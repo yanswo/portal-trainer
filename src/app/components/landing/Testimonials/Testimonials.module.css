@@ -1,6 +1,6 @@
 .section {
   padding: var(--section-spacing) var(--container-padding);
-  background: var(--surface-muted);
+  background: var(--background-light);
 }
 
 .container {
@@ -11,7 +11,7 @@
   gap: var(--section-spacing-tight);
 }
 
-.sectionHeader {
+.header {
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -19,44 +19,49 @@
   gap: 1.2rem;
 }
 
-.title {
+.header h2 {
   font-family: var(--font-serif);
   font-size: clamp(2rem, 3.5vw, 3rem);
   color: var(--primary-900);
-  max-width: 720px;
+  max-width: 700px;
   line-height: 1.1;
 }
 
-.subtitle {
-  max-width: 720px;
+.header p {
+  max-width: 700px;
   color: var(--text-secondary);
-  font-size: 1rem;
   line-height: 1.7;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.tracks {
-  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
-.trackCard {
-  background: rgba(255, 255, 255, 0.92);
+.card {
+  background: rgba(255, 255, 255, 0.95);
 }
 
-.trackLink {
+.quote {
+  font-size: 1.05rem;
+  color: var(--primary-900);
+  line-height: 1.8;
+  margin: 0 0 1.5rem 0;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.name {
   font-weight: 600;
-  color: var(--accent-color);
-  text-decoration: none;
+  color: var(--primary-800);
 }
 
-.trackLink:hover {
-  color: var(--accent-hover-color);
-  text-decoration: underline;
+.role {
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }

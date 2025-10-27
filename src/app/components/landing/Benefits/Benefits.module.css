@@ -1,55 +1,90 @@
 .section {
-  padding: 80px 2rem;
-  background-color: #ffffff;
+  padding: var(--section-spacing) var(--container-padding);
+  background: linear-gradient(180deg, rgba(13, 44, 79, 0.04), rgba(0, 169, 157, 0.05));
 }
 
 .container {
-  max-width: var(--max-width);
+  max-width: var(--content-width);
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-spacing-tight);
+}
+
+.sectionHeader {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: 2.5rem;
-  color: var(--primary-color);
-  margin-bottom: 1rem;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  color: var(--primary-900);
+  max-width: 760px;
+  line-height: 1.1;
 }
 
 .subtitle {
-  font-size: 1.1rem;
+  max-width: 760px;
   color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto 3rem auto;
+  font-size: 1rem;
+  line-height: 1.75;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2.5rem;
-  text-align: left;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
 }
 
-.benefitItem {
+.benefitCard {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.cardHeader {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
-.icon {
-  color: var(--accent-color);
-  margin-bottom: 1rem;
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(0, 169, 157, 0.12);
+  color: var(--accent-hover-color);
+  font-size: 1.35rem;
 }
 
-.itemTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
+.highlightList {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  list-style: none;
+  padding: 0;
 }
 
-.itemDescription {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
+.highlightList li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.highlightList li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  opacity: 0.7;
 }
