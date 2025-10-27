@@ -1,0 +1,153 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.header span {
+  color: var(--color-text-secondary);
+}
+
+.playerLayout {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 2rem;
+}
+
+.player {
+  background: var(--color-surface);
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.videoContainer {
+  position: relative;
+  padding-top: 56.25%;
+  background: var(--color-surface-alt);
+}
+
+.videoContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.2));
+}
+
+.videoContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text-inverse);
+  gap: 1rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.videoContent button {
+  backdrop-filter: blur(6px);
+}
+
+.playerDetails {
+  padding: 1.75rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.playerDetails h2 {
+  font-size: 1.4rem;
+}
+
+.playerDetails p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.lessonList {
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.lessonItem {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  border: 1px solid transparent;
+  transition: border-color var(--transition-speed), background-color var(--transition-speed);
+}
+
+.lessonItemActive {
+  border-color: var(--color-text-primary);
+  background: var(--color-accent-muted);
+}
+
+.lessonMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.feedbackSection {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.feedbackGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.feedbackCard {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1.5rem;
+  display: grid;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.feedbackForm {
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.feedbackForm textarea {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  padding: 1rem;
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+@media (max-width: 1024px) {
+  .playerLayout {
+    grid-template-columns: 1fr;
+  }
+}

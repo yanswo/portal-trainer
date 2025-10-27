@@ -1,6 +1,6 @@
 .footer {
-  background: linear-gradient(160deg, #071a2c, #0d2c4f 45%, #123d65 100%);
-  color: var(--text-on-dark);
+  background: linear-gradient(160deg, #111111, #000000 60%);
+  color: var(--color-text-inverse);
   padding: 4.5rem var(--container-padding) 2rem var(--container-padding);
   margin-top: var(--section-spacing);
 }
@@ -21,8 +21,8 @@
   gap: 1.5rem;
   padding: 1.5rem 2rem;
   border-radius: var(--border-radius-lg);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .badge {
@@ -31,7 +31,7 @@
   justify-content: center;
   padding: 0.4rem 0.95rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.22);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 0.7rem;
@@ -50,8 +50,8 @@
   gap: 0.6rem;
   padding: 0.65rem 1.1rem;
   border-radius: 999px;
-  background: rgba(0, 169, 157, 0.16);
-  color: var(--text-on-dark);
+  background: #ffffff;
+  color: #111111;
   font-weight: 600;
 }
 

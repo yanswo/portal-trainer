@@ -1,7 +1,7 @@
 .button {
   padding: 0.85rem 1.75rem;
   border: none;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-pill);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -11,6 +11,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  letter-spacing: 0.01em;
 }
 
 .button:focus-visible {
@@ -19,24 +20,35 @@
 }
 
 .primary {
-  background: linear-gradient(135deg, #0d2c4f 0%, #00a99d 100%);
-  color: var(--text-on-dark);
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
   box-shadow: var(--shadow-sm);
 }
 
 .primary:hover {
-  background: linear-gradient(135deg, #0b2643 0%, #008a7e 100%);
+  background: var(--color-accent-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .secondary {
-  background-color: rgba(13, 44, 79, 0.06);
-  color: var(--primary-800);
-  border: 1px solid rgba(13, 44, 79, 0.12);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
 }
 
 .secondary:hover {
-  background-color: rgba(13, 44, 79, 0.1);
-  border-color: rgba(13, 44, 79, 0.25);
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-border-strong);
+}
+
+.link {
+  background: transparent;
+  color: var(--color-text-primary);
+  padding-inline: 0.5rem;
+}
+
+.link:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
 }

@@ -9,10 +9,10 @@
   inset: 0;
   background: radial-gradient(
       circle at top right,
-      rgba(0, 169, 157, 0.18),
+      rgba(0, 0, 0, 0.12),
       transparent 55%
     ),
-    radial-gradient(circle at 15% 80%, rgba(13, 44, 79, 0.12), transparent 60%);
+    radial-gradient(circle at 15% 80%, rgba(0, 0, 0, 0.08), transparent 60%);
   z-index: 0;
 }
 
@@ -68,7 +68,7 @@
   padding: 1.2rem 1.4rem;
   border-radius: var(--border-radius);
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(13, 44, 79, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: var(--shadow-sm);
 }
 
@@ -105,7 +105,7 @@
 
 .heroCardHeader h2 {
   font-size: 1.4rem;
-  color: var(--primary-800);
+  color: var(--color-text-primary);
   margin: 0;
 }
 
@@ -161,7 +161,7 @@
   flex-wrap: wrap;
   gap: 1rem;
   font-weight: 500;
-  color: var(--primary-800);
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 1024px) {

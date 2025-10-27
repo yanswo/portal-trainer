@@ -1,6 +1,6 @@
 .section {
   padding: var(--section-spacing) var(--container-padding);
-  background: linear-gradient(180deg, rgba(13, 44, 79, 0.04), rgba(0, 169, 157, 0.05));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.02));
 }
 
 .container {
@@ -57,8 +57,8 @@
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(0, 169, 157, 0.12);
-  color: var(--accent-hover-color);
+  background: rgba(17, 17, 17, 0.1);
+  color: var(--color-text-primary);
   font-size: 1.35rem;
 }
 

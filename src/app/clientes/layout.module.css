@@ -1,0 +1,117 @@
+.shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.sidebar {
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.brand span {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.brand strong {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.nav {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.navItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: var(--border-radius);
+  color: var(--color-text-secondary);
+  transition: background-color var(--transition-speed), color var(--transition-speed),
+    transform var(--transition-speed);
+}
+
+.navItem:hover {
+  background: var(--color-accent-muted);
+  color: var(--color-text-primary);
+  transform: translateX(4px);
+}
+
+.navItemActive {
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+}
+
+.accountSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1rem;
+  border-radius: var(--border-radius-lg);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+
+.accountSummary strong {
+  font-size: 0.95rem;
+}
+
+.main {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f6f6 100%);
+  padding: 2.5rem 3.5rem;
+}
+
+.mainContent {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (max-width: 1080px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 1.75rem;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .navItem {
+    padding: 0.65rem 0.85rem;
+  }
+
+  .main {
+    padding: 2rem 1.5rem;
+  }
+}

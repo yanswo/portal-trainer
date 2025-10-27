@@ -36,7 +36,7 @@ const benefits = [
     icon: <FaUserClock aria-hidden />,
     title: "Aprendizagem flexível",
     description:
-      "Trilhas sob demanda, aulas ao vivo e acompanhamento assíncrono com tutores especialistas.",
+      "Trilhas sob demanda, videoaulas curtas e acompanhamento assíncrono com tutores especialistas.",
     highlights: ["Mentorias semanais", "Painel de progresso"],
   },
   {

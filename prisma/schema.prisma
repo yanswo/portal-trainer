@@ -10,66 +10,91 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum UserRole {
   ADMIN
   CLIENT
 }
 
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  BOLETO
+}
+
+enum AssessmentStatus {
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum BudgetStatus {
+  RECEIVED
+  IN_REVIEW
+  SENT
+  APPROVED
+  DECLINED
+}
 
 model User {
-  id        String   @id @default(cuid()) 
+  id        String   @id @default(cuid())
   name      String?
-  email     String   @unique 
-  password  String   
-  role      UserRole @default(CLIENT) 
+  email     String   @unique
+  password  String
+  role      UserRole @default(CLIENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-
-  profile    Profile?     
-  enrollments Enrollment[]   
-  supportTickets SupportTicket[] 
+  profile        Profile?
+  enrollments    Enrollment[]
+  supportTickets SupportTicket[]
+  payments       Payment[]
+  budgets        BudgetRequest[]
+  assessments    Assessment[]
 }
-
 
 model Profile {
   id        String  @id @default(cuid())
   bio       String?
   avatarUrl String?
-  userId    String  @unique 
+  userId    String  @unique
   user      User    @relation(fields: [userId], references: [id])
 }
-
 
 model Course {
   id          String   @id @default(cuid())
   title       String
   description String?
   imageUrl    String?
-  price       Decimal 
-  isPublished Boolean  @default(false) 
+  price       Decimal
+  isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-
-  videos      Video[]      
-  enrollments Enrollment[] 
+  videos      Video[]
+  enrollments Enrollment[]
+  payments    Payment[]
+  assessments Assessment[]
 }
-
 
 model Video {
-  id          String   @id @default(cuid())
-  title       String
-  url         String  
-  position    Int      
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  url       String
+  position  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   courseId String
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade) 
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
-
 
 model Enrollment {
   id         String   @id @default(cuid())
@@ -77,21 +102,73 @@ model Enrollment {
   courseId   String
   enrolledAt DateTime @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
+  course      Course       @relation(fields: [courseId], references: [id])
+  payments    Payment[]
+  assessments Assessment[]
 
-  @@unique([userId, courseId]) 
+  @@unique([userId, courseId])
 }
-
 
 model SupportTicket {
   id        String   @id @default(cuid())
   subject   String
   message   String
-  status    String   @default("OPEN") 
+  status    String   @default("OPEN")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  amount    Decimal
+  status    PaymentStatus @default(PENDING)
+  method    PaymentMethod
+  reference String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  userId       String
+  courseId     String
+  enrollmentId String?
+
+  user       User        @relation(fields: [userId], references: [id])
+  course     Course      @relation(fields: [courseId], references: [id])
+  enrollment Enrollment? @relation(fields: [enrollmentId], references: [id])
+}
+
+model BudgetRequest {
+  id          String       @id @default(cuid())
+  companyName String
+  courseFocus String
+  seats       Int
+  status      BudgetStatus @default(RECEIVED)
+  proposedFee Decimal?
+  notes       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Assessment {
+  id          String           @id @default(cuid())
+  score       Float?
+  status      AssessmentStatus @default(IN_PROGRESS)
+  attempt     Int              @default(1)
+  submittedAt DateTime?
+  approvedAt  DateTime?
+  feedback    String?
+
+  userId       String
+  courseId     String
+  enrollmentId String
+
+  user       User       @relation(fields: [userId], references: [id])
+  course     Course     @relation(fields: [courseId], references: [id])
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
 }

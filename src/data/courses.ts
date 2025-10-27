@@ -6,6 +6,7 @@ export type CourseVideo = {
   description: string;
   preview?: boolean;
   resources?: string[];
+  transcriptSummary?: string;
 };
 
 export type Course = {
@@ -23,6 +24,16 @@ export type Course = {
   videos: CourseVideo[];
   certificate: boolean;
   requirements: string[];
+  assessmentSummary: string;
+};
+
+export type CourseFeedback = {
+  id: string;
+  author: string;
+  role: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
 };
 
 export const courses: Course[] = [
@@ -30,9 +41,9 @@ export const courses: Course[] = [
     id: "nr10",
     slug: "nr-10-seguranca-eletrica",
     title: "NR-10: Segurança em Instalações Elétricas",
-    headline: "Treinamento completo para eletricistas com foco em prevenção de riscos",
+    headline: "Treinamento completo e autoinstrucional com foco em prevenção de riscos",
     description:
-      "Capacitação oficial com abordagem prática sobre segurança elétrica, análise de riscos, planos de ação e conformidade legal para profissionais de manutenção e operação.",
+      "Capacitação oficial composta por videoaulas gravadas, roteiros de inspeção e simulados avaliativos para profissionais que atuam com manutenção e operação elétrica.",
     category: "Segurança Elétrica",
     level: "Intermediário",
     duration: "16h",
@@ -40,16 +51,18 @@ export const courses: Course[] = [
     coverImage:
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1600&q=80",
     highlights: [
-      "Simulações realistas com checklist de bloqueio e etiquetagem",
-      "Modelos de documentação para inspeções e relatórios",
-      "Mentoria técnica com engenheiro eletricista",
+      "Simulações guiadas com checklist de bloqueio e etiquetagem",
+      "Modelos de documentação para inspeções e relatórios digitais",
+      "Trilhas de revisão com comentários dos instrutores",
     ],
     certificate: true,
     requirements: [
       "Comprovar formação mínima em curso técnico ou equivalente",
-      "Apresentar exames médicos e ASO válidos",
-      "Participar das avaliações práticas supervisionadas",
+      "Enviar ASO válido na etapa de upload de documentos",
+      "Concluir a avaliação prática gravada com feedback do instrutor",
     ],
+    assessmentSummary:
+      "A prova final combina questões situacionais e a entrega de um checklist aplicado em campo para liberar o certificado digital.",
     videos: [
       {
         id: "nr10-1",
@@ -57,7 +70,9 @@ export const courses: Course[] = [
         duration: "18m",
         type: "Teoria",
         description:
-          "Panorama da legislação, responsabilidades do empregador e trabalhador e estrutura normativa.",
+          "Panorama da legislação, responsabilidades do empregador e trabalhador e estrutura normativa para revisar antes da prova.",
+        transcriptSummary:
+          "Reforça conceitos de segurança, classificação de tensões e documentação exigida.",
         preview: true,
       },
       {
@@ -68,6 +83,8 @@ export const courses: Course[] = [
         description:
           "Demonstração orientada de bloqueio e etiquetagem com checklist aplicável em campo.",
         resources: ["Checklist LOTO", "Modelo de PT"],
+        transcriptSummary:
+          "Exibe passo a passo de isolamento de energia e registros fotográficos obrigatórios.",
       },
       {
         id: "nr10-3",
@@ -76,6 +93,8 @@ export const courses: Course[] = [
         type: "Teoria",
         description:
           "Metodologias para identificação de riscos, classificação e plano de contingência.",
+        transcriptSummary:
+          "Apresenta matriz de risco e exemplos de relatórios enviados para auditoria interna.",
       },
       {
         id: "nr10-4",
@@ -84,6 +103,8 @@ export const courses: Course[] = [
         type: "Avaliação",
         description:
           "Etapa avaliativa com orientações para aplicação dos procedimentos em campo real.",
+        transcriptSummary:
+          "Detalha critérios de avaliação e demonstra como registrar a execução em vídeo.",
       },
     ],
   },
@@ -91,9 +112,9 @@ export const courses: Course[] = [
     id: "nr35",
     slug: "nr-35-trabalho-em-altura",
     title: "NR-35: Trabalho em Altura",
-    headline: "Aprenda a planejar, analisar riscos e executar atividades em altura com segurança",
+    headline: "Aprenda a planejar e executar atividades em altura no seu ritmo",
     description:
-      "Conteúdo atualizado com simulações práticas, planos de resgate e documentação obrigatória para equipes que atuam em altura.",
+      "Sequência de videoaulas gravadas com estudos de caso, modelos de documentação e desafios avaliativos para equipes que atuam em altura.",
     category: "Operações em Altura",
     level: "Básico",
     duration: "12h",
@@ -109,8 +130,10 @@ export const courses: Course[] = [
     requirements: [
       "Comprovação de aptidão física e ASO válido",
       "Treinamento introdutório sobre uso de EPIs",
-      "Participação mínima de 75% nas aulas ao vivo",
+      "Concluir pelo menos 75% das videoaulas e enviar o relatório de prática",
     ],
+    assessmentSummary:
+      "O exame final inclui prova objetiva com 20 questões e submissão de um plano de trabalho em altura assinado pelo responsável.",
     videos: [
       {
         id: "nr35-1",
@@ -120,6 +143,8 @@ export const courses: Course[] = [
         description:
           "Contextualização da norma, responsabilidades e requisitos para empresas e trabalhadores.",
         preview: true,
+        transcriptSummary:
+          "Explica a hierarquia de proteção e documentos exigidos para liberar uma atividade.",
       },
       {
         id: "nr35-2",
@@ -128,6 +153,8 @@ export const courses: Course[] = [
         type: "Teoria",
         description:
           "Seleção de sistemas de ancoragem, planejamento de acesso e organização do canteiro.",
+        transcriptSummary:
+          "Demonstra instalação de linhas de vida, inspeção visual e registro fotográfico.",
       },
       {
         id: "nr35-3",
@@ -137,6 +164,8 @@ export const courses: Course[] = [
         description:
           "Simulação guiada com montagem de tripé, protocolos de resgate e checklist de inspeção.",
         resources: ["Plano de resgate", "Guia rápido de primeiros socorros"],
+        transcriptSummary:
+          "Mostra o fluxo completo de resgate com pontos de atenção e registros obrigatórios.",
       },
       {
         id: "nr35-4",
@@ -145,6 +174,8 @@ export const courses: Course[] = [
         type: "Avaliação",
         description:
           "Orientações sobre a avaliação teórica, critérios de aprovação e emissão automática do certificado.",
+        transcriptSummary:
+          "Explica critérios de aprovação, retentativas e como acessar o certificado digital.",
       },
     ],
   },
@@ -154,7 +185,7 @@ export const courses: Course[] = [
     title: "Primeiros Socorros para Ambientes Industriais",
     headline: "Equipe preparada para responder rapidamente a incidentes e emergências",
     description:
-      "Treinamento com foco em protocolos práticos de primeiros socorros, comunicação de incidentes e integração com a CIPA.",
+      "Videoaulas gravadas com demonstrações práticas, fluxos de comunicação e simulados avaliativos para equipes operacionais.",
     category: "Primeiros Socorros",
     level: "Intermediário",
     duration: "10h",
@@ -162,16 +193,18 @@ export const courses: Course[] = [
     coverImage:
       "https://images.unsplash.com/photo-1580281657521-4fe0f1a0d357?auto=format&fit=crop&w=1600&q=80",
     highlights: [
-      "Simulações com feedback em tempo real",
+      "Simulações com feedback comentado pelos instrutores",
       "Protocolos prontos para comunicação de acidentes",
       "Biblioteca com materiais de apoio para a CIPA",
     ],
     certificate: true,
     requirements: [
-      "Disponibilidade para encontros síncronos obrigatórios",
-      "Participar da atividade prática de imobilização",
+      "Assistir às videoaulas e registrar presença com os quizzes rápidos",
+      "Executar a atividade prática de imobilização com upload de vídeo",
       "Submeter relatório de aplicação em campo",
     ],
+    assessmentSummary:
+      "O certificado é liberado após aprovação no simulado online e envio do relatório de prática com assinatura do responsável.",
     videos: [
       {
         id: "ps-1",
@@ -181,6 +214,8 @@ export const courses: Course[] = [
         description:
           "Etapas do protocolo primário de avaliação, comunicação e estabilização inicial.",
         preview: true,
+        transcriptSummary:
+          "Demonstra abordagem segura e checagem de sinais vitais antes da remoção.",
       },
       {
         id: "ps-2",
@@ -189,7 +224,9 @@ export const courses: Course[] = [
         type: "Prática",
         description:
           "Demonstração de técnicas de contenção de hemorragias e imobilização.",
-        resources: ["Checklist de trauma", "Fluxo de atendimento"]
+        resources: ["Checklist de trauma", "Fluxo de atendimento"],
+        transcriptSummary:
+          "Detalha procedimentos para diferentes tipos de trauma e comunicação com o CCIH.",
       },
       {
         id: "ps-3",
@@ -198,6 +235,8 @@ export const courses: Course[] = [
         type: "Prática",
         description:
           "Protocolo CAB, uso de DEA e montagem de kit de emergência para chão de fábrica.",
+        transcriptSummary:
+          "Reforça tempos de resposta e cuidados ao operar o DEA até a chegada do suporte externo.",
       },
       {
         id: "ps-4",
@@ -206,10 +245,57 @@ export const courses: Course[] = [
         type: "Avaliação",
         description:
           "Checklist de desempenho, emissão do certificado e plano de melhoria contínua.",
+        transcriptSummary:
+          "Mostra critérios de avaliação e exemplos de feedbacks enviados aos participantes.",
       },
     ],
   },
 ];
+
+export const courseFeedback: Record<string, CourseFeedback[]> = {
+  "nr-10-seguranca-eletrica": [
+    {
+      id: "fb-nr10-1",
+      author: "Juliana A.",
+      role: "Supervisora de Manutenção",
+      rating: 5,
+      comment:
+        "Excelente didática e materiais complementares muito úteis para padronizar nossos checklists internos.",
+      createdAt: "12/03/2025",
+    },
+    {
+      id: "fb-nr10-2",
+      author: "Tiago M.",
+      role: "Técnico Eletricista",
+      rating: 4,
+      comment:
+        "As simulações ajudam bastante, apenas senti falta de mais exemplos de instalações industriais pesadas.",
+      createdAt: "02/03/2025",
+    },
+  ],
+  "nr-35-trabalho-em-altura": [
+    {
+      id: "fb-nr35-1",
+      author: "Fernanda R.",
+      role: "Engenheira de Segurança",
+      rating: 5,
+      comment:
+        "Os roteiros de prática são completos e facilitam muito a avaliação dos técnicos de campo.",
+      createdAt: "08/03/2025",
+    },
+  ],
+  "primeiros-socorros-industrial": [
+    {
+      id: "fb-ps-1",
+      author: "Luiz H.",
+      role: "Coordenador de Produção",
+      rating: 5,
+      comment:
+        "Consegui replicar os protocolos com a equipe inteira em menos de uma semana graças aos materiais extras.",
+      createdAt: "16/02/2025",
+    },
+  ],
+};
 
 export function getCourseBySlug(slug: string) {
   return courses.find((course) => course.slug === slug);

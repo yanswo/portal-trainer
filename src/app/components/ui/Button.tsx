@@ -6,6 +6,7 @@ interface ButtonProps {
   href?: string;
   onClick?: () => void;
   variant?: "primary" | "secondary";
+  type?: "button" | "submit" | "reset";
 }
 
 export default function Button({
@@ -13,6 +14,7 @@ export default function Button({
   href,
   onClick,
   variant = "primary",
+  type = "button",
 }: ButtonProps) {
   const buttonClass = variant === "primary" ? styles.primary : styles.secondary;
 
@@ -25,7 +27,7 @@ export default function Button({
   }
 
   return (
-    <button className={`${styles.button} ${buttonClass}`} onClick={onClick}>
+    <button className={`${styles.button} ${buttonClass}`} onClick={onClick} type={type}>
       {children}
     </button>
   );
