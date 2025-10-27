@@ -1,27 +1,24 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --primary-color: #0d2c4f;
+  --secondary-color: #1a5a7a;
+  --accent-color: #00a99d;
+  --accent-hover-color: #008a7e;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  --background-light: #f7f9fa;
+  --background-dark: #1a1a2e;
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+  --text-primary: #333333;
+  --text-secondary: #5f6c7b;
+  --text-on-dark: #ffffff;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --font-serif: "Lora", serif;
+
+  --max-width: 1200px;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --transition-speed: 0.3s ease;
 }
 
 * {
@@ -30,13 +27,22 @@ body {
   margin: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background-light);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--accent-hover-color);
 }
