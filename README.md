@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portal de Treinamento Online - Segurança do Trabalho
 
-## Getting Started
+Este é o repositório do projeto de um portal de treinamentos online focado em cursos de capacitação profissional na área de Segurança do Trabalho, inspirado em plataformas como a INBRAEP. O objetivo é oferecer uma plataforma robusta e intuitiva tanto para clientes (alunos) quanto para administradores.
 
-First, run the development server:
+## 📜 Descrição
+
+O projeto consiste em uma plataforma EAD (Ensino a Distância) completa, onde usuários podem se cadastrar, comprar cursos, assistir às aulas em vídeo e obter seus certificados. A plataforma também conta com uma área administrativa para o gerenciamento completo de cursos, módulos e usuários.
+
+A aplicação está sendo desenvolvida com um backend integrado ao frontend (usando Next.js), o que garante agilidade no desenvolvimento e uma arquitetura moderna.
+
+## ✨ Features Principais
+
+### Área do Cliente (Aluno)
+
+- **Cadastro e Login:** Sistema de autenticação seguro.
+- **Catálogo de Cursos:** Visualização dos cursos disponíveis com filtros e busca.
+- **Compra de Cursos:** Integração com um futuro sistema de pagamentos.
+- **Meus Cursos:** Área para assistir aos cursos comprados, com aulas separadas por vídeo.
+- **Perfil:** Gerenciamento de dados pessoais e senha.
+- **Suporte:** Canal para ajuda e suporte técnico.
+
+### Área do Administrador
+
+- **Dashboard:** Visão geral da plataforma.
+- **Gerenciamento de Cursos:** Cadastro, edição e publicação de cursos.
+- **Gerenciamento de Módulos e Vídeos:** Adição e organização de vídeos dentro de cada curso.
+- **Gerenciamento de Usuários:** Visualização e gestão dos alunos cadastrados.
+
+## 🚀 Tecnologias Utilizadas
+
+- **Framework:** [Next.js](https://nextjs.org/) (com App Router)
+- **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
+- **Banco de Dados (ORM):** [Prisma](https://www.prisma.io/)
+- **Banco de Dados (Desenvolvimento):** SQLite
+- **Estilização:** [CSS Modules](https://github.com/css-modules/css-modules)
+- **Ícones:** [React Icons](https://react-icons.github.io/react-icons/)
+- **Autenticação:** [NextAuth.js](https://next-auth.js.org/) (planejado)
+
+## 🔧 Configuração do Ambiente de Desenvolvimento
+
+Siga os passos abaixo para executar o projeto localmente.
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/en/) (versão 18.x ou superior)
+- [npm](https://www.npmjs.com/) ou [Yarn](https://yarnpkg.com/)
+
+### 1. Clonar o Repositório
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [https://github.com/seu-usuario/portal-treinamento.git](https://github.com/seu-usuario/portal-treinamento.git)
+cd portal-treinamento
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
