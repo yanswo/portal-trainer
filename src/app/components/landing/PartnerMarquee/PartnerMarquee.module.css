@@ -1,0 +1,37 @@
+.section {
+  padding: var(--section-spacing-tight) var(--container-padding);
+  background: rgba(13, 44, 79, 0.03);
+}
+
+.container {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.75rem;
+  justify-items: center;
+}
+
+.title {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.marquee {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.partner {
+  font-weight: 600;
+  color: var(--primary-800);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0.75;
+}

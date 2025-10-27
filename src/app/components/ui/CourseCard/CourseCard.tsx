@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./CourseCard.module.css";
 import { FaCertificate, FaClock } from "react-icons/fa";
+import Badge from "../Badge/Badge";
 
 interface CourseCardProps {
   title: string;
@@ -9,6 +10,9 @@ interface CourseCardProps {
   imageUrl: string;
   courseUrl: string;
   duration: string;
+  category?: string;
+  level?: string;
+  format?: string;
 }
 
 export default function CourseCard({
@@ -17,6 +21,9 @@ export default function CourseCard({
   imageUrl,
   courseUrl,
   duration,
+  category,
+  level,
+  format,
 }: CourseCardProps) {
   return (
     <div className={styles.card}>
@@ -30,14 +37,21 @@ export default function CourseCard({
         />
       </div>
       <div className={styles.content}>
-        <h3 className={styles.title}>{title}</h3>
+        <div className={styles.header}>
+          <div className={styles.badges}>
+            {category ? <Badge variant="neutral">{category}</Badge> : null}
+            {level ? <Badge variant="outline">{level}</Badge> : null}
+          </div>
+          <h3 className={styles.title}>{title}</h3>
+        </div>
         <div className={styles.meta}>
           <span>
-            <FaClock /> {duration}
+            <FaClock aria-hidden /> {duration}
           </span>
           <span>
-            <FaCertificate /> Com Certificado
+            <FaCertificate aria-hidden /> Certificação digital
           </span>
+          {format ? <span>{format}</span> : null}
         </div>
         <p className={styles.description}>{description}</p>
         <Link href={courseUrl} className={styles.ctaLink}>
