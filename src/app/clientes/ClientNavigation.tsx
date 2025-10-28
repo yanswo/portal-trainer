@@ -7,7 +7,7 @@ import styles from "./layout.module.css";
 const navItems = [
   { href: "/clientes", label: "Visão geral" },
   { href: "/clientes/cursos", label: "Catálogo" },
-  { href: "/clientes/meus-cursos/nr-10-seguranca-eletrica", label: "Continuar curso" },
+  { href: "/clientes/meus-cursos", label: "Meus cursos" },
   { href: "/clientes/orcamentos", label: "Orçamentos" },
   { href: "/clientes/suporte", label: "Suporte" },
   { href: "/clientes/configuracoes", label: "Configurações" },

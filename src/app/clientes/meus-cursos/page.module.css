@@ -15,31 +15,32 @@
 
 .header p {
   color: var(--color-text-secondary);
-  max-width: 520px;
+  max-width: 480px;
   line-height: 1.6;
 }
 
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.summaryGrid {
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.25rem;
 }
 
-.summaryGrid p {
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.85rem;
   color: var(--color-text-secondary);
-  line-height: 1.4;
 }
 
-.contact {
-  font-size: 0.9rem;
+.meta span {
+  background: var(--color-accent-muted);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--border-radius-pill);
+}
+
+.lastAccess {
+  font-size: 0.85rem;
   color: var(--color-text-muted);
 }
 

@@ -1,184 +1,188 @@
-"use client";
-
-import { FormEvent, useState } from "react";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
+import Chart from "@/app/components/ui/Chart/Chart";
 import { Card } from "@/app/components/ui/Card/Card";
+import { Table } from "@/app/components/ui/Table/Table";
 import {
+  adminActivity,
   adminCourses,
   adminMetrics,
-  adminProfile,
+  assessmentSeries,
   paymentSummary,
   productionQueue,
+  revenueSeries,
   spotlightClients,
 } from "@/data/admin-dashboard";
 import styles from "./page.module.css";
 
-const ADMIN_EMAIL = "admin@cw.com";
-const ADMIN_PASSWORD = "admincw";
-
-export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
-
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      setIsAuthenticated(true);
-      setError(null);
-    } else {
-      setError("Credenciais inválidas. Utilize admin@cw.com e admincw.");
-    }
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className={styles.loginCard}>
-        <Badge variant="outline">Acesso restrito</Badge>
-        <h1>Painel administrativo CW Training</h1>
-        <p>Informe as credenciais oficiais para gerenciar cursos, clientes e pagamentos.</p>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.field}>
-            <label htmlFor="email">E-mail</label>
-            <input id="email" name="email" type="email" placeholder="admin@cw.com" required />
-          </div>
-          <div className={styles.field}>
-            <label htmlFor="password">Senha</label>
-            <input id="password" name="password" type="password" placeholder="••••••" required />
-          </div>
-          {error ? <span className={styles.error}>{error}</span> : null}
-          <Button type="submit">Entrar</Button>
-        </form>
-      </div>
-    );
-  }
-
+export default function AdminDashboardPage() {
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div className={styles.heroContent}>
-          <Badge variant="outline">Administração</Badge>
-          <h1>Gestão completa do ecossistema CW Training</h1>
-          <p>
-            Controle catálogo, pagamentos e relacionamento com clientes em um único painel com
-            indicadores em tempo real.
-          </p>
-          <div className={styles.metricsGrid}>
-            {adminMetrics.map((metric) => (
-              <div key={metric.label} className={styles.metricCard}>
-                <span>{metric.label}</span>
-                <strong>{metric.value}</strong>
-                <span>{metric.detail}</span>
-              </div>
-            ))}
+    <div className={styles.dashboard}>
+      <section className={styles.metrics} aria-label="Indicadores principais">
+        {adminMetrics.map((metric) => (
+          <div key={metric.id} className={styles.metricCard}>
+            <span>{metric.label}</span>
+            <strong>{metric.value}</strong>
+            <Badge variant="neutral">{metric.change}</Badge>
+            <p>{metric.detail}</p>
           </div>
-        </div>
-        <Card>
+        ))}
+      </section>
+
+      <section className={styles.analytics} aria-label="Visão analítica">
+        <Chart
+          title="Receita conciliada"
+          description="Valores em milhares de reais conciliados mês a mês"
+          data={revenueSeries}
+          prefix="R$ "
+          suffix=" mil"
+        />
+        <Chart
+          title="Aprovação nas avaliações"
+          description="Percentual de alunos aprovados após assistir às videoaulas gravadas"
+          data={assessmentSeries}
+          suffix="%"
+        />
+        <Card className={styles.activity}>
           <Card.Header>
-            <Card.Title>{adminProfile.name}</Card.Title>
+            <Card.Title>Atualizações recentes</Card.Title>
+            <Card.Description>
+              Monitoramento em tempo real de certificados liberados, pagamentos e solicitações.
+            </Card.Description>
           </Card.Header>
           <Card.Content>
-            <div className={styles.listMeta}>
-              <span>{adminProfile.role}</span>
-              <span>{adminProfile.email}</span>
-              <span>{adminProfile.phone}</span>
-            </div>
+            <ul className={styles.activityList}>
+              {adminActivity.map((item) => (
+                <li key={item.id}>
+                  <strong>{item.title}</strong>
+                  <span>{item.description}</span>
+                  <time>{item.timestamp}</time>
+                </li>
+              ))}
+            </ul>
           </Card.Content>
         </Card>
-      </header>
+      </section>
 
-      <section className={styles.section} aria-labelledby="catalogo-admin">
+      <section aria-labelledby="catalogo-admin" className={styles.section}>
         <div className={styles.sectionHeader}>
           <div>
-            <h2 id="catalogo-admin">Cursos publicados</h2>
-            <p>Revise os treinamentos ativos, atualize módulos gravados e acompanhe pendências.</p>
+            <h2 id="catalogo-admin">Catálogo gravado</h2>
+            <p>Gerencie cursos autoinstrucionais, atualize módulos e acompanhe taxas de conclusão.</p>
           </div>
           <Button href="/admin/novo-curso">Novo curso</Button>
         </div>
-        <div className={styles.courseList}>
-          {adminCourses.map((course) => (
-            <div key={course.id} className={styles.courseItem}>
-              <div>
-                <strong>{course.title}</strong>
-                <div className={styles.courseMeta}>
-                  <span>{course.duration}</span>
-                  <span>{course.level}</span>
-                  <span>{course.category}</span>
-                  <span>{course.enrolled} alunos</span>
-                  {course.pendingAssets ? <span>{course.pendingAssets} ativos pendentes</span> : null}
-                </div>
-              </div>
-              <div className={styles.listMeta}>
-                <Button href={`/admin/cursos/${course.slug}`}>Gerenciar aulas</Button>
-                <Button href={`/admin/cursos/${course.slug}/avaliacoes`} variant="secondary">
-                  Avaliações e certificados
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <Table>
+          <Table.Header>
+            <Table.Row>
+              <Table.Cell header>Curso</Table.Cell>
+              <Table.Cell header>Status</Table.Cell>
+              <Table.Cell header>Alunos</Table.Cell>
+              <Table.Cell header>Conclusão</Table.Cell>
+              <Table.Cell header>Atualizado</Table.Cell>
+              <Table.Cell header>Ações</Table.Cell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {adminCourses.map((course) => (
+              <Table.Row key={course.id}>
+                <Table.Cell>
+                  <div className={styles.courseTitle}>
+                    <strong>{course.title}</strong>
+                    <span>{course.category}</span>
+                  </div>
+                </Table.Cell>
+                <Table.Cell>
+                  <Badge variant="outline">{course.status}</Badge>
+                </Table.Cell>
+                <Table.Cell>{course.enrolled} alunos</Table.Cell>
+                <Table.Cell>{Math.round(course.completionRate * 100)}%</Table.Cell>
+                <Table.Cell>{course.lastUpdate}</Table.Cell>
+                <Table.Cell>
+                  <div className={styles.tableActions}>
+                    <Button href={`/admin/cursos/${course.slug}`} variant="ghost" size="sm">
+                      Gerenciar
+                    </Button>
+                    <Button
+                      href={`/admin/cursos/${course.slug}/avaliacoes`}
+                      variant="ghost"
+                      size="sm"
+                    >
+                      Avaliações
+                    </Button>
+                  </div>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
       </section>
 
-      <section className={`${styles.section} ${styles.twoColumn}`} aria-labelledby="operacoes">
-        <div>
-          <div className={styles.sectionHeader}>
-            <div>
-              <h2 id="operacoes">Fila de produção</h2>
-              <p>Acompanhe roteiros, edições e revisões dos vídeos gravados.</p>
-            </div>
-            <Button href="/admin/producao" variant="secondary">
-              Ver produção
+      <section className={styles.split} aria-label="Operações e finanças">
+        <Card>
+          <Card.Header>
+            <Card.Title>Fila de produção</Card.Title>
+            <Card.Description>
+              Acompanhe roteiros, captação e edição das videoaulas para novos treinamentos.
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
+            <ul className={styles.list}>
+              {productionQueue.map((item) => (
+                <li key={item.id}>
+                  <div>
+                    <strong>{item.title}</strong>
+                    <span>{item.owner}</span>
+                  </div>
+                  <div className={styles.listMeta}>
+                    <Badge variant="neutral">{item.stage}</Badge>
+                    <span>{item.status}</span>
+                    <span>Entrega: {item.dueDate}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <Button href="/admin/producao" variant="secondary" size="sm">
+              Ver produção completa
             </Button>
-          </div>
-          <div className={styles.list}>
-            {productionQueue.map((item) => (
-              <div key={item.id} className={styles.listItem}>
-                <strong>{item.title}</strong>
-                <div className={styles.listMeta}>
-                  <span>{item.owner}</span>
-                  <span>Status: {item.status}</span>
-                  <span>Entrega: {item.dueDate}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          </Card.Content>
+        </Card>
 
-        <div>
-          <div className={styles.sectionHeader}>
-            <div>
-              <h2>Pagamentos recentes</h2>
-              <p>Valide conciliações e libere certificados após a confirmação financeira.</p>
-            </div>
-            <Button href="/admin/financeiro" variant="secondary">
-              Ver financeiro
+        <Card>
+          <Card.Header>
+            <Card.Title>Pagamentos recentes</Card.Title>
+            <Card.Description>
+              Consolidação das últimas entradas para liberar certificados automaticamente.
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
+            <ul className={styles.list}>
+              {paymentSummary.map((payment) => (
+                <li key={payment.id}>
+                  <div>
+                    <strong>{payment.client}</strong>
+                    <span>{payment.amount}</span>
+                  </div>
+                  <div className={styles.listMeta}>
+                    <span>{payment.method}</span>
+                    <span>{payment.status}</span>
+                    <span>{payment.processedAt}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <Button href="/admin/financeiro" variant="secondary" size="sm">
+              Abrir financeiro
             </Button>
-          </div>
-          <div className={styles.list}>
-            {paymentSummary.map((payment) => (
-              <div key={payment.id} className={styles.listItem}>
-                <strong>{payment.client}</strong>
-                <div className={styles.listMeta}>
-                  <span>{payment.amount}</span>
-                  <span>{payment.method}</span>
-                  <span>{payment.status}</span>
-                  <span>{payment.processedAt}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          </Card.Content>
+        </Card>
       </section>
 
-      <section className={styles.section} aria-labelledby="clientes">
+      <section aria-labelledby="clientes" className={styles.section}>
         <div className={styles.sectionHeader}>
           <div>
-            <h2 id="clientes">Clientes em destaque</h2>
-            <p>Monitore quem está consumindo as videoaulas e mantendo certificações ativas.</p>
+            <h2 id="clientes">Clientes corporativos em destaque</h2>
+            <p>Quem está consumindo as videoaulas gravadas e mantendo certificações ativas.</p>
           </div>
           <Button href="/admin/clientes" variant="secondary">
             Ver todos
@@ -188,9 +192,12 @@ export default function AdminPage() {
           {spotlightClients.map((client) => (
             <div key={client.company} className={styles.clientCard}>
               <strong>{client.company}</strong>
-              <span>Contato: {client.contact}</span>
-              <span>Cursos ativos: {client.activeCourses}</span>
-              <span>Último acesso: {client.lastAccess}</span>
+              <span>{client.industry}</span>
+              <div>
+                <span>{client.activeCourses} cursos ativos</span>
+                <span>Status: {client.status}</span>
+                <span>Último acesso: {client.lastAccess}</span>
+              </div>
             </div>
           ))}
         </div>

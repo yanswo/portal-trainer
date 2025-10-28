@@ -28,6 +28,12 @@ enum PaymentMethod {
   BOLETO
 }
 
+enum VideoType {
+  THEORY
+  PRACTICE
+  ASSESSMENT
+}
+
 enum AssessmentStatus {
   IN_PROGRESS
   SUBMITTED
@@ -41,6 +47,18 @@ enum BudgetStatus {
   SENT
   APPROVED
   DECLINED
+}
+
+enum EvidenceType {
+  VIDEO
+  DOCUMENT
+  AUDIO
+}
+
+enum CertificationStatus {
+  ISSUED
+  PENDING
+  REVOKED
 }
 
 model User {
@@ -79,21 +97,42 @@ model Course {
   updatedAt   DateTime @updatedAt
 
   videos      Video[]
+  modules     CourseModule[]
   enrollments Enrollment[]
   payments    Payment[]
   assessments Assessment[]
-}
+  }
 
 model Video {
   id        String   @id @default(cuid())
   title     String
   url       String
   position  Int
+  type      VideoType @default(THEORY)
+  duration  Int?
+  transcriptUrl String?
+  resources Json?
+  preview   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  moduleId String?
+  module   CourseModule? @relation(fields: [moduleId], references: [id], onDelete: SetNull)
+}
+
+model CourseModule {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  position    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  videos   Video[]
 }
 
 model Enrollment {
@@ -120,6 +159,7 @@ model SupportTicket {
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
+  messages SupportMessage[]
 }
 
 model Payment {
@@ -171,4 +211,43 @@ model Assessment {
   user       User       @relation(fields: [userId], references: [id])
   course     Course     @relation(fields: [courseId], references: [id])
   enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+  evidences  AssessmentEvidence[]
+}
+
+model AssessmentEvidence {
+  id           String       @id @default(cuid())
+  type         EvidenceType @default(VIDEO)
+  url          String
+  uploadedAt   DateTime     @default(now())
+  assessmentId String
+  assessment   Assessment   @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+}
+
+model Certification {
+  id           String               @id @default(cuid())
+  status       CertificationStatus  @default(PENDING)
+  issuedAt     DateTime?
+  expiresAt    DateTime?
+  documentUrl  String?
+  enrollmentId String               @unique
+  enrollment   Enrollment           @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+}
+
+model SupportMessage {
+  id        String   @id @default(cuid())
+  body      String
+  sender    String   @default("CLIENT")
+  createdAt DateTime @default(now())
+
+  ticketId String
+  ticket   SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+model BudgetItem {
+  id          String   @id @default(cuid())
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Decimal
+  budgetId    String
+  budget      BudgetRequest @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 }
