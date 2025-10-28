@@ -1,145 +1,119 @@
 .footer {
-  background: linear-gradient(160deg, #111111, #000000 60%);
-  color: var(--color-text-inverse);
-  padding: 4.5rem var(--container-padding) 2rem var(--container-padding);
-  margin-top: var(--section-spacing);
+  background: rgba(0, 0, 0, 0.04);
+  padding: var(--section-spacing) var(--container-padding) calc(var(--section-spacing) * 0.75);
 }
 
 .container {
-  max-width: var(--content-width);
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 2.5rem;
 }
 
 .topBanner {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 1.5rem;
   padding: 1.5rem 2rem;
   border-radius: var(--border-radius-lg);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.4rem 0.95rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-
-.topBanner h3 {
-  margin: 0.6rem 0 0 0;
-  font-size: 1.3rem;
-  font-weight: 600;
+  color: var(--color-text-muted);
 }
 
 .mailLink {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.65rem 1.1rem;
-  border-radius: 999px;
-  background: #ffffff;
-  color: #111111;
+  gap: 0.75rem;
   font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.mailLink svg {
+  width: 18px;
+  height: 18px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2.5rem;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .column {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  gap: 0.85rem;
+  color: var(--color-text-secondary);
 }
 
 .logo {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 .description {
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
   line-height: 1.7;
-  max-width: 320px;
 }
 
 .title {
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-text-muted);
 }
 
 .linkList {
   list-style: none;
-  padding: 0;
-  margin: 0;
   display: grid;
-  gap: 0.65rem;
+  gap: 0.5rem;
 }
 
 .linkList a {
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  transition: color var(--transition-speed);
-}
-
-.linkList a:hover {
-  color: #ffffff;
+  color: inherit;
 }
 
 .socialIcons {
   display: flex;
-  gap: 1.5rem;
+  gap: 0.75rem;
 }
 
 .socialIcons a {
-  color: rgba(255, 255, 255, 0.7);
-  transition: color var(--transition-speed);
-}
-
-.socialIcons a:hover {
-  color: #ffffff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .bottomBar {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
   gap: 1rem;
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.65);
 }
 
 .legalLinks {
   display: flex;
-  gap: 1.2rem;
-}
-
-.legalLinks a {
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-}
-
-.legalLinks a:hover {
-  color: #ffffff;
-  text-decoration: underline;
+  gap: 1rem;
 }
 
 @media (max-width: 640px) {
@@ -148,12 +122,16 @@
   }
 
   .mailLink {
-    width: 100%;
     justify-content: center;
   }
 
   .bottomBar {
     flex-direction: column;
     align-items: center;
+    text-align: center;
+  }
+
+  .legalLinks {
+    flex-direction: column;
   }
 }

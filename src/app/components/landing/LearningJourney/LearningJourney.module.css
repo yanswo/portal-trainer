@@ -1,84 +1,77 @@
 .section {
   padding: var(--section-spacing) var(--container-padding);
-  background: var(--surface-color);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .container {
-  max-width: var(--content-width);
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--section-spacing-tight);
+  display: grid;
+  gap: 2.75rem;
 }
 
 .header {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.2rem;
+  display: grid;
+  gap: 1rem;
+  max-width: 700px;
 }
 
 .header h2 {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  color: var(--primary-900);
-  max-width: 640px;
-  line-height: 1.1;
+  font-size: clamp(2.1rem, 3.6vw, 3.1rem);
+  letter-spacing: -0.02em;
 }
 
 .header p {
-  max-width: 720px;
-  color: var(--text-secondary);
-  font-size: 1rem;
+  font-size: 1.02rem;
+  color: var(--color-text-secondary);
   line-height: 1.7;
 }
 
 .timeline {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
 .stepCard {
-  background: rgba(255, 255, 255, 0.95);
-  position: relative;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .stepHeader {
   display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
   gap: 0.9rem;
+  position: relative;
 }
 
 .stepIndex {
-  grid-row: span 2;
-  font-size: 0.8rem;
+  position: absolute;
+  top: -2.5rem;
+  right: 0;
+  font-size: 2.75rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--accent-hover-color);
+  color: rgba(0, 0, 0, 0.06);
 }
 
 .icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 1.1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(17, 17, 17, 0.08);
+  background: rgba(0, 0, 0, 0.08);
   color: var(--color-text-primary);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .stepTitle {
-  grid-column: 1 / -1;
-  margin: 0;
-  font-size: 1.1rem;
-  color: var(--primary-900);
+  font-size: 1.2rem;
 }
 
 .stepDescription {
-  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
 }

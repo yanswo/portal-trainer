@@ -1,4 +1,4 @@
-import { FaClipboardCheck, FaChalkboardTeacher, FaUserShield, FaMedal } from "react-icons/fa";
+import { FaClipboardCheck, FaPlayCircle, FaTasks, FaMedal } from "react-icons/fa";
 import { Card } from "../../ui/Card/Card";
 import Badge from "../../ui/Badge/Badge";
 import styles from "./LearningJourney.module.css";
@@ -6,41 +6,40 @@ import styles from "./LearningJourney.module.css";
 const steps = [
   {
     icon: <FaClipboardCheck aria-hidden />,
-    title: "Landing que converte",
+    title: "Landing page personalizada",
     description:
-      "Captação de leads com posicionamento profissional, diferenciais claros e CTAs orientados para ação.",
+      "Capture novos alunos com posicionamento claro, depoimentos reais e formulários prontos para conversão imediata.",
   },
   {
-    icon: <FaChalkboardTeacher aria-hidden />,
-    title: "Portal do aluno",
+    icon: <FaPlayCircle aria-hidden />,
+    title: "Biblioteca de videoaulas",
     description:
-      "Cadastro, compra de cursos, filtros inteligentes, progresso por vídeo e suporte centralizado.",
+      "Organize módulos gravados, adicione materiais complementares e libere checkpoints obrigatórios entre as aulas.",
   },
   {
-    icon: <FaUserShield aria-hidden />,
-    title: "Painel administrador",
+    icon: <FaTasks aria-hidden />,
+    title: "Provas e feedback",
     description:
-      "Gestão de catálogo, upload de aulas, agenda de lives e acompanhamento de matrículas em tempo real.",
+      "Configure avaliações com nota de corte, simulados e planos de estudo sugeridos conforme o desempenho.",
   },
   {
     icon: <FaMedal aria-hidden />,
-    title: "Certificação e indicadores",
+    title: "Certificação e relatórios",
     description:
-      "Certificados automáticos, dashboards de conformidade e exportação de relatórios corporativos.",
+      "Emita certificados digitais, acompanhe indicadores e exporte relatórios para auditorias com um clique.",
   },
 ];
 
 export default function LearningJourney() {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="jornada">
       <div className={styles.container}>
         <div className={styles.header}>
           <Badge variant="outline">Jornada completa</Badge>
-          <h2>Como conduzimos a transformação da sua equipe</h2>
+          <h2>Como a CW Training entrega a transformação digital</h2>
           <p>
-            Unimos tecnologia, conteúdo e acompanhamento humano em uma jornada
-            desenhada para garantir adesão e resultados tangíveis em segurança do
-            trabalho.
+            Estruturamos cada etapa para que você tenha previsibilidade: atraia interessados, entregue videoaulas gravadas,
+            aplique provas automáticas e certifique sua base em tempo recorde.
           </p>
         </div>
         <div className={styles.timeline}>

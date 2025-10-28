@@ -7,13 +7,15 @@ const partners = [
   "Votorantim",
   "CCR",
   "Braskem",
+  "Gerdau",
+  "Raízen",
 ];
 
 export default function PartnerMarquee() {
   return (
-    <section className={styles.section} aria-label="Empresas que confiam no portal">
+    <section className={styles.section} aria-label="Organizações que confiam na CW Training">
       <div className={styles.container}>
-        <p className={styles.title}>Empresas que confiam nas nossas formações</p>
+        <p className={styles.title}>Empresas que potencializam seus treinamentos com a CW Training</p>
         <div className={styles.marquee}>
           {partners.map((partner) => (
             <span key={partner} className={styles.partner}>

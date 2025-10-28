@@ -4,46 +4,45 @@ import Badge from "../../ui/Badge/Badge";
 import Button from "../../ui/Button";
 import styles from "./Header.module.css";
 
+const navigation = [
+  { label: "Experiência", href: "#experiencia" },
+  { label: "Biblioteca", href: "#cursos" },
+  { label: "Metodologia", href: "#jornada" },
+  { label: "Resultados", href: "#resultados" },
+  { label: "FAQ", href: "#faq" },
+];
+
 export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.announcementBar}>
         <div className={styles.announcementContent}>
-          <Badge variant="neutral">Novidade</Badge>
-          <span>Turmas corporativas com mentoria dedicada</span>
-          <Link href="/solucoes-empresas">Conheça a solução</Link>
+          <Badge variant="neutral">Lançamento</Badge>
+          <span>Avaliações automáticas com certificado instantâneo</span>
+          <Link href="#experiencia">Conheça o fluxo completo</Link>
         </div>
       </div>
       <div className={styles.container}>
-        <Link href="/" className={styles.logo}>
-          <span>Portal de Treinamento</span>
+        <Link href="/" className={styles.logo} aria-label="CW Training">
+          <span className={styles.logoMark}>CW</span>
+          <span className={styles.logoText}>Training</span>
         </Link>
         <nav className={styles.navigation} aria-label="Navegação principal">
-          <Link href="/cursos" className={styles.navLink}>
-            Catálogo
-          </Link>
-          <Link href="/clientes" className={styles.navLink}>
-            Portal do aluno
-          </Link>
-          <Link href="/admin" className={styles.navLink}>
-            Painel administrador
-          </Link>
-          <Link href="/empresas" className={styles.navLink}>
-            Soluções corporativas
-          </Link>
-          <Link href="/contato" className={styles.navLink}>
-            Contato
-          </Link>
+          {navigation.map((item) => (
+            <a key={item.label} href={item.href} className={styles.navLink}>
+              {item.label}
+            </a>
+          ))}
         </nav>
         <div className={styles.actions}>
-          <Link href="/atendimento" className={styles.supportLink}>
+          <a href="https://wa.me/550000000000" className={styles.supportLink}>
             <FaWhatsapp aria-hidden />
             <span>Atendimento</span>
-          </Link>
+          </a>
           <Button href="/clientes" variant="secondary">
             Portal do aluno
           </Button>
-          <Button href="/cadastro">Criar conta gratuita</Button>
+          <Button href="/cadastro">Criar conta</Button>
         </div>
       </div>
     </header>

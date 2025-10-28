@@ -7,67 +7,59 @@ const featuredCourses = [
   {
     title: "NR-10 Básico — Segurança em Instalações Elétricas",
     description:
-      "Aprenda a aplicar procedimentos seguros em instalações elétricas com foco em prevenção de acidentes e conformidade legal.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80",
+      "Videoaulas detalhadas, laboratórios virtuais e checklist de inspeção para aplicar imediatamente no campo.",
+    imageUrl: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80",
     courseUrl: "/cursos/nr-10-basico",
     duration: "40 horas",
     category: "Normas Regulamentadoras",
     level: "Básico",
-    format: "100% online",
+    format: "Gravado + Avaliação",
   },
   {
     title: "NR-35 — Capacitação para Trabalho em Altura",
     description:
-      "Domine protocolos essenciais para trabalhos em altura com simuladores, checklists e planos de resgate atualizados.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1516383607781-913a0c7bb87d?auto=format&fit=crop&w=900&q=80",
+      "Sequência de aulas com estudos de caso reais, simulados adaptativos e checklist para liberação de atividades.",
+    imageUrl: "https://images.unsplash.com/photo-1516383607781-913a0c7bb87d?auto=format&fit=crop&w=900&q=80",
     courseUrl: "/cursos/nr-35-trabalho-altura",
     duration: "8 horas",
     category: "Operações em Campo",
     level: "Intermediário",
-    format: "Híbrido",
+    format: "Gravado",
   },
   {
     title: "Primeiros Socorros — Noções Básicas",
     description:
-      "Capacitação prática com simulações e protocolos para atuação rápida em situações de emergência no ambiente corporativo.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=900&q=80",
+      "Protocolos atualizados, simulações guiadas e prova prática com devolutiva para reforçar tomada de decisão.",
+    imageUrl: "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=900&q=80",
     courseUrl: "/cursos/primeiros-socorros",
     duration: "16 horas",
     category: "Emergência",
     level: "Básico",
-    format: "Ao vivo + On-demand",
+    format: "Gravado",
   },
 ];
 
 const learningTracks = [
   {
-    title: "Trilha de Formação de Cipeiros",
-    description:
-      "Programa completo com módulos de CIPA, inspeções e planos de ação contínuos.",
+    title: "Formação em Normas Regulamentadoras",
+    description: "Coleção de cursos NR com provas específicas e certificação centralizada.",
   },
   {
-    title: "Academia de Líderes de SST",
-    description:
-      "Desenvolvimento de lideranças com foco em cultura preventiva e gestão de riscos.",
+    title: "Academia de Supervisores",
+    description: "Trilhas para líderes acompanharem o cumprimento das aulas pela equipe.",
   },
 ];
 
 export default function CourseHighlight() {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="cursos">
       <div className={styles.container}>
         <div className={styles.sectionHeader}>
-          <Badge>Programas estratégicos</Badge>
-          <h2 className={styles.title}>
-            Trilhas e cursos validados por especialistas do mercado
-          </h2>
+          <Badge>Biblioteca on-demand</Badge>
+          <h2 className={styles.title}>Cursos gravados atualizados com avaliações prontas</h2>
           <p className={styles.subtitle}>
-            Combine cursos regulamentados com experiências práticas e suporte
-            consultivo. Cada programa é atualizado constantemente para garantir
-            conformidade e impacto real nas operações.
+            Escolha entre cursos regulatórios, formações avançadas e trilhas corporativas. Cada conteúdo já vem com prova,
+            gabarito e certificado validados por especialistas da CW Training.
           </p>
         </div>
         <div className={styles.grid}>

@@ -1,62 +1,50 @@
 .section {
   padding: var(--section-spacing) var(--container-padding);
-  background: var(--surface-muted);
 }
 
 .container {
-  max-width: var(--content-width);
+  max-width: var(--content-max-width);
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--section-spacing-tight);
+  display: grid;
+  gap: 2.5rem;
 }
 
 .sectionHeader {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.2rem;
+  display: grid;
+  gap: 1.1rem;
+  max-width: 740px;
 }
 
 .title {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  color: var(--primary-900);
-  max-width: 720px;
-  line-height: 1.1;
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  max-width: 720px;
-  color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 1.02rem;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .tracks {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .trackCard {
-  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-lg);
 }
 
 .trackLink {
   font-weight: 600;
-  color: var(--accent-color);
-  text-decoration: none;
-}
-
-.trackLink:hover {
-  color: var(--accent-hover-color);
-  text-decoration: underline;
+  color: var(--color-text-primary);
 }

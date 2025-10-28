@@ -11,18 +11,18 @@ export default function Footer() {
         <div className={styles.topBanner}>
           <div>
             <span className={styles.badge}>Próximo passo</span>
-            <h3>Fale com um especialista em treinamentos corporativos</h3>
+            <h3>Fale com um consultor da CW Training</h3>
           </div>
-          <a href="mailto:contato@portaldetreinamento.com" className={styles.mailLink}>
-            <FaEnvelope aria-hidden /> contato@portaldetreinamento.com
+          <a href="mailto:contato@cwtraining.com" className={styles.mailLink}>
+            <FaEnvelope aria-hidden /> contato@cwtraining.com
           </a>
         </div>
         <div className={styles.grid}>
           <div className={styles.column}>
-            <h3 className={styles.logo}>Portal de Treinamento</h3>
+            <h3 className={styles.logo}>CW Training</h3>
             <p className={styles.description}>
-              Capacitação profissional em segurança do trabalho com certificação
-              reconhecida e suporte consultivo.
+              Plataforma completa para publicar videoaulas, aplicar provas, certificar alunos e acompanhar indicadores de
+              segurança do trabalho.
             </p>
           </div>
 
@@ -30,40 +30,40 @@ export default function Footer() {
             <h4 className={styles.title}>Navegação</h4>
             <ul className={styles.linkList}>
               <li>
-                <Link href="/cursos">Todos os Cursos</Link>
+                <Link href="#experiencia">Experiência</Link>
               </li>
               <li>
-                <Link href="/trilhas">Trilhas Profissionais</Link>
+                <Link href="#cursos">Biblioteca</Link>
               </li>
               <li>
-                <Link href="/empresas">Soluções para Empresas</Link>
+                <Link href="#jornada">Metodologia</Link>
               </li>
               <li>
-                <Link href="/faq">Ajuda (FAQ)</Link>
+                <Link href="#faq">FAQ</Link>
               </li>
             </ul>
           </div>
 
           <div className={styles.column}>
-            <h4 className={styles.title}>Conteúdo</h4>
+            <h4 className={styles.title}>Recursos</h4>
             <ul className={styles.linkList}>
               <li>
                 <Link href="/blog">Blog</Link>
               </li>
               <li>
-                <Link href="/webinars">Webinars</Link>
-              </li>
-              <li>
                 <Link href="/materiais">Materiais gratuitos</Link>
               </li>
               <li>
-                <Link href="/sobre">Sobre Nós</Link>
+                <Link href="/webinars">Webinars</Link>
+              </li>
+              <li>
+                <Link href="/suporte">Central de ajuda</Link>
               </li>
             </ul>
           </div>
 
           <div className={styles.column}>
-            <h4 className={styles.title}>Siga-nos</h4>
+            <h4 className={styles.title}>Siga a CW</h4>
             <div className={styles.socialIcons}>
               <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                 <FaFacebook size={24} />
@@ -79,7 +79,7 @@ export default function Footer() {
         </div>
 
         <div className={styles.bottomBar}>
-          <p>&copy; {currentYear} Portal de Treinamento. Todos os direitos reservados.</p>
+          <p>&copy; {currentYear} CW Training. Todos os direitos reservados.</p>
           <div className={styles.legalLinks}>
             <Link href="/termos-de-uso">Termos de Uso</Link>
             <Link href="/politica-de-privacidade">Política de Privacidade</Link>
