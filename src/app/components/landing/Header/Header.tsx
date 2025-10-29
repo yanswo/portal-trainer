@@ -3,16 +3,13 @@
 import Link from "next/link";
 import { MouseEvent, useCallback } from "react";
 import { FaWhatsapp } from "react-icons/fa";
-import Badge from "../../ui/Badge/Badge";
 import Button from "../../ui/Button";
 import styles from "./Header.module.css";
 
 const navigation = [
   { label: "Experiência", href: "#experiencia" },
-  { label: "Biblioteca", href: "#cursos" },
-  { label: "Metodologia", href: "#jornada" },
-  { label: "Resultados", href: "#resultados" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Catálogo", href: "#cursos" },
+  { label: "Contato", href: "#contato" },
 ];
 
 export default function Header() {
@@ -27,13 +24,6 @@ export default function Header() {
 
   return (
     <header className={styles.header} data-animate="fade">
-      <div className={styles.announcementBar}>
-        <div className={styles.announcementContent}>
-          <Badge variant="neutral">Lançamento</Badge>
-          <span>Avaliações automáticas com certificado instantâneo</span>
-          <Link href="#experiencia">Conheça o fluxo completo</Link>
-        </div>
-      </div>
       <div className={styles.container}>
         <Link href="/" className={styles.logo} aria-label="CW Training">
           <span className={styles.logoMark}>CW</span>
@@ -56,6 +46,9 @@ export default function Header() {
             <FaWhatsapp aria-hidden />
             <span>Atendimento</span>
           </a>
+          <Button href="/login" variant="ghost">
+            Fazer login
+          </Button>
           <Button href="/cadastro">Criar conta</Button>
         </div>
       </div>
