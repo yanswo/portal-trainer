@@ -110,10 +110,10 @@ type TabsComponent = typeof TabsRoot & {
   Content: typeof TabsContent;
 };
 
-const Tabs = TabsRoot as TabsComponent;
-
-Tabs.List = TabsList;
-Tabs.Trigger = TabsTrigger;
-Tabs.Content = TabsContent;
+const Tabs = Object.assign(TabsRoot, {
+  List: TabsList,
+  Trigger: TabsTrigger,
+  Content: TabsContent,
+}) as TabsComponent;
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };
