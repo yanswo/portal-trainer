@@ -1,6 +1,10 @@
 import Button from "@/app/components/ui/Button";
 import styles from "./page.module.css";
 import LoginForm from "./LoginForm";
+import Link from "next/link";
+import Button from "@/app/components/ui/Button";
+import Input from "@/app/components/ui/Input/Input";
+import styles from "./page.module.css";
 
 export default function ClientLoginPage() {
   return (
@@ -11,6 +15,8 @@ export default function ClientLoginPage() {
         <p>
           Entre com o e-mail corporativo para acompanhar o progresso das turmas, emitir certificados e assistir às videoaulas
           disponíveis 24 horas por dia.
+          Entre com o e-mail corporativo para acompanhar o progresso das turmas, emitir
+          certificados e assistir às videoaulas disponíveis 24 horas por dia.
         </p>
         <ul>
           <li>Continue exatamente de onde parou nas trilhas de aprendizagem.</li>
@@ -26,6 +32,44 @@ export default function ClientLoginPage() {
         </header>
 
         <LoginForm />
+        <form className={styles.form}>
+          <div className={styles.field}>
+            <label htmlFor="email">E-mail corporativo</label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              placeholder="voce@empresa.com"
+              required
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label htmlFor="password">Senha</label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Digite sua senha"
+              required
+            />
+          </div>
+
+          <div className={styles.formFooter}>
+            <label className={styles.remember}>
+              <input type="checkbox" name="remember" defaultChecked />
+              <span>Lembrar acesso neste dispositivo</span>
+            </label>
+            <Link href="/recuperar-acesso">Esqueci minha senha</Link>
+          </div>
+
+          <Button type="submit" fullWidth>
+            Fazer login
+          </Button>
+        </form>
 
         <footer className={styles.footer}>
           <span>Primeira vez por aqui?</span>
