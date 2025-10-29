@@ -1,6 +1,5 @@
 import Button from "@/app/components/ui/Button";
 import styles from "./page.module.css";
-import SignUpForm from "./SignUpForm";
 
 export default function ClientSignUpPage() {
   return (
@@ -11,7 +10,6 @@ export default function ClientSignUpPage() {
           <p>Informe os dados básicos para começar a acompanhar treinamentos e certificados da sua equipe.</p>
         </header>
 
-        <SignUpForm />
         <form className={styles.form}>
           <div className={styles.field}>
             <label htmlFor="name">Nome completo</label>

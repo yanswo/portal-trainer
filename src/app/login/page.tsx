@@ -1,6 +1,3 @@
-import Button from "@/app/components/ui/Button";
-import styles from "./page.module.css";
-import LoginForm from "./LoginForm";
 import Link from "next/link";
 import Button from "@/app/components/ui/Button";
 import Input from "@/app/components/ui/Input/Input";
@@ -13,8 +10,6 @@ export default function ClientLoginPage() {
         <span className={styles.kicker}>Portal do cliente</span>
         <h1>Acesse seus cursos e certificados</h1>
         <p>
-          Entre com o e-mail corporativo para acompanhar o progresso das turmas, emitir certificados e assistir às videoaulas
-          disponíveis 24 horas por dia.
           Entre com o e-mail corporativo para acompanhar o progresso das turmas, emitir
           certificados e assistir às videoaulas disponíveis 24 horas por dia.
         </p>
@@ -31,7 +26,6 @@ export default function ClientLoginPage() {
           <p>Informe suas credenciais para continuar o treinamento.</p>
         </header>
 
-        <LoginForm />
         <form className={styles.form}>
           <div className={styles.field}>
             <label htmlFor="email">E-mail corporativo</label>
