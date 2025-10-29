@@ -12,15 +12,17 @@ export default function ClientAreaLayout({
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <div className={styles.brand}>
-          <span>Portal</span>
-          <strong>CW Training</strong>
-        </div>
-        <div className={styles.accountSummary}>
-          <Avatar name={clientAccount.name} size="sm" />
-          <div>
-            <strong>{clientAccount.name}</strong>
-            <p>{clientAccount.email}</p>
+        <div className={styles.sidebarTop}>
+          <div className={styles.brand}>
+            <span>Portal do cliente</span>
+            <strong>CW Training</strong>
+          </div>
+          <div className={styles.accountSummary}>
+            <Avatar name={clientAccount.name} size="sm" />
+            <div>
+              <strong>{clientAccount.name}</strong>
+              <p>{clientAccount.email}</p>
+            </div>
           </div>
         </div>
         <ClientNavigation />
