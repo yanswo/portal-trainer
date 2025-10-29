@@ -28,7 +28,7 @@ export default function Testimonials() {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <div className={styles.header}>
+        <div className={styles.header} data-animate="fade-up">
           <Badge variant="primary">Histórias de sucesso</Badge>
           <h2>Clientes que já transformaram seus treinamentos</h2>
           <p>
@@ -37,8 +37,13 @@ export default function Testimonials() {
           </p>
         </div>
         <div className={styles.grid}>
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.name} className={styles.card}>
+          {testimonials.map((testimonial, index) => (
+            <Card
+              key={testimonial.name}
+              className={styles.card}
+              data-animate="rise"
+              style={{ animationDelay: `${0.12 * (index + 1)}s` }}
+            >
               <Card.Content>
                 <div className={styles.rating} aria-label="Avaliação 5 de 5 estrelas">
                   {Array.from({ length: 5 }).map((_, index) => (

@@ -7,121 +7,138 @@ import {
   clientAccount,
   dashboardActions,
   dashboardHighlights,
-  learningTimeline,
   purchasedCourses,
 } from "@/data/client-portal";
 
 export default function ClientDashboardPage() {
+  const [featuredCourse, ...otherCourses] = purchasedCourses;
+
   return (
-    <div className={styles.header}>
-      <div className={styles.headerTop}>
-        <div className={styles.headerCopy}>
-          <Badge variant="outline">Bem-vinda de volta</Badge>
-          <h1>Olá, {clientAccount.name.split(" ")[0]}! Continue sua jornada.</h1>
+    <div className={styles.page}>
+      <section className={styles.welcome} data-animate="fade-up" style={{ animationDelay: "0.05s" }}>
+        <div className={styles.welcomeCopy}>
+          <Badge variant="outline">Portal do cliente</Badge>
+          <h1>Olá, {clientAccount.name.split(" ")[0]}! Aqui está o seu resumo.</h1>
           <p>
-            Acompanhe seu progresso nas trilhas autoinstrucionais, organize os prazos das provas e
-            mantenha a emissão dos certificados em dia.
+            Continue assistindo às videoaulas gravadas, acompanhe suas provas automatizadas e mantenha os certificados sempre
+            válidos. Este é o ponto de partida para gerenciar toda a sua jornada de treinamento na CW Training.
           </p>
-          <div>
-            <Button href="/clientes/meus-cursos/nr-10-seguranca-eletrica">
-              Retomar último curso
+          <div className={styles.primaryActions}>
+            {featuredCourse ? (
+              <Button href={`/clientes/meus-cursos/${featuredCourse.slug}`}>Retomar curso em andamento</Button>
+            ) : null}
+            <Button href="/clientes/cursos" variant="secondary">
+              Explorar catálogo completo
             </Button>
           </div>
         </div>
-        <div className={styles.metricsGrid}>
-          {dashboardHighlights.map((metric) => (
-            <div key={metric.label} className={styles.metricCard}>
-              <span>{metric.label}</span>
-              <span className={styles.metricValue}>{metric.value}</span>
-              <span>{metric.description}</span>
+        <div className={styles.statGrid}>
+          {dashboardHighlights.map((metric, index) => (
+            <div
+              key={metric.label}
+              className={styles.statCard}
+              data-animate="zoom"
+              style={{ animationDelay: `${0.12 * (index + 1)}s` }}
+            >
+              <span className={styles.statLabel}>{metric.label}</span>
+              <span className={styles.statValue}>{metric.value}</span>
+              <span className={styles.statDescription}>{metric.description}</span>
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
-      <section aria-labelledby="acoes-rapidas">
+      {featuredCourse ? (
+        <section className={styles.featuredCourse} data-animate="rise" style={{ animationDelay: "0.15s" }}>
+          <Card className={styles.featuredCard}>
+            <Card.Header className={styles.featuredHeader}>
+              <Card.Title>{featuredCourse.title}</Card.Title>
+              <Card.Description>{featuredCourse.headline}</Card.Description>
+            </Card.Header>
+            <Card.Content className={styles.featuredContent}>
+              <div className={styles.featuredMeta}>
+                <span>{featuredCourse.duration}</span>
+                <span>{featuredCourse.level}</span>
+                <span>Certificado digital incluso</span>
+              </div>
+              <Progress
+                value={Math.round(featuredCourse.progress * 100)}
+                label={`Progresso geral (${Math.round(featuredCourse.progress * 100)}%)`}
+              />
+            </Card.Content>
+            <Card.Footer className={styles.featuredFooter}>
+              <div>
+                <strong>Próxima etapa</strong>
+                <span>Assista ao próximo módulo e libere a prova final gravada.</span>
+              </div>
+              <Button href={`/clientes/meus-cursos/${featuredCourse.slug}`}>Continuar curso</Button>
+            </Card.Footer>
+          </Card>
+        </section>
+      ) : null}
+
+      <section className={styles.courseSection} data-animate="fade-up" style={{ animationDelay: "0.2s" }}>
         <div className={styles.sectionHeader}>
           <div>
-            <h2 id="acoes-rapidas">Sugestões para hoje</h2>
-            <p>Escolha um próximo passo para avançar na certificação.</p>
+            <h2>Cursos matriculados</h2>
+            <p>Visualize rapidamente o andamento e as datas mais recentes de acesso aos seus treinamentos.</p>
           </div>
+          <Button href="/clientes/meus-cursos" variant="secondary">
+            Ver todos os cursos
+          </Button>
         </div>
-        <div className={styles.actions}>
-          {dashboardActions.map((action) => (
-            <Card key={action.id}>
+        <div className={styles.courseGrid}>
+          {[featuredCourse, ...otherCourses].filter(Boolean).map((course, index) => (
+            <Card
+              key={course!.id}
+              className={styles.courseCard}
+              data-animate="rise"
+              style={{ animationDelay: `${0.08 * (index + 1)}s` }}
+            >
               <Card.Header>
-                <Card.Title>{action.title}</Card.Title>
+                <Card.Title>{course!.title}</Card.Title>
+                <Card.Description>{course!.headline}</Card.Description>
               </Card.Header>
-              <Card.Content>
-                <Card.Description>{action.description}</Card.Description>
+              <Card.Content className={styles.courseContent}>
+                <div className={styles.courseMeta}>
+                  <span>{course!.duration}</span>
+                  <span>{course!.level}</span>
+                  <span>{course!.certificate ? "Certificado incluso" : "Sem certificado"}</span>
+                </div>
+                <Progress
+                  value={Math.round(course!.progress * 100)}
+                  label={`Progresso (${Math.round(course!.progress * 100)}%)`}
+                />
               </Card.Content>
-              <Card.Footer>
-                <Button href={action.href} variant="secondary">
-                  {action.accent}
-                </Button>
+              <Card.Footer className={styles.courseFooter}>
+                <span>Último acesso em {course!.lastAccess}</span>
+                <Button href={`/clientes/meus-cursos/${course!.slug}`}>Abrir curso</Button>
               </Card.Footer>
             </Card>
           ))}
         </div>
       </section>
 
-      <section aria-labelledby="linha-aprendizado">
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 id="linha-aprendizado">Linha do seu treinamento</h2>
-            <p>
-              Visualize as principais etapas da jornada CW Training: aulas gravadas, simulados e
-              liberação do certificado digital.
-            </p>
-          </div>
-        </div>
-        <div className={styles.timeline}>
-          {learningTimeline.map((step) => (
-            <div key={step.id} className={styles.timelineItem}>
-              <span className={styles.status}>{step.status}</span>
-              <strong>{step.title}</strong>
-              <span>{step.detail}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="cursos-em-andamento">
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 id="cursos-em-andamento">Cursos em andamento</h2>
-            <p>
-              Continue das últimas anotações, revise as videoaulas e acompanhe o status da prova
-              final.
-            </p>
-          </div>
-          <Button href="/clientes/cursos" variant="secondary">
-            Ver catálogo
-          </Button>
-        </div>
-        <div className={styles.courseList}>
-          {purchasedCourses.map((course) => (
-            <div key={course.id} className={styles.courseCard}>
-              <div>
-                <h3>{course.title}</h3>
-                <p>{course.headline}</p>
-              </div>
-              <div className={styles.courseMeta}>
-                <span>{course.duration}</span>
-                <span>{course.level}</span>
-                <span>{course.certificate ? "Certificado incluso" : "Sem certificado"}</span>
-              </div>
-              <div className={styles.progressWrapper}>
-                <Progress
-                  value={Math.round(course.progress * 100)}
-                  label={`Progresso geral (${Math.round(course.progress * 100)}%)`}
-                />
-              </div>
-              <div className={styles.courseFooter}>
-                <span>Último acesso em {course.lastAccess}</span>
-                <Button href={`/clientes/meus-cursos/${course.slug}`}>Continuar</Button>
-              </div>
-            </div>
+      <section className={styles.quickActions} data-animate="fade" style={{ animationDelay: "0.25s" }}>
+        <h2>Próximos passos rápidos</h2>
+        <div className={styles.quickActionGrid}>
+          {dashboardActions.map((action, index) => (
+            <Card
+              key={action.id}
+              className={styles.quickActionCard}
+              data-animate="rise"
+              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+            >
+              <Card.Header>
+                <Card.Title>{action.title}</Card.Title>
+                <Card.Description>{action.description}</Card.Description>
+              </Card.Header>
+              <Card.Footer>
+                <Button href={action.href} variant="secondary">
+                  {action.accent}
+                </Button>
+              </Card.Footer>
+            </Card>
           ))}
         </div>
       </section>

@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  HTMLAttributes,
   PropsWithChildren,
   useContext,
   useMemo,
@@ -47,9 +48,9 @@ function TabsRoot({
   return <TabsContext.Provider value={contextValue}>{children}</TabsContext.Provider>;
 }
 
-function TabsList({ children }: PropsWithChildren) {
+function TabsList({ children, className, ...props }: PropsWithChildren<HTMLAttributes<HTMLDivElement>>) {
   return (
-    <div role="tablist" className={styles.list}>
+    <div role="tablist" className={cn(styles.list, className)} {...props}>
       {children}
     </div>
   );
@@ -81,12 +82,12 @@ function TabsTrigger({ value, children }: TabsTriggerProps) {
   );
 }
 
-interface TabsContentProps {
+interface TabsContentProps extends HTMLAttributes<HTMLDivElement> {
   value: string;
   children: React.ReactNode;
 }
 
-function TabsContent({ value, children }: TabsContentProps) {
+function TabsContent({ value, children, className, ...props }: TabsContentProps) {
   const context = useContext(TabsContext);
   if (!context) {
     throw new Error("TabsContent must be used within Tabs");
@@ -97,7 +98,7 @@ function TabsContent({ value, children }: TabsContentProps) {
   }
 
   return (
-    <div role="tabpanel" className={styles.content}>
+    <div role="tabpanel" className={cn(styles.content, className)} {...props}>
       {children}
     </div>
   );

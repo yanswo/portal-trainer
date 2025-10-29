@@ -5,7 +5,7 @@ const stats = [
   {
     value: "8.4k+",
     label: "Profissionais certificados",
-    description: "Alunos que concluíram trilhas gravadas e provas automatizadas.",
+    description: "Clientes que concluíram trilhas gravadas e provas automatizadas.",
   },
   {
     value: "92%",
@@ -28,7 +28,7 @@ export default function Stats() {
   return (
     <section className={styles.section} id="resultados">
       <div className={styles.container}>
-        <div className={styles.header}>
+        <div className={styles.header} data-animate="fade-up">
           <span className={styles.kicker}>Resultados em números</span>
           <h2>Uma operação enxuta com desempenho comprovado</h2>
           <p>
@@ -37,8 +37,13 @@ export default function Stats() {
           </p>
         </div>
         <div className={styles.grid}>
-          {stats.map((stat) => (
-            <Card key={stat.label} className={styles.card}>
+          {stats.map((stat, index) => (
+            <Card
+              key={stat.label}
+              className={styles.card}
+              data-animate="rise"
+              style={{ animationDelay: `${0.12 * (index + 1)}s` }}
+            >
               <Card.Content>
                 <span className={styles.value}>{stat.value}</span>
                 <span className={styles.label}>{stat.label}</span>

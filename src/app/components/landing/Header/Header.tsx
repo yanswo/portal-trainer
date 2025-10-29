@@ -1,4 +1,7 @@
+'use client';
+
 import Link from "next/link";
+import { MouseEvent, useCallback } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import Badge from "../../ui/Badge/Badge";
 import Button from "../../ui/Button";
@@ -13,8 +16,17 @@ const navigation = [
 ];
 
 export default function Header() {
+  const handleNavigate = useCallback((href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const target = document.querySelector(href);
+
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-animate="fade">
       <div className={styles.announcementBar}>
         <div className={styles.announcementContent}>
           <Badge variant="neutral">Lançamento</Badge>
@@ -29,7 +41,12 @@ export default function Header() {
         </Link>
         <nav className={styles.navigation} aria-label="Navegação principal">
           {navigation.map((item) => (
-            <a key={item.label} href={item.href} className={styles.navLink}>
+            <a
+              key={item.label}
+              href={item.href}
+              className={styles.navLink}
+              onClick={handleNavigate(item.href)}
+            >
               {item.label}
             </a>
           ))}
@@ -39,9 +56,6 @@ export default function Header() {
             <FaWhatsapp aria-hidden />
             <span>Atendimento</span>
           </a>
-          <Button href="/clientes" variant="secondary">
-            Portal do aluno
-          </Button>
           <Button href="/cadastro">Criar conta</Button>
         </div>
       </div>

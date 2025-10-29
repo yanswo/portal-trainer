@@ -8,7 +8,7 @@ const steps = [
     icon: <FaClipboardCheck aria-hidden />,
     title: "Landing page personalizada",
     description:
-      "Capture novos alunos com posicionamento claro, depoimentos reais e formulários prontos para conversão imediata.",
+      "Capture novos clientes com posicionamento claro, depoimentos reais e formulários prontos para conversão imediata.",
   },
   {
     icon: <FaPlayCircle aria-hidden />,
@@ -34,7 +34,7 @@ export default function LearningJourney() {
   return (
     <section className={styles.section} id="jornada">
       <div className={styles.container}>
-        <div className={styles.header}>
+        <div className={styles.header} data-animate="fade-up">
           <Badge variant="outline">Jornada completa</Badge>
           <h2>Como a CW Training entrega a transformação digital</h2>
           <p>
@@ -44,7 +44,12 @@ export default function LearningJourney() {
         </div>
         <div className={styles.timeline}>
           {steps.map((step, index) => (
-            <Card key={step.title} className={styles.stepCard}>
+            <Card
+              key={step.title}
+              className={styles.stepCard}
+              data-animate="rise"
+              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+            >
               <Card.Header className={styles.stepHeader}>
                 <span className={styles.stepIndex}>{String(index + 1).padStart(2, "0")}</span>
                 <span className={styles.icon}>{step.icon}</span>

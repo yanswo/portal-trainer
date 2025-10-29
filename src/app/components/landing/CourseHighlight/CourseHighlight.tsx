@@ -54,7 +54,7 @@ export default function CourseHighlight() {
   return (
     <section className={styles.section} id="cursos">
       <div className={styles.container}>
-        <div className={styles.sectionHeader}>
+        <div className={styles.sectionHeader} data-animate="fade-up">
           <Badge>Biblioteca on-demand</Badge>
           <h2 className={styles.title}>Cursos gravados atualizados com avaliações prontas</h2>
           <p className={styles.subtitle}>
@@ -63,7 +63,7 @@ export default function CourseHighlight() {
           </p>
         </div>
         <div className={styles.grid}>
-          {featuredCourses.map((course) => (
+          {featuredCourses.map((course, index) => (
             <CourseCard
               key={course.title}
               title={course.title}
@@ -74,12 +74,19 @@ export default function CourseHighlight() {
               category={course.category}
               level={course.level}
               format={course.format}
+              data-animate="rise"
+              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
             />
           ))}
         </div>
         <div className={styles.tracks}>
-          {learningTracks.map((track) => (
-            <Card key={track.title} className={styles.trackCard}>
+          {learningTracks.map((track, index) => (
+            <Card
+              key={track.title}
+              className={styles.trackCard}
+              data-animate="fade"
+              style={{ animationDelay: `${0.16 * (index + 1)}s` }}
+            >
               <Card.Header>
                 <Card.Title>{track.title}</Card.Title>
                 <Card.Description>{track.description}</Card.Description>

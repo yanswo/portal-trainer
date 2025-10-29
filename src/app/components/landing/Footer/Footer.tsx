@@ -7,7 +7,7 @@ export default function Footer() {
 
   return (
     <footer className={styles.footer}>
-      <div className={styles.container}>
+      <div className={styles.container} data-animate="fade">
         <div className={styles.topBanner}>
           <div>
             <span className={styles.badge}>Próximo passo</span>
@@ -21,7 +21,7 @@ export default function Footer() {
           <div className={styles.column}>
             <h3 className={styles.logo}>CW Training</h3>
             <p className={styles.description}>
-              Plataforma completa para publicar videoaulas, aplicar provas, certificar alunos e acompanhar indicadores de
+              Plataforma completa para publicar videoaulas, aplicar provas, certificar clientes e acompanhar indicadores de
               segurança do trabalho.
             </p>
           </div>

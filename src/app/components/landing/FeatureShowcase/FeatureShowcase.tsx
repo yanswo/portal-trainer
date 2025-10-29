@@ -5,15 +5,15 @@ import styles from "./FeatureShowcase.module.css";
 
 const showcases = [
   {
-    value: "aluno",
-    label: "Portal do aluno",
+    value: "cliente",
+    label: "Portal do cliente",
     title: "Videoaulas gravadas com experiência cinematográfica",
     description:
-      "Trilhas agrupadas por norma, player com velocidade inteligente, notas de aula e lembretes automáticos para manter o ritmo.",
+      "Trilhas agrupadas por norma, player com velocidade inteligente, notas de aula e lembretes automáticos para manter o ritmo dos clientes corporativos.",
     bullets: [
       "Dashboard de progresso por módulo e certificados conquistados",
       "Download de apostilas, checklists e relatórios diretamente no player",
-      "Suporte integrado via chat e envio de dúvidas para os instrutores",
+      "Suporte integrado via chat e envio de dúvidas para os especialistas",
     ],
   },
   {
@@ -33,11 +33,11 @@ const showcases = [
     label: "Painel administrativo",
     title: "Gestão do catálogo, matrículas e finanças em tempo real",
     description:
-      "Crie cursos, organize módulos de vídeo, acompanhe pagamentos e envie comunicados para a base de alunos sem sair do painel.",
+      "Crie cursos, organize módulos de vídeo, acompanhe pagamentos e envie comunicados para a base de clientes sem sair do painel.",
     bullets: [
       "Upload de vídeos em lote com transcrição automática",
       "Financeiro com previsão de receitas e status de notas fiscais",
-      "CRM simplificado para relacionamento com alunos e empresas",
+      "CRM simplificado para relacionamento com clientes e empresas",
     ],
   },
 ];
@@ -46,16 +46,16 @@ export default function FeatureShowcase() {
   return (
     <section className={styles.section} id="experiencia">
       <div className={styles.container}>
-        <div className={styles.header}>
+        <div className={styles.header} data-animate="fade-up">
           <Badge>Experiência integrada</Badge>
           <h2>Uma plataforma com foco na jornada completa</h2>
           <p>
             Use os componentes prontos da CW Training para apresentar seu catálogo, entregar aulas, aplicar provas e emitir
-            certificados sem fricção.
+            certificados sem fricção para seus clientes.
           </p>
         </div>
-        <Tabs defaultValue="aluno">
-          <Tabs.List>
+        <Tabs defaultValue="cliente">
+          <Tabs.List data-animate="fade" style={{ animationDelay: "0.1s" }}>
             {showcases.map((showcase) => (
               <Tabs.Trigger key={showcase.value} value={showcase.value}>
                 {showcase.label}
@@ -63,7 +63,7 @@ export default function FeatureShowcase() {
             ))}
           </Tabs.List>
           {showcases.map((showcase) => (
-            <Tabs.Content key={showcase.value} value={showcase.value}>
+            <Tabs.Content key={showcase.value} value={showcase.value} data-animate="rise">
               <Card className={styles.card}>
                 <Card.Header className={styles.cardHeader}>
                   <Card.Title>{showcase.title}</Card.Title>

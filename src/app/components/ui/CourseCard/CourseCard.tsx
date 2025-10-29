@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import styles from "./CourseCard.module.css";
+import { HTMLAttributes } from "react";
 import { FaCertificate, FaClock } from "react-icons/fa";
+import { cn } from "@/lib/cn";
 import Badge from "../Badge/Badge";
+import styles from "./CourseCard.module.css";
 
-interface CourseCardProps {
+interface CourseCardProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   description: string;
   imageUrl: string;
@@ -24,9 +26,11 @@ export default function CourseCard({
   category,
   level,
   format,
+  className,
+  ...rest
 }: CourseCardProps) {
   return (
-    <div className={styles.card}>
+    <div className={cn(styles.card, className)} {...rest}>
       <div className={styles.imageContainer}>
         <Image
           src={imageUrl}

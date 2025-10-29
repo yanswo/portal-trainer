@@ -32,13 +32,13 @@ const benefits = [
   {
     icon: <FaUserClock aria-hidden />,
     title: "Gestão de jornadas",
-    description: "Acompanhe trilhas, defina metas de conclusão e envie lembretes automáticos aos alunos.",
+    description: "Acompanhe trilhas, defina metas de conclusão e envie lembretes automáticos aos clientes.",
     highlights: ["Alerta de pendências", "Progresso por turma"],
   },
   {
     icon: <FaHeadset aria-hidden />,
     title: "Suporte dedicado",
-    description: "Equipe especializada para configurar fluxos, importar alunos e orientar instrutores.",
+    description: "Equipe especializada para configurar fluxos, importar clientes e orientar instrutores.",
     highlights: ["Onboarding assistido", "Canal premium no WhatsApp"],
   },
   {
@@ -53,7 +53,7 @@ export default function Benefits() {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <div className={styles.sectionHeader}>
+        <div className={styles.sectionHeader} data-animate="fade-up">
           <Badge variant="primary">Infraestrutura completa</Badge>
           <h2 className={styles.title}>Aparato profissional para lançar e escalar seus treinamentos</h2>
           <p className={styles.subtitle}>
@@ -62,8 +62,13 @@ export default function Benefits() {
           </p>
         </div>
         <div className={styles.grid}>
-          {benefits.map((benefit) => (
-            <Card key={benefit.title} className={styles.benefitCard}>
+          {benefits.map((benefit, index) => (
+            <Card
+              key={benefit.title}
+              className={styles.benefitCard}
+              data-animate="rise"
+              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
+            >
               <Card.Header className={styles.cardHeader}>
                 <span className={styles.iconWrapper}>{benefit.icon}</span>
                 <Card.Title>{benefit.title}</Card.Title>

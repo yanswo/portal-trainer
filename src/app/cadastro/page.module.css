@@ -3,34 +3,110 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4rem 1.5rem;
-  background: linear-gradient(135deg, #ffffff 0%, #f3f3f3 100%);
+  padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 5vw, 3rem);
+  background: radial-gradient(circle at 15% 20%, rgba(0, 0, 0, 0.06), transparent 55%),
+    radial-gradient(circle at 80% 15%, rgba(0, 0, 0, 0.05), transparent 60%),
+    linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
 }
 
-.formCard {
-  width: min(520px, 100%);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+.container {
+  width: min(1100px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2.5rem, 5vw, 4rem);
+  align-items: stretch;
+}
+
+.aside {
+  background: rgba(255, 255, 255, 0.9);
   border-radius: var(--border-radius-xl);
-  padding: 2.5rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow-md);
   display: grid;
   gap: 1.5rem;
+  align-content: start;
 }
 
-.formCard h1 {
-  font-size: 2rem;
-  letter-spacing: -0.02em;
+.aside h1 {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  letter-spacing: -0.025em;
 }
 
-.formCard p {
+.aside p {
   color: var(--color-text-secondary);
-  line-height: 1.6;
+  line-height: 1.7;
+}
+
+.asideBadge {
+  width: fit-content;
+}
+
+.highlightList {
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+  padding: 0;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.highlightList li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+}
+
+.highlightList svg {
+  color: var(--color-accent);
+}
+
+.securityCard {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--border-radius);
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--color-text-secondary);
+}
+
+.securityCard strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+}
+
+.formWrapper {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: var(--border-radius-xl);
+  padding: clamp(2rem, 4vw, 3rem);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: 2rem;
 }
 
 .form {
   display: grid;
+  gap: 1.4rem;
+}
+
+.formHeader {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.formHeader p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.fieldGroup {
+  display: grid;
   gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .field {
@@ -50,11 +126,45 @@
   padding: 0.85rem 1rem;
   font-size: 1rem;
   font-family: inherit;
+  background: rgba(255, 255, 255, 0.95);
+  transition: border-color var(--transition-speed),
+    box-shadow var(--motion-duration-short) var(--motion-ease);
+}
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: var(--focus-ring);
+  outline: none;
 }
 
 .field textarea {
-  min-height: 120px;
+  min-height: 140px;
   resize: vertical;
+}
+
+.helperText {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.checkbox a {
+  text-decoration: underline;
 }
 
 .footer {
@@ -62,17 +172,28 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--color-text-secondary);
 }
 
-@media (max-width: 600px) {
-  .formCard {
-    padding: 2rem;
+@media (max-width: 960px) {
+  .container {
+    grid-template-columns: 1fr;
   }
 
+  .aside,
+  .formWrapper {
+    padding: clamp(1.75rem, 6vw, 2.5rem);
+  }
+}
+
+@media (max-width: 600px) {
   .footer {
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .checkbox {
     align-items: flex-start;
   }
 }

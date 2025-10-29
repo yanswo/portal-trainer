@@ -5,35 +5,54 @@ import { Card } from "../../ui/Card/Card";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
+  const heroMetrics = [
+    { value: "98%", label: "Clientes satisfeitos com a experiência gravada" },
+    { value: "24/7", label: "Acesso aos vídeos e provas automatizadas" },
+    { value: "QR Code", label: "Certificação autenticada instantaneamente" },
+  ];
+
   return (
     <section className={styles.heroSection} id="inicio">
       <div className={styles.gradientGlow} aria-hidden />
       <div className={styles.container}>
-        <div className={styles.content}>
-          <Badge className={styles.badge}>CW Training · Plataforma completa</Badge>
+        <div className={styles.content} data-animate="fade-up" style={{ animationDelay: "0.05s" }}>
+          <Badge className={styles.badge}>CW Training · Plataforma on-demand</Badge>
           <h1 className={styles.title}>
             Treinamentos on-demand com provas automatizadas e certificação imediata
           </h1>
           <p className={styles.subtitle}>
-            Estruture a experiência digital da sua escola de segurança do trabalho em um só lugar: landing page de alta
-            conversão, portal do aluno com videoaulas gravadas, provas inteligentes e emissão automática de certificados.
+            Estruture a experiência digital da sua operação de segurança do trabalho em um só lugar: landing page de alta
+            conversão, portal do cliente com videoaulas gravadas, provas inteligentes e emissão automática de certificados.
           </p>
           <div className={styles.actions}>
             <Button href="/cadastro">Iniciar teste gratuito</Button>
             <Button href="/clientes" variant="secondary">
-              Ver experiência do aluno
+              Ver portal do cliente
             </Button>
           </div>
-          <div className={styles.highlights}>
+          <div className={styles.metrics}>
+            {heroMetrics.map((metric, index) => (
+              <div
+                key={metric.label}
+                className={styles.metric}
+                data-animate="zoom"
+                style={{ animationDelay: `${0.12 * (index + 1)}s` }}
+              >
+                <span className={styles.metricValue}>{metric.value}</span>
+                <span className={styles.metricLabel}>{metric.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className={styles.highlights} data-animate="fade" style={{ animationDelay: "0.28s" }}>
             <span>Catálogo com +180 videoaulas HD</span>
             <span>Simulados adaptativos com correção instantânea</span>
             <span>Certificado digital com validação via QR Code</span>
           </div>
         </div>
-        <div className={styles.showcase}>
+        <div className={styles.showcase} data-animate="rise" style={{ animationDelay: "0.18s" }}>
           <Card className={styles.heroCard}>
             <Card.Header className={styles.heroCardHeader}>
-              <Badge variant="outline">Visão do aluno</Badge>
+              <Badge variant="outline">Visão do cliente</Badge>
               <h2>Player moderno com progresso sincronizado</h2>
               <p>
                 Trilhas organizadas, anotações dentro do vídeo e resumo da aula garantem que cada profissional conclua o
@@ -59,7 +78,7 @@ export default function Hero() {
                 <li>Download de materiais e certificados em um clique</li>
                 <li>Dashboard com trilhas concluídas e próximas etapas</li>
               </ul>
-            </Card.Content>
+              </Card.Content>
             <Card.Footer className={styles.heroCardFooter}>
               <div>
                 <span className={styles.footerTitle}>Integração com o painel administrativo</span>
@@ -70,6 +89,10 @@ export default function Hero() {
               </Button>
             </Card.Footer>
           </Card>
+          <div className={styles.scrollCue} aria-hidden>
+            <span />
+            Role para conhecer toda a experiência CW Training
+          </div>
         </div>
       </div>
     </section>

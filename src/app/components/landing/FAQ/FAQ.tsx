@@ -5,7 +5,7 @@ const faqs = [
   {
     question: "Como funciona o acesso aos cursos gravados?",
     answer:
-      "Após o cadastro, o aluno recebe login para o portal CW Training. As aulas ficam disponíveis 24/7 e liberamos o certificado automaticamente após a conclusão da prova.",
+      "Após o cadastro, o cliente recebe login para o portal CW Training. As aulas ficam disponíveis 24/7 e liberamos o certificado automaticamente após a conclusão da prova.",
   },
   {
     question: "Posso importar meus próprios vídeos e questões?",
@@ -28,7 +28,7 @@ export default function FAQ() {
   return (
     <section className={styles.section} id="faq">
       <div className={styles.container}>
-        <div className={styles.header}>
+        <div className={styles.header} data-animate="fade-up">
           <Badge variant="outline">FAQ</Badge>
           <h2>Perguntas frequentes sobre a CW Training</h2>
           <p>
@@ -37,8 +37,13 @@ export default function FAQ() {
           </p>
         </div>
         <div className={styles.list}>
-          {faqs.map((faq) => (
-            <details key={faq.question} className={styles.item}>
+          {faqs.map((faq, index) => (
+            <details
+              key={faq.question}
+              className={styles.item}
+              data-animate="fade"
+              style={{ animationDelay: `${0.12 * (index + 1)}s` }}
+            >
               <summary>{faq.question}</summary>
               <p>{faq.answer}</p>
             </details>

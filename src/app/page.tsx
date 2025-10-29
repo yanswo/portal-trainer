@@ -1,6 +1,5 @@
 import Header from "./components/landing/Header/Header";
 import Hero from "./components/landing/Hero/Hero";
-import PartnerMarquee from "./components/landing/PartnerMarquee/PartnerMarquee";
 import Stats from "./components/landing/Stats/Stats";
 import FeatureShowcase from "./components/landing/FeatureShowcase/FeatureShowcase";
 import CourseHighlight from "./components/landing/CourseHighlight/CourseHighlight";
@@ -17,7 +16,6 @@ export default function LandingPage() {
       <Header />
       <Hero />
       <Stats />
-      <PartnerMarquee />
       <FeatureShowcase />
       <CourseHighlight />
       <LearningJourney />
