@@ -5,10 +5,10 @@ import { Card, CardHeader, CardContent, CardFooter } from "../../ui/Card/Card";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
-  const heroMetrics = [
-    { value: "98%", label: "Clientes satisfeitos com a experiência gravada" },
-    { value: "24/7", label: "Acesso aos vídeos e provas automatizadas" },
-    { value: "QR Code", label: "Certificação autenticada instantaneamente" },
+  const heroHighlights = [
+    "Landing page pronta para converter",
+    "Portal do cliente com aulas gravadas",
+    "Certificados liberados automaticamente",
   ];
 
   return (
@@ -17,12 +17,10 @@ export default function Hero() {
       <div className={styles.container}>
         <div className={styles.content} data-animate="fade-up" style={{ animationDelay: "0.05s" }}>
           <Badge className={styles.badge}>CW Training · Plataforma on-demand</Badge>
-          <h1 className={styles.title}>
-            Treinamentos on-demand com provas automatizadas e certificação imediata
-          </h1>
+          <h1 className={styles.title}>Treinamentos em vídeo com certificação instantânea</h1>
           <p className={styles.subtitle}>
-            Estruture a experiência digital da sua operação de segurança do trabalho em um só lugar: landing page de alta
-            conversão, portal do cliente com videoaulas gravadas, provas inteligentes e emissão automática de certificados.
+            Centralize landing page, aulas gravadas, avaliações e certificados em uma experiência simples para o seu time de
+            SST.
           </p>
           <div className={styles.actions}>
             <Button href="/cadastro">Iniciar teste gratuito</Button>
@@ -30,34 +28,19 @@ export default function Hero() {
               Ver portal do cliente
             </Button>
           </div>
-          <div className={styles.metrics}>
-            {heroMetrics.map((metric, index) => (
-              <div
-                key={metric.label}
-                className={styles.metric}
-                data-animate="zoom"
-                style={{ animationDelay: `${0.12 * (index + 1)}s` }}
-              >
-                <span className={styles.metricValue}>{metric.value}</span>
-                <span className={styles.metricLabel}>{metric.label}</span>
-              </div>
-            ))}
-          </div>
+          <p className={styles.note}>Sem taxa de implantação · Cancelamento a qualquer momento</p>
           <div className={styles.highlights} data-animate="fade" style={{ animationDelay: "0.28s" }}>
-            <span>Catálogo com +180 videoaulas HD</span>
-            <span>Simulados adaptativos com correção instantânea</span>
-            <span>Certificado digital com validação via QR Code</span>
+            {heroHighlights.map((highlight) => (
+              <span key={highlight}>{highlight}</span>
+            ))}
           </div>
         </div>
         <div className={styles.showcase} data-animate="rise" style={{ animationDelay: "0.18s" }}>
           <Card className={styles.heroCard}>
             <CardHeader className={styles.heroCardHeader}>
-              <Badge variant="outline">Visão do cliente</Badge>
-              <h2>Player moderno com progresso sincronizado</h2>
-              <p>
-                Trilhas organizadas, anotações dentro do vídeo e resumo da aula garantem que cada profissional conclua o
-                conteúdo no ritmo ideal.
-              </p>
+              <Badge variant="outline">Visão do aluno</Badge>
+              <h2>Portal enxuto e fácil de navegar</h2>
+              <p>Alunos assistem, fazem a avaliação e baixam o certificado no mesmo ambiente.</p>
             </CardHeader>
             <CardContent className={styles.heroCardContent}>
               <div className={styles.previewImage}>
@@ -74,25 +57,20 @@ export default function Hero() {
                 </div>
               </div>
               <ul className={styles.cardList}>
-                <li>Checklist pós-aula para liberação da prova</li>
-                <li>Download de materiais e certificados em um clique</li>
-                <li>Dashboard com trilhas concluídas e próximas etapas</li>
+                <li>Progresso salvo automaticamente entre aulas</li>
+                <li>Materiais extras e avaliações lado a lado</li>
               </ul>
             </CardContent>
             <CardFooter className={styles.heroCardFooter}>
               <div>
                 <span className={styles.footerTitle}>Integração com o painel administrativo</span>
-                <span className={styles.footerSubtitle}>Status de matrícula, uploads e avaliações em tempo real.</span>
+                <span className={styles.footerSubtitle}>Acompanhe inscrições e certificados em tempo real.</span>
               </div>
               <Button href="/admin" variant="secondary">
-                Explorar painel admin
+                Ver painel admin
               </Button>
             </CardFooter>
           </Card>
-          <div className={styles.scrollCue} aria-hidden>
-            <span />
-            Role para conhecer toda a experiência CW Training
-          </div>
         </div>
       </div>
     </section>

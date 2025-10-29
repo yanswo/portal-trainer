@@ -33,18 +33,3 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-.tracks {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-.trackCard {
-  box-shadow: var(--shadow-sm);
-  border-radius: var(--border-radius-lg);
-}
-
-.trackLink {
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
