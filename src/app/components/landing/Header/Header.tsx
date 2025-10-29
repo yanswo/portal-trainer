@@ -46,6 +46,9 @@ export default function Header() {
             <FaWhatsapp aria-hidden />
             <span>Atendimento</span>
           </a>
+          <Button href="/login" variant="ghost">
+            Fazer login
+          </Button>
           <Button href="/cadastro">Criar conta</Button>
         </div>
       </div>
