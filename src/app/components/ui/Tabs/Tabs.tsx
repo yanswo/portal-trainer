@@ -104,8 +104,16 @@ function TabsContent({ value, children, className, ...props }: TabsContentProps)
   );
 }
 
-export const Tabs = Object.assign(TabsRoot, {
-  List: TabsList,
-  Trigger: TabsTrigger,
-  Content: TabsContent,
-});
+type TabsComponent = typeof TabsRoot & {
+  List: typeof TabsList;
+  Trigger: typeof TabsTrigger;
+  Content: typeof TabsContent;
+};
+
+const Tabs = TabsRoot as TabsComponent;
+
+Tabs.List = TabsList;
+Tabs.Trigger = TabsTrigger;
+Tabs.Content = TabsContent;
+
+export { Tabs, TabsList, TabsTrigger, TabsContent };
