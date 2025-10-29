@@ -28,51 +28,46 @@
   line-height: 1.7;
 }
 
-.card {
-  padding: 2.25rem;
-  background: var(--color-surface);
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.featureCard {
+  padding: 2rem 1.75rem;
   border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-md);
-}
-
-.cardHeader {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
   display: grid;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
-.cardHeader h3,
-.cardHeader h2 {
+.featureCard h3 {
   margin: 0;
+  font-size: 1.25rem;
 }
 
-.list {
-  margin-top: 1.5rem;
-  display: grid;
-  gap: 0.8rem;
-  padding-left: 1.1rem;
+.featureCard p {
+  margin: 0;
   color: var(--color-text-secondary);
-  font-size: 0.96rem;
   line-height: 1.6;
 }
 
-.list li {
-  position: relative;
-  padding-left: 0.5rem;
-}
-
-.list li::before {
-  content: "";
-  position: absolute;
-  left: -0.85rem;
-  top: 0.6rem;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-text-primary);
+.icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--color-text-primary);
+  font-size: 1.4rem;
 }
 
 @media (max-width: 768px) {
-  .card {
-    padding: 1.75rem;
+  .featureCard {
+    padding: 1.75rem 1.5rem;
   }
 }
