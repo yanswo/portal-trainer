@@ -16,13 +16,13 @@
   justify-self: center;
 }
 
-h2 {
+.heading {
   font-family: var(--font-serif);
   font-size: clamp(2rem, 3.2vw, 2.8rem);
   letter-spacing: -0.02em;
 }
 
-p {
+.description {
   max-width: 640px;
   justify-self: center;
   font-size: 1.05rem;

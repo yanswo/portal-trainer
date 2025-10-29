@@ -9,8 +9,8 @@ export default function CallToAction() {
         <Badge variant="neutral" className={styles.badge}>
           Vamos construir juntos
         </Badge>
-        <h2>Conheça a CW Training em uma demonstração guiada</h2>
-        <p>
+        <h2 className={styles.heading}>Conheça a CW Training em uma demonstração guiada</h2>
+        <p className={styles.description}>
           Entenda como personalizamos a landing page, configuramos as trilhas gravadas e automatizamos provas e certificados em
           uma conversa de 30 minutos com nossos especialistas.
         </p>
