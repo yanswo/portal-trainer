@@ -1,8 +1,14 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
 import Chart from "@/app/components/ui/Chart/Chart";
-import { Card } from "@/app/components/ui/Card/Card";
-import { Table } from "@/app/components/ui/Table/Table";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/app/components/ui/Card/Card";
+import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import {
   adminActivity,
   adminCourses,
@@ -44,13 +50,13 @@ export default function AdminDashboardPage() {
           suffix="%"
         />
         <Card className={styles.activity}>
-          <Card.Header>
-            <Card.Title>Atualizações recentes</Card.Title>
-            <Card.Description>
+          <CardHeader>
+            <CardTitle>Atualizações recentes</CardTitle>
+            <CardDescription>
               Monitoramento em tempo real de certificados liberados, pagamentos e solicitações.
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <ul className={styles.activityList}>
               {adminActivity.map((item) => (
                 <li key={item.id}>
@@ -60,7 +66,7 @@ export default function AdminDashboardPage() {
                 </li>
               ))}
             </ul>
-          </Card.Content>
+          </CardContent>
         </Card>
       </section>
 
@@ -73,32 +79,32 @@ export default function AdminDashboardPage() {
           <Button href="/admin/novo-curso">Novo curso</Button>
         </div>
         <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.Cell header>Curso</Table.Cell>
-              <Table.Cell header>Status</Table.Cell>
-              <Table.Cell header>Alunos</Table.Cell>
-              <Table.Cell header>Conclusão</Table.Cell>
-              <Table.Cell header>Atualizado</Table.Cell>
-              <Table.Cell header>Ações</Table.Cell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+          <TableHeader>
+            <TableRow>
+              <TableCell header>Curso</TableCell>
+              <TableCell header>Status</TableCell>
+              <TableCell header>Alunos</TableCell>
+              <TableCell header>Conclusão</TableCell>
+              <TableCell header>Atualizado</TableCell>
+              <TableCell header>Ações</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {adminCourses.map((course) => (
-              <Table.Row key={course.id}>
-                <Table.Cell>
+              <TableRow key={course.id}>
+                <TableCell>
                   <div className={styles.courseTitle}>
                     <strong>{course.title}</strong>
                     <span>{course.category}</span>
                   </div>
-                </Table.Cell>
-                <Table.Cell>
+                </TableCell>
+                <TableCell>
                   <Badge variant="outline">{course.status}</Badge>
-                </Table.Cell>
-                <Table.Cell>{course.enrolled} alunos</Table.Cell>
-                <Table.Cell>{Math.round(course.completionRate * 100)}%</Table.Cell>
-                <Table.Cell>{course.lastUpdate}</Table.Cell>
-                <Table.Cell>
+                </TableCell>
+                <TableCell>{course.enrolled} alunos</TableCell>
+                <TableCell>{Math.round(course.completionRate * 100)}%</TableCell>
+                <TableCell>{course.lastUpdate}</TableCell>
+                <TableCell>
                   <div className={styles.tableActions}>
                     <Button href={`/admin/cursos/${course.slug}`} variant="ghost" size="sm">
                       Gerenciar
@@ -111,22 +117,22 @@ export default function AdminDashboardPage() {
                       Avaliações
                     </Button>
                   </div>
-                </Table.Cell>
-              </Table.Row>
+                </TableCell>
+              </TableRow>
             ))}
-          </Table.Body>
+          </TableBody>
         </Table>
       </section>
 
       <section className={styles.split} aria-label="Operações e finanças">
         <Card>
-          <Card.Header>
-            <Card.Title>Fila de produção</Card.Title>
-            <Card.Description>
+          <CardHeader>
+            <CardTitle>Fila de produção</CardTitle>
+            <CardDescription>
               Acompanhe roteiros, captação e edição das videoaulas para novos treinamentos.
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <ul className={styles.list}>
               {productionQueue.map((item) => (
                 <li key={item.id}>
@@ -145,17 +151,17 @@ export default function AdminDashboardPage() {
             <Button href="/admin/producao" variant="secondary" size="sm">
               Ver produção completa
             </Button>
-          </Card.Content>
+          </CardContent>
         </Card>
 
         <Card>
-          <Card.Header>
-            <Card.Title>Pagamentos recentes</Card.Title>
-            <Card.Description>
+          <CardHeader>
+            <CardTitle>Pagamentos recentes</CardTitle>
+            <CardDescription>
               Consolidação das últimas entradas para liberar certificados automaticamente.
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <ul className={styles.list}>
               {paymentSummary.map((payment) => (
                 <li key={payment.id}>
@@ -174,7 +180,7 @@ export default function AdminDashboardPage() {
             <Button href="/admin/financeiro" variant="secondary" size="sm">
               Abrir financeiro
             </Button>
-          </Card.Content>
+          </CardContent>
         </Card>
       </section>
 

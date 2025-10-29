@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
-import { Table } from "@/app/components/ui/Table/Table";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/app/components/ui/Card/Card";
+import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import { courseAssessmentStats, courseModules, adminCourses } from "@/data/admin-dashboard";
 import { courseFeedback, courses, getCourseBySlug } from "@/data/courses";
 import styles from "./page.module.css";
@@ -41,10 +41,10 @@ export default function AdminCourseDetails({ params }: PageProps) {
 
       <section className={styles.summary} aria-label="Resumo do curso">
         <Card>
-          <Card.Header>
-            <Card.Title>Informações gerais</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Informações gerais</CardTitle>
+          </CardHeader>
+          <CardContent>
             <dl className={styles.infoGrid}>
               <div>
                 <dt>Duração</dt>
@@ -71,14 +71,14 @@ export default function AdminCourseDetails({ params }: PageProps) {
                 <dd>{adminCourse ? `${Math.round(adminCourse.completionRate * 100)}%` : "-"}</dd>
               </div>
             </dl>
-          </Card.Content>
+          </CardContent>
         </Card>
         {assessment ? (
           <Card>
-            <Card.Header>
-              <Card.Title>Desempenho avaliativo</Card.Title>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>Desempenho avaliativo</CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className={styles.assessmentGrid}>
                 <div>
                   <span>Aprovação</span>
@@ -101,7 +101,7 @@ export default function AdminCourseDetails({ params }: PageProps) {
                   </li>
                 ))}
               </ul>
-            </Card.Content>
+            </CardContent>
           </Card>
         ) : null}
       </section>
@@ -119,11 +119,11 @@ export default function AdminCourseDetails({ params }: PageProps) {
         <div className={styles.modulesGrid}>
           {modules.map((module) => (
             <Card key={module.id}>
-              <Card.Header>
-                <Card.Title>{module.title}</Card.Title>
-                <Card.Description>{module.description}</Card.Description>
-              </Card.Header>
-              <Card.Content>
+              <CardHeader>
+                <CardTitle>{module.title}</CardTitle>
+                <CardDescription>{module.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
                 <ul className={styles.lessonList}>
                   {module.lessons.map((lessonId) => {
                     const lesson = course.videos.find((video) => video.id === lessonId);
@@ -143,7 +143,7 @@ export default function AdminCourseDetails({ params }: PageProps) {
                     );
                   })}
                 </ul>
-              </Card.Content>
+              </CardContent>
             </Card>
           ))}
         </div>
@@ -157,28 +157,28 @@ export default function AdminCourseDetails({ params }: PageProps) {
           </div>
         </div>
         <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.Cell header>Título</Table.Cell>
-              <Table.Cell header>Duração</Table.Cell>
-              <Table.Cell header>Tipo</Table.Cell>
-              <Table.Cell header>Recursos</Table.Cell>
-              <Table.Cell header>Preview</Table.Cell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+          <TableHeader>
+            <TableRow>
+              <TableCell header>Título</TableCell>
+              <TableCell header>Duração</TableCell>
+              <TableCell header>Tipo</TableCell>
+              <TableCell header>Recursos</TableCell>
+              <TableCell header>Preview</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {course.videos.map((video) => (
-              <Table.Row key={video.id}>
-                <Table.Cell>{video.title}</Table.Cell>
-                <Table.Cell>{video.duration}</Table.Cell>
-                <Table.Cell>{video.type}</Table.Cell>
-                <Table.Cell>
+              <TableRow key={video.id}>
+                <TableCell>{video.title}</TableCell>
+                <TableCell>{video.duration}</TableCell>
+                <TableCell>{video.type}</TableCell>
+                <TableCell>
                   {video.resources && video.resources.length > 0 ? video.resources.join(", ") : "-"}
-                </Table.Cell>
-                <Table.Cell>{video.preview ? "Sim" : "Não"}</Table.Cell>
-              </Table.Row>
+                </TableCell>
+                <TableCell>{video.preview ? "Sim" : "Não"}</TableCell>
+              </TableRow>
             ))}
-          </Table.Body>
+          </TableBody>
         </Table>
       </section>
 
@@ -191,28 +191,28 @@ export default function AdminCourseDetails({ params }: PageProps) {
         </div>
         <div className={styles.twoColumn}>
           <Card>
-            <Card.Header>
-              <Card.Title>Requisitos para certificação</Card.Title>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>Requisitos para certificação</CardTitle>
+            </CardHeader>
+            <CardContent>
               <ul className={styles.bulletList}>
                 {course.requirements.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-            </Card.Content>
+            </CardContent>
           </Card>
           <Card>
-            <Card.Header>
-              <Card.Title>Diferenciais do conteúdo</Card.Title>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>Diferenciais do conteúdo</CardTitle>
+            </CardHeader>
+            <CardContent>
               <ul className={styles.bulletList}>
                 {course.highlights.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-            </Card.Content>
+            </CardContent>
           </Card>
         </div>
       </section>
@@ -228,14 +228,14 @@ export default function AdminCourseDetails({ params }: PageProps) {
           <div className={styles.feedbackGrid}>
             {feedback.map((item) => (
               <Card key={item.id}>
-                <Card.Header>
-                  <Card.Title>{item.author}</Card.Title>
-                  <Card.Description>{item.role}</Card.Description>
-                </Card.Header>
-                <Card.Content>
+                <CardHeader>
+                  <CardTitle>{item.author}</CardTitle>
+                  <CardDescription>{item.role}</CardDescription>
+                </CardHeader>
+                <CardContent>
                   <p>{item.comment}</p>
                   <span className={styles.feedbackMeta}>{item.createdAt}</span>
-                </Card.Content>
+                </CardContent>
               </Card>
             ))}
           </div>

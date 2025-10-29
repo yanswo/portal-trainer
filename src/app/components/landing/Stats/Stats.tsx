@@ -1,4 +1,4 @@
-import { Card } from "../../ui/Card/Card";
+import { Card, CardContent } from "../../ui/Card/Card";
 import styles from "./Stats.module.css";
 
 const stats = [
@@ -44,11 +44,11 @@ export default function Stats() {
               data-animate="rise"
               style={{ animationDelay: `${0.12 * (index + 1)}s` }}
             >
-              <Card.Content>
+              <CardContent>
                 <span className={styles.value}>{stat.value}</span>
                 <span className={styles.label}>{stat.label}</span>
                 <p className={styles.description}>{stat.description}</p>
-              </Card.Content>
+              </CardContent>
             </Card>
           ))}
         </div>

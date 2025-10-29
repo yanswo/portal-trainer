@@ -1,6 +1,6 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/app/components/ui/Card/Card";
 import Progress from "@/app/components/ui/Progress/Progress";
 import { purchasedCourses } from "@/data/client-portal";
 import styles from "./page.module.css";
@@ -19,11 +19,11 @@ export default function MyCoursesPage() {
           const progress = Math.round(course.progress * 100);
           return (
             <Card key={course.id}>
-              <Card.Header>
-                <Card.Title>{course.title}</Card.Title>
-                <Card.Description>{course.headline}</Card.Description>
-              </Card.Header>
-              <Card.Content>
+              <CardHeader>
+                <CardTitle>{course.title}</CardTitle>
+                <CardDescription>{course.headline}</CardDescription>
+              </CardHeader>
+              <CardContent>
                 <div className={styles.meta}>
                   <span>{course.duration}</span>
                   <span>{course.level}</span>
@@ -31,13 +31,13 @@ export default function MyCoursesPage() {
                 </div>
                 <Progress value={progress} label={`Progresso (${progress}%)`} />
                 <span className={styles.lastAccess}>Último acesso em {course.lastAccess}</span>
-              </Card.Content>
-              <Card.Footer>
+              </CardContent>
+              <CardFooter>
                 <Button href={`/clientes/meus-cursos/${course.slug}`}>Continuar</Button>
                 <Button href={`/clientes/cursos/${course.slug}`} variant="secondary">
                   Ver detalhes do catálogo
                 </Button>
-              </Card.Footer>
+              </CardFooter>
             </Card>
           );
         })}

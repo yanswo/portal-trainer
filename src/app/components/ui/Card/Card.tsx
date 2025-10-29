@@ -1,65 +1,39 @@
-import { HTMLAttributes, PropsWithChildren } from "react";
+import { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 import styles from "./Card.module.css";
 
 type CardElementProps = HTMLAttributes<HTMLDivElement>;
 
-function CardContainer({ children, className, ...props }: PropsWithChildren<CardElementProps>) {
-  return (
-    <div className={cn(styles.card, className)} {...props}>
-      {children}
-    </div>
-  );
+function CardRoot({ className, ...props }: CardElementProps) {
+  return <div className={cn(styles.card, className)} {...props} />;
 }
 
-function CardHeader({ children, className, ...props }: PropsWithChildren<CardElementProps>) {
-  return (
-    <div className={cn(styles.header, className)} {...props}>
-      {children}
-    </div>
-  );
+function CardHeader({ className, ...props }: CardElementProps) {
+  return <div className={cn(styles.header, className)} {...props} />;
 }
 
-function CardContent({ children, className, ...props }: PropsWithChildren<CardElementProps>) {
-  return (
-    <div className={cn(styles.content, className)} {...props}>
-      {children}
-    </div>
-  );
+function CardContent({ className, ...props }: CardElementProps) {
+  return <div className={cn(styles.content, className)} {...props} />;
 }
 
-function CardFooter({ children, className, ...props }: PropsWithChildren<CardElementProps>) {
-  return (
-    <div className={cn(styles.footer, className)} {...props}>
-      {children}
-    </div>
-  );
+function CardFooter({ className, ...props }: CardElementProps) {
+  return <div className={cn(styles.footer, className)} {...props} />;
 }
 
-function CardTitle({ children, className, ...props }: PropsWithChildren<CardElementProps>) {
-  return (
-    <h3 className={cn(styles.title, className)} {...props}>
-      {children}
-    </h3>
-  );
+function CardTitle({ className, ...props }: CardElementProps) {
+  return <h3 className={cn(styles.title, className)} {...props} />;
 }
 
-function CardDescription({
-  children,
-  className,
-  ...props
-}: PropsWithChildren<CardElementProps>) {
-  return (
-    <p className={cn(styles.description, className)} {...props}>
-      {children}
-    </p>
-  );
+function CardDescription({ className, ...props }: CardElementProps) {
+  return <p className={cn(styles.description, className)} {...props} />;
 }
 
-export const Card = Object.assign(CardContainer, {
+const Card = Object.assign(CardRoot, {
   Header: CardHeader,
   Content: CardContent,
   Footer: CardFooter,
   Title: CardTitle,
   Description: CardDescription,
 });
+
+export { Card, CardRoot, CardHeader, CardContent, CardFooter, CardTitle, CardDescription };

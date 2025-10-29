@@ -1,7 +1,7 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
 import Chart from "@/app/components/ui/Chart/Chart";
-import { Card } from "@/app/components/ui/Card/Card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/app/components/ui/Card/Card";
 import {
   productionBurndown,
   productionQueue,
@@ -31,11 +31,11 @@ export default function ProductionPage() {
           data={productionBurndown}
         />
         <Card>
-          <Card.Header>
-            <Card.Title>Sprints em andamento</Card.Title>
-            <Card.Description>Planejamento da squad de conteúdo e audiovisual.</Card.Description>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Sprints em andamento</CardTitle>
+            <CardDescription>Planejamento da squad de conteúdo e audiovisual.</CardDescription>
+          </CardHeader>
+          <CardContent>
             <ul className={styles.sprintList}>
               {productionSprints.map((sprint) => (
                 <li key={sprint.id}>
@@ -51,7 +51,7 @@ export default function ProductionPage() {
                 </li>
               ))}
             </ul>
-          </Card.Content>
+          </CardContent>
         </Card>
       </section>
 
@@ -65,11 +65,11 @@ export default function ProductionPage() {
         <div className={styles.queue}>
           {productionQueue.map((item) => (
             <Card key={item.id}>
-              <Card.Header>
-                <Card.Title>{item.title}</Card.Title>
-                <Card.Description>{item.owner}</Card.Description>
-              </Card.Header>
-              <Card.Content>
+              <CardHeader>
+                <CardTitle>{item.title}</CardTitle>
+                <CardDescription>{item.owner}</CardDescription>
+              </CardHeader>
+              <CardContent>
                 <div className={styles.queueMeta}>
                   <Badge variant="neutral">{item.stage}</Badge>
                   <span>{item.status}</span>
@@ -78,7 +78,7 @@ export default function ProductionPage() {
                 <Button variant="ghost" size="sm">
                   Atualizar status
                 </Button>
-              </Card.Content>
+              </CardContent>
             </Card>
           ))}
         </div>

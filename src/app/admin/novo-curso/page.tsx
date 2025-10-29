@@ -1,6 +1,6 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
 import Input from "@/app/components/ui/Input/Input";
 import Label from "@/app/components/ui/Label/Label";
 import Select from "@/app/components/ui/Select/Select";
@@ -24,10 +24,10 @@ export default function NewCoursePage() {
 
       <form className={styles.form}>
         <Card>
-          <Card.Header>
-            <Card.Title>Informações principais</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Informações principais</CardTitle>
+          </CardHeader>
+          <CardContent>
             <div className={styles.grid}>
               <div className={styles.field}>
                 <Label htmlFor="title">Título do curso</Label>
@@ -72,14 +72,14 @@ export default function NewCoursePage() {
                 placeholder="Detalhe o objetivo do treinamento, a metodologia e os resultados esperados."
               />
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
 
         <Card>
-          <Card.Header>
-            <Card.Title>Materiais e requisitos</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Materiais e requisitos</CardTitle>
+          </CardHeader>
+          <CardContent>
             <div className={styles.grid}>
               <div className={styles.field}>
                 <Label htmlFor="requirements">Requisitos obrigatórios</Label>
@@ -111,14 +111,14 @@ export default function NewCoursePage() {
                 </Select>
               </div>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
 
         <Card>
-          <Card.Header>
-            <Card.Title>Publicação</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Publicação</CardTitle>
+          </CardHeader>
+          <CardContent>
             <div className={styles.grid}>
               <div className={styles.field}>
                 <Label htmlFor="publish">Status inicial</Label>
@@ -139,7 +139,7 @@ export default function NewCoursePage() {
               </Button>
               <Button type="submit">Publicar curso</Button>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
       </form>
     </div>

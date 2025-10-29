@@ -1,5 +1,5 @@
 import { Tabs } from "../../ui/Tabs/Tabs";
-import { Card } from "../../ui/Card/Card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "../../ui/Card/Card";
 import Badge from "../../ui/Badge/Badge";
 import styles from "./FeatureShowcase.module.css";
 
@@ -65,17 +65,17 @@ export default function FeatureShowcase() {
           {showcases.map((showcase) => (
             <Tabs.Content key={showcase.value} value={showcase.value} data-animate="rise">
               <Card className={styles.card}>
-                <Card.Header className={styles.cardHeader}>
-                  <Card.Title>{showcase.title}</Card.Title>
-                  <Card.Description>{showcase.description}</Card.Description>
-                </Card.Header>
-                <Card.Content>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle>{showcase.title}</CardTitle>
+                  <CardDescription>{showcase.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
                   <ul className={styles.list}>
                     {showcase.bullets.map((bullet) => (
                       <li key={bullet}>{bullet}</li>
                     ))}
                   </ul>
-                </Card.Content>
+                </CardContent>
               </Card>
             </Tabs.Content>
           ))}

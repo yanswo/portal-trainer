@@ -1,6 +1,6 @@
 import Badge from "../components/ui/Badge/Badge";
 import Button from "../components/ui/Button";
-import { Card } from "../components/ui/Card/Card";
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "../components/ui/Card/Card";
 import Progress from "../components/ui/Progress/Progress";
 import styles from "./page.module.css";
 import {
@@ -51,11 +51,11 @@ export default function ClientDashboardPage() {
       {featuredCourse ? (
         <section className={styles.featuredCourse} data-animate="rise" style={{ animationDelay: "0.15s" }}>
           <Card className={styles.featuredCard}>
-            <Card.Header className={styles.featuredHeader}>
-              <Card.Title>{featuredCourse.title}</Card.Title>
-              <Card.Description>{featuredCourse.headline}</Card.Description>
-            </Card.Header>
-            <Card.Content className={styles.featuredContent}>
+            <CardHeader className={styles.featuredHeader}>
+              <CardTitle>{featuredCourse.title}</CardTitle>
+              <CardDescription>{featuredCourse.headline}</CardDescription>
+            </CardHeader>
+            <CardContent className={styles.featuredContent}>
               <div className={styles.featuredMeta}>
                 <span>{featuredCourse.duration}</span>
                 <span>{featuredCourse.level}</span>
@@ -65,14 +65,14 @@ export default function ClientDashboardPage() {
                 value={Math.round(featuredCourse.progress * 100)}
                 label={`Progresso geral (${Math.round(featuredCourse.progress * 100)}%)`}
               />
-            </Card.Content>
-            <Card.Footer className={styles.featuredFooter}>
+            </CardContent>
+            <CardFooter className={styles.featuredFooter}>
               <div>
                 <strong>Próxima etapa</strong>
                 <span>Assista ao próximo módulo e libere a prova final gravada.</span>
               </div>
               <Button href={`/clientes/meus-cursos/${featuredCourse.slug}`}>Continuar curso</Button>
-            </Card.Footer>
+            </CardFooter>
           </Card>
         </section>
       ) : null}
@@ -95,11 +95,11 @@ export default function ClientDashboardPage() {
               data-animate="rise"
               style={{ animationDelay: `${0.08 * (index + 1)}s` }}
             >
-              <Card.Header>
-                <Card.Title>{course!.title}</Card.Title>
-                <Card.Description>{course!.headline}</Card.Description>
-              </Card.Header>
-              <Card.Content className={styles.courseContent}>
+              <CardHeader>
+                <CardTitle>{course!.title}</CardTitle>
+                <CardDescription>{course!.headline}</CardDescription>
+              </CardHeader>
+              <CardContent className={styles.courseContent}>
                 <div className={styles.courseMeta}>
                   <span>{course!.duration}</span>
                   <span>{course!.level}</span>
@@ -109,11 +109,11 @@ export default function ClientDashboardPage() {
                   value={Math.round(course!.progress * 100)}
                   label={`Progresso (${Math.round(course!.progress * 100)}%)`}
                 />
-              </Card.Content>
-              <Card.Footer className={styles.courseFooter}>
+              </CardContent>
+              <CardFooter className={styles.courseFooter}>
                 <span>Último acesso em {course!.lastAccess}</span>
                 <Button href={`/clientes/meus-cursos/${course!.slug}`}>Abrir curso</Button>
-              </Card.Footer>
+              </CardFooter>
             </Card>
           ))}
         </div>
@@ -129,15 +129,15 @@ export default function ClientDashboardPage() {
               data-animate="rise"
               style={{ animationDelay: `${0.1 * (index + 1)}s` }}
             >
-              <Card.Header>
-                <Card.Title>{action.title}</Card.Title>
-                <Card.Description>{action.description}</Card.Description>
-              </Card.Header>
-              <Card.Footer>
+              <CardHeader>
+                <CardTitle>{action.title}</CardTitle>
+                <CardDescription>{action.description}</CardDescription>
+              </CardHeader>
+              <CardFooter>
                 <Button href={action.href} variant="secondary">
                   {action.accent}
                 </Button>
-              </Card.Footer>
+              </CardFooter>
             </Card>
           ))}
         </div>

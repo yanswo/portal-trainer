@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { FaFileAlt } from "react-icons/fa";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
 import { courseFeedback, courses, getCourseBySlug } from "@/data/courses";
 import styles from "./page.module.css";
 
@@ -66,15 +66,15 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
       <div className={styles.columns} id="conteudo">
         <div className={styles.modulesSection}>
           <Card>
-            <Card.Header>
-              <Card.Title>Trilha de aulas gravadas</Card.Title>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>Trilha de aulas gravadas</CardTitle>
+            </CardHeader>
+            <CardContent>
               <p>
                 Cada módulo combina conceitos, demonstrações e atividades avaliativas. Use as
                 transcrições resumidas para revisar antes da prova final.
               </p>
-            </Card.Content>
+            </CardContent>
           </Card>
 
           <div className={styles.modulesGrid}>

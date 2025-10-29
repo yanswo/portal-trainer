@@ -1,7 +1,7 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
-import { Table } from "@/app/components/ui/Table/Table";
+import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
+import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import {
   adminClientList,
   clientSegments,
@@ -23,13 +23,13 @@ export default function ClientsPage() {
       <section className={styles.overview} aria-label="Segmentação">
         {clientSegments.map((segment) => (
           <Card key={segment.segment}>
-            <Card.Header>
-              <Card.Title>{segment.segment}</Card.Title>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>{segment.segment}</CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className={styles.segmentValue}>{segment.clients} empresas</div>
               <Badge variant="neutral">{segment.share}</Badge>
-            </Card.Content>
+            </CardContent>
           </Card>
         ))}
       </section>
@@ -42,33 +42,33 @@ export default function ClientsPage() {
           </div>
         </div>
         <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.Cell header>Empresa</Table.Cell>
-              <Table.Cell header>Contato</Table.Cell>
-              <Table.Cell header>Plano</Table.Cell>
-              <Table.Cell header>Licenças</Table.Cell>
-              <Table.Cell header>Status</Table.Cell>
-              <Table.Cell header>Renovação</Table.Cell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+          <TableHeader>
+            <TableRow>
+              <TableCell header>Empresa</TableCell>
+              <TableCell header>Contato</TableCell>
+              <TableCell header>Plano</TableCell>
+              <TableCell header>Licenças</TableCell>
+              <TableCell header>Status</TableCell>
+              <TableCell header>Renovação</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {adminClientList.map((client) => (
-              <Table.Row key={client.company}>
-                <Table.Cell>
+              <TableRow key={client.company}>
+                <TableCell>
                   <div className={styles.companyCell}>
                     <strong>{client.company}</strong>
                     <span>{client.industry}</span>
                   </div>
-                </Table.Cell>
-                <Table.Cell>{client.contact}</Table.Cell>
-                <Table.Cell>{client.plan}</Table.Cell>
-                <Table.Cell>{client.licenses}</Table.Cell>
-                <Table.Cell>{client.status}</Table.Cell>
-                <Table.Cell>{client.renewal}</Table.Cell>
-              </Table.Row>
+                </TableCell>
+                <TableCell>{client.contact}</TableCell>
+                <TableCell>{client.plan}</TableCell>
+                <TableCell>{client.licenses}</TableCell>
+                <TableCell>{client.status}</TableCell>
+                <TableCell>{client.renewal}</TableCell>
+              </TableRow>
             ))}
-          </Table.Body>
+          </TableBody>
         </Table>
       </section>
     </div>

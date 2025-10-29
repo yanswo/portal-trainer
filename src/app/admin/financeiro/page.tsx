@@ -1,8 +1,14 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
 import Chart from "@/app/components/ui/Chart/Chart";
-import { Card } from "@/app/components/ui/Card/Card";
-import { Table } from "@/app/components/ui/Table/Table";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/app/components/ui/Card/Card";
+import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import {
   financeHighlights,
   financeTransactions,
@@ -29,14 +35,14 @@ export default function FinancePage() {
       <section className={styles.metrics} aria-label="Indicadores financeiros">
         {financeHighlights.map((highlight) => (
           <Card key={highlight.id}>
-            <Card.Header>
-              <Card.Title>{highlight.label}</Card.Title>
-              <Card.Description>{highlight.detail}</Card.Description>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>{highlight.label}</CardTitle>
+              <CardDescription>{highlight.detail}</CardDescription>
+            </CardHeader>
+            <CardContent>
               <div className={styles.metricValue}>{highlight.value}</div>
               <Badge variant="neutral">{highlight.change}</Badge>
-            </Card.Content>
+            </CardContent>
           </Card>
         ))}
       </section>
@@ -56,10 +62,10 @@ export default function FinancePage() {
           suffix=" mil"
         />
         <Card>
-          <Card.Header>
-            <Card.Title>Composição de receita</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Composição de receita</CardTitle>
+          </CardHeader>
+          <CardContent>
             <ul className={styles.breakdownList}>
               {revenueBreakdown.map((item) => (
                 <li key={item.label}>
@@ -71,7 +77,7 @@ export default function FinancePage() {
             <Button variant="secondary" size="sm">
               Ajustar preços
             </Button>
-          </Card.Content>
+          </CardContent>
         </Card>
       </section>
 
@@ -83,30 +89,30 @@ export default function FinancePage() {
           </div>
         </div>
         <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.Cell header>ID</Table.Cell>
-              <Table.Cell header>Cliente</Table.Cell>
-              <Table.Cell header>Valor</Table.Cell>
-              <Table.Cell header>Método</Table.Cell>
-              <Table.Cell header>Status</Table.Cell>
-              <Table.Cell header>Referência</Table.Cell>
-              <Table.Cell header>Processado em</Table.Cell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+          <TableHeader>
+            <TableRow>
+              <TableCell header>ID</TableCell>
+              <TableCell header>Cliente</TableCell>
+              <TableCell header>Valor</TableCell>
+              <TableCell header>Método</TableCell>
+              <TableCell header>Status</TableCell>
+              <TableCell header>Referência</TableCell>
+              <TableCell header>Processado em</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {financeTransactions.map((transaction) => (
-              <Table.Row key={transaction.id}>
-                <Table.Cell>{transaction.id}</Table.Cell>
-                <Table.Cell>{transaction.client}</Table.Cell>
-                <Table.Cell>{transaction.amount}</Table.Cell>
-                <Table.Cell>{transaction.method}</Table.Cell>
-                <Table.Cell>{transaction.status}</Table.Cell>
-                <Table.Cell>{transaction.reference}</Table.Cell>
-                <Table.Cell>{transaction.processedAt}</Table.Cell>
-              </Table.Row>
+              <TableRow key={transaction.id}>
+                <TableCell>{transaction.id}</TableCell>
+                <TableCell>{transaction.client}</TableCell>
+                <TableCell>{transaction.amount}</TableCell>
+                <TableCell>{transaction.method}</TableCell>
+                <TableCell>{transaction.status}</TableCell>
+                <TableCell>{transaction.reference}</TableCell>
+                <TableCell>{transaction.processedAt}</TableCell>
+              </TableRow>
             ))}
-          </Table.Body>
+          </TableBody>
         </Table>
       </section>
     </div>

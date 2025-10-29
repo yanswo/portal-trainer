@@ -1,5 +1,5 @@
 import styles from "./Testimonials.module.css";
-import { Card } from "../../ui/Card/Card";
+import { Card, CardContent } from "../../ui/Card/Card";
 import Badge from "../../ui/Badge/Badge";
 import { FaStar } from "react-icons/fa";
 
@@ -44,7 +44,7 @@ export default function Testimonials() {
               data-animate="rise"
               style={{ animationDelay: `${0.12 * (index + 1)}s` }}
             >
-              <Card.Content>
+              <CardContent>
                 <div className={styles.rating} aria-label="Avaliação 5 de 5 estrelas">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <FaStar key={index} />
@@ -57,7 +57,7 @@ export default function Testimonials() {
                   <span className={styles.name}>{testimonial.name}</span>
                   <span className={styles.role}>{testimonial.role}</span>
                 </div>
-              </Card.Content>
+              </CardContent>
             </Card>
           ))}
         </div>

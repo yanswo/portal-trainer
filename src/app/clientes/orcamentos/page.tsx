@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
-import { Table } from "@/app/components/ui/Table/Table";
+import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
+import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import { Tabs } from "@/app/components/ui/Tabs/Tabs";
 import { allCourses, budgetFilters, budgets } from "@/data/client-portal";
 import styles from "./page.module.css";
@@ -54,63 +54,63 @@ export default function BudgetsPage() {
       </div>
 
       <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.Cell header>ID</Table.Cell>
-            <Table.Cell header>Curso</Table.Cell>
-            <Table.Cell header>Vagas</Table.Cell>
-            <Table.Cell header>Valor</Table.Cell>
-            <Table.Cell header>Status</Table.Cell>
-            <Table.Cell header>Válido até</Table.Cell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
+        <TableHeader>
+          <TableRow>
+            <TableCell header>ID</TableCell>
+            <TableCell header>Curso</TableCell>
+            <TableCell header>Vagas</TableCell>
+            <TableCell header>Valor</TableCell>
+            <TableCell header>Status</TableCell>
+            <TableCell header>Válido até</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {filteredBudgets.map((budget) => {
             const course = allCourses.find((item) => item.slug === budget.courseSlug);
             return (
-              <Table.Row key={budget.id}>
-                <Table.Cell>{budget.id}</Table.Cell>
-                <Table.Cell>{course?.title}</Table.Cell>
-                <Table.Cell>{budget.seats}</Table.Cell>
-                <Table.Cell>{budget.amount}</Table.Cell>
-                <Table.Cell>
+              <TableRow key={budget.id}>
+                <TableCell>{budget.id}</TableCell>
+                <TableCell>{course?.title}</TableCell>
+                <TableCell>{budget.seats}</TableCell>
+                <TableCell>{budget.amount}</TableCell>
+                <TableCell>
                   <Badge variant="neutral">{budget.status}</Badge>
-                </Table.Cell>
-                <Table.Cell>{budget.validUntil}</Table.Cell>
-              </Table.Row>
+                </TableCell>
+                <TableCell>{budget.validUntil}</TableCell>
+              </TableRow>
             );
           })}
-        </Table.Body>
+        </TableBody>
       </Table>
 
       <section className={styles.summaryGrid} aria-label="Próximos passos">
         <Card>
-          <Card.Header>
-            <Card.Title>Próximo passo sugerido</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Próximo passo sugerido</CardTitle>
+          </CardHeader>
+          <CardContent>
             <p>Envie a proposta BGT-2031 com condições atualizadas.</p>
             <Button variant="secondary" size="sm">
               Enviar e-mail
             </Button>
-          </Card.Content>
+          </CardContent>
         </Card>
         <Card>
-          <Card.Header>
-            <Card.Title>Economia estimada</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Economia estimada</CardTitle>
+          </CardHeader>
+          <CardContent>
             <p>R$ 1.280,00 negociados com licenças combinadas neste trimestre.</p>
-          </Card.Content>
+          </CardContent>
         </Card>
         <Card>
-          <Card.Header>
-            <Card.Title>Contato responsável</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Contato responsável</CardTitle>
+          </CardHeader>
+          <CardContent>
             <p>Equipe financeira CW Training</p>
             <span className={styles.contact}>financeiro@cwtraining.com</span>
-          </Card.Content>
+          </CardContent>
         </Card>
       </section>
     </div>

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Badge from "../../ui/Badge/Badge";
 import Button from "../../ui/Button";
-import { Card } from "../../ui/Card/Card";
+import { Card, CardHeader, CardContent, CardFooter } from "../../ui/Card/Card";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
@@ -51,15 +51,15 @@ export default function Hero() {
         </div>
         <div className={styles.showcase} data-animate="rise" style={{ animationDelay: "0.18s" }}>
           <Card className={styles.heroCard}>
-            <Card.Header className={styles.heroCardHeader}>
+            <CardHeader className={styles.heroCardHeader}>
               <Badge variant="outline">Visão do cliente</Badge>
               <h2>Player moderno com progresso sincronizado</h2>
               <p>
                 Trilhas organizadas, anotações dentro do vídeo e resumo da aula garantem que cada profissional conclua o
                 conteúdo no ritmo ideal.
               </p>
-            </Card.Header>
-            <Card.Content className={styles.heroCardContent}>
+            </CardHeader>
+            <CardContent className={styles.heroCardContent}>
               <div className={styles.previewImage}>
                 <Image
                   src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
@@ -78,8 +78,8 @@ export default function Hero() {
                 <li>Download de materiais e certificados em um clique</li>
                 <li>Dashboard com trilhas concluídas e próximas etapas</li>
               </ul>
-              </Card.Content>
-            <Card.Footer className={styles.heroCardFooter}>
+            </CardContent>
+            <CardFooter className={styles.heroCardFooter}>
               <div>
                 <span className={styles.footerTitle}>Integração com o painel administrativo</span>
                 <span className={styles.footerSubtitle}>Status de matrícula, uploads e avaliações em tempo real.</span>
@@ -87,7 +87,7 @@ export default function Hero() {
               <Button href="/admin" variant="secondary">
                 Explorar painel admin
               </Button>
-            </Card.Footer>
+            </CardFooter>
           </Card>
           <div className={styles.scrollCue} aria-hidden>
             <span />

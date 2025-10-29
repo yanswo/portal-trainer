@@ -7,7 +7,7 @@ import {
   FaHeadset,
   FaChartLine,
 } from "react-icons/fa";
-import { Card } from "../../ui/Card/Card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "../../ui/Card/Card";
 import Badge from "../../ui/Badge/Badge";
 
 const benefits = [
@@ -69,18 +69,18 @@ export default function Benefits() {
               data-animate="rise"
               style={{ animationDelay: `${0.1 * (index + 1)}s` }}
             >
-              <Card.Header className={styles.cardHeader}>
+              <CardHeader className={styles.cardHeader}>
                 <span className={styles.iconWrapper}>{benefit.icon}</span>
-                <Card.Title>{benefit.title}</Card.Title>
-              </Card.Header>
-              <Card.Content>
-                <Card.Description>{benefit.description}</Card.Description>
+                <CardTitle>{benefit.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{benefit.description}</CardDescription>
                 <ul className={styles.highlightList}>
                   {benefit.highlights.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-              </Card.Content>
+              </CardContent>
             </Card>
           ))}
         </div>

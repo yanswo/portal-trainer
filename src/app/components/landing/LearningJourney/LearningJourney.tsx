@@ -1,5 +1,5 @@
 import { FaClipboardCheck, FaPlayCircle, FaTasks, FaMedal } from "react-icons/fa";
-import { Card } from "../../ui/Card/Card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "../../ui/Card/Card";
 import Badge from "../../ui/Badge/Badge";
 import styles from "./LearningJourney.module.css";
 
@@ -50,16 +50,16 @@ export default function LearningJourney() {
               data-animate="rise"
               style={{ animationDelay: `${0.1 * (index + 1)}s` }}
             >
-              <Card.Header className={styles.stepHeader}>
+              <CardHeader className={styles.stepHeader}>
                 <span className={styles.stepIndex}>{String(index + 1).padStart(2, "0")}</span>
                 <span className={styles.icon}>{step.icon}</span>
-                <Card.Title className={styles.stepTitle}>{step.title}</Card.Title>
-              </Card.Header>
-              <Card.Content>
-                <Card.Description className={styles.stepDescription}>
+                <CardTitle className={styles.stepTitle}>{step.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className={styles.stepDescription}>
                   {step.description}
-                </Card.Description>
-              </Card.Content>
+                </CardDescription>
+              </CardContent>
             </Card>
           ))}
         </div>

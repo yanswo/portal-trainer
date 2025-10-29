@@ -1,6 +1,6 @@
 import CourseCard from "../../ui/CourseCard/CourseCard";
 import Badge from "../../ui/Badge/Badge";
-import { Card } from "../../ui/Card/Card";
+import { Card, CardHeader, CardFooter, CardTitle, CardDescription } from "../../ui/Card/Card";
 import styles from "./CourseHighlight.module.css";
 
 const featuredCourses = [
@@ -87,15 +87,15 @@ export default function CourseHighlight() {
               data-animate="fade"
               style={{ animationDelay: `${0.16 * (index + 1)}s` }}
             >
-              <Card.Header>
-                <Card.Title>{track.title}</Card.Title>
-                <Card.Description>{track.description}</Card.Description>
-              </Card.Header>
-              <Card.Footer>
+              <CardHeader>
+                <CardTitle>{track.title}</CardTitle>
+                <CardDescription>{track.description}</CardDescription>
+              </CardHeader>
+              <CardFooter>
                 <a href="/trilhas" className={styles.trackLink}>
                   Ver trilha completa
                 </a>
-              </Card.Footer>
+              </CardFooter>
             </Card>
           ))}
         </div>

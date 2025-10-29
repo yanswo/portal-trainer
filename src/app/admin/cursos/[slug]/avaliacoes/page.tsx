@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
-import { Table } from "@/app/components/ui/Table/Table";
+import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
+import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import { courseAssessmentStats } from "@/data/admin-dashboard";
 import { courses } from "@/data/courses";
 import styles from "./page.module.css";
@@ -37,10 +37,10 @@ export default function CourseEvaluationsPage({ params }: PageProps) {
 
       <section className={styles.summary} aria-label="Indicadores de aprovação">
         <Card>
-          <Card.Header>
-            <Card.Title>Visão consolidada</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Visão consolidada</CardTitle>
+          </CardHeader>
+          <CardContent>
             <div className={styles.summaryGrid}>
               <div>
                 <span>Taxa de aprovação</span>
@@ -63,13 +63,13 @@ export default function CourseEvaluationsPage({ params }: PageProps) {
                 </li>
               ))}
             </ul>
-          </Card.Content>
+          </CardContent>
         </Card>
         <Card>
-          <Card.Header>
-            <Card.Title>Ações recomendadas</Card.Title>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Ações recomendadas</CardTitle>
+          </CardHeader>
+          <CardContent>
             <ul className={styles.bulletList}>
               <li>Validar evidências pendentes em até 24h úteis.</li>
               <li>Enviar feedback automatizado para tentativas reprovadas.</li>
@@ -78,7 +78,7 @@ export default function CourseEvaluationsPage({ params }: PageProps) {
             <Button variant="secondary" size="sm">
               Configurar lembretes
             </Button>
-          </Card.Content>
+          </CardContent>
         </Card>
       </section>
 
@@ -90,30 +90,30 @@ export default function CourseEvaluationsPage({ params }: PageProps) {
           </div>
         </div>
         <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.Cell header>ID</Table.Cell>
-              <Table.Cell header>Participante</Table.Cell>
-              <Table.Cell header>Nota</Table.Cell>
-              <Table.Cell header>Status</Table.Cell>
-              <Table.Cell header>Recebido em</Table.Cell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+          <TableHeader>
+            <TableRow>
+              <TableCell header>ID</TableCell>
+              <TableCell header>Participante</TableCell>
+              <TableCell header>Nota</TableCell>
+              <TableCell header>Status</TableCell>
+              <TableCell header>Recebido em</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {assessment.submissions.map((submission) => (
-              <Table.Row key={submission.id}>
-                <Table.Cell>{submission.id}</Table.Cell>
-                <Table.Cell>{submission.learner}</Table.Cell>
-                <Table.Cell>{submission.score}</Table.Cell>
-                <Table.Cell>
+              <TableRow key={submission.id}>
+                <TableCell>{submission.id}</TableCell>
+                <TableCell>{submission.learner}</TableCell>
+                <TableCell>{submission.score}</TableCell>
+                <TableCell>
                   <Badge variant={submission.status.includes("Aprov") ? "neutral" : "outline"}>
                     {submission.status}
                   </Badge>
-                </Table.Cell>
-                <Table.Cell>{submission.deliveredAt}</Table.Cell>
-              </Table.Row>
+                </TableCell>
+                <TableCell>{submission.deliveredAt}</TableCell>
+              </TableRow>
             ))}
-          </Table.Body>
+          </TableBody>
         </Table>
       </section>
 
@@ -126,28 +126,28 @@ export default function CourseEvaluationsPage({ params }: PageProps) {
         </div>
         <div className={styles.twoColumn}>
           <Card>
-            <Card.Header>
-              <Card.Title>Checklist da banca</Card.Title>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>Checklist da banca</CardTitle>
+            </CardHeader>
+            <CardContent>
               <ul className={styles.bulletList}>
                 <li>Verificar integridade do vídeo e áudio do procedimento.</li>
                 <li>Checar documentação obrigatória anexada ao formulário.</li>
                 <li>Registrar parecer técnico com recomendações de melhoria.</li>
               </ul>
-            </Card.Content>
+            </CardContent>
           </Card>
           <Card>
-            <Card.Header>
-              <Card.Title>Comunicação com participantes</Card.Title>
-            </Card.Header>
-            <Card.Content>
+            <CardHeader>
+              <CardTitle>Comunicação com participantes</CardTitle>
+            </CardHeader>
+            <CardContent>
               <ul className={styles.bulletList}>
                 <li>Enviar mensagem personalizada em até 12h após avaliação.</li>
                 <li>Disponibilizar link do certificado quando aprovado.</li>
                 <li>Orientar sobre nova tentativa quando houver pendências.</li>
               </ul>
-            </Card.Content>
+            </CardContent>
           </Card>
         </div>
       </section>

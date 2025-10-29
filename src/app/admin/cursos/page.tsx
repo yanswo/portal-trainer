@@ -3,8 +3,14 @@
 import { useMemo, useState } from "react";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card } from "@/app/components/ui/Card/Card";
-import { Table } from "@/app/components/ui/Table/Table";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/app/components/ui/Card/Card";
+import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import { Tabs } from "@/app/components/ui/Tabs/Tabs";
 import {
   adminCourses,
@@ -47,13 +53,13 @@ export default function AdminCoursesPage() {
 
       <div className={styles.summaryGrid}>
         <Card>
-          <Card.Header>
-            <Card.Title>Catálogo ativo</Card.Title>
-            <Card.Description>
+          <CardHeader>
+            <CardTitle>Catálogo ativo</CardTitle>
+            <CardDescription>
               {adminCourses.length} cursos com {totalLessons} videoaulas gravadas.
-            </Card.Description>
-          </Card.Header>
-          <Card.Content>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <ul className={styles.summaryList}>
               {adminMetrics.slice(0, 2).map((metric) => (
                 <li key={metric.id}>
@@ -62,14 +68,14 @@ export default function AdminCoursesPage() {
                 </li>
               ))}
             </ul>
-          </Card.Content>
+          </CardContent>
         </Card>
         <Card>
-          <Card.Header>
-            <Card.Title>Programação por status</Card.Title>
-            <Card.Description>Equilibre atualizações de conteúdo e novas gravações.</Card.Description>
-          </Card.Header>
-          <Card.Content>
+          <CardHeader>
+            <CardTitle>Programação por status</CardTitle>
+            <CardDescription>Equilibre atualizações de conteúdo e novas gravações.</CardDescription>
+          </CardHeader>
+          <CardContent>
             <div className={styles.badges}>
               {filters.slice(1).map((filterOption) => {
                 const count = adminCourses.filter((course) => course.status === filterOption.value).length;
@@ -80,7 +86,7 @@ export default function AdminCoursesPage() {
                 );
               })}
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
       </div>
 
@@ -94,32 +100,32 @@ export default function AdminCoursesPage() {
         </Tabs.List>
         <Tabs.Content value={filter}>
           <Table>
-            <Table.Header>
-              <Table.Row>
-                <Table.Cell header>Curso</Table.Cell>
-                <Table.Cell header>Módulos</Table.Cell>
-                <Table.Cell header>Aulas</Table.Cell>
-                <Table.Cell header>Alunos</Table.Cell>
-                <Table.Cell header>Status</Table.Cell>
-                <Table.Cell header>Ações</Table.Cell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
+            <TableHeader>
+              <TableRow>
+                <TableCell header>Curso</TableCell>
+                <TableCell header>Módulos</TableCell>
+                <TableCell header>Aulas</TableCell>
+                <TableCell header>Alunos</TableCell>
+                <TableCell header>Status</TableCell>
+                <TableCell header>Ações</TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {filteredCourses.map((course) => (
-                <Table.Row key={course.id}>
-                  <Table.Cell>
+                <TableRow key={course.id}>
+                  <TableCell>
                     <div className={styles.courseCell}>
                       <strong>{course.title}</strong>
                       <span>{course.headline}</span>
                     </div>
-                  </Table.Cell>
-                  <Table.Cell>{course.modules}</Table.Cell>
-                  <Table.Cell>{course.lessons}</Table.Cell>
-                  <Table.Cell>{course.enrolled}</Table.Cell>
-                  <Table.Cell>
+                  </TableCell>
+                  <TableCell>{course.modules}</TableCell>
+                  <TableCell>{course.lessons}</TableCell>
+                  <TableCell>{course.enrolled}</TableCell>
+                  <TableCell>
                     <Badge variant="outline">{course.status}</Badge>
-                  </Table.Cell>
-                  <Table.Cell>
+                  </TableCell>
+                  <TableCell>
                     <div className={styles.actions}>
                       <Button href={`/admin/cursos/${course.slug}`} variant="ghost" size="sm">
                         Gerenciar conteúdo
@@ -132,10 +138,10 @@ export default function AdminCoursesPage() {
                         Avaliações
                       </Button>
                     </div>
-                  </Table.Cell>
-                </Table.Row>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Body>
+            </TableBody>
           </Table>
         </Tabs.Content>
       </Tabs>
@@ -148,12 +154,12 @@ export default function AdminCoursesPage() {
         <div className={styles.modulesGrid}>
           {Object.entries(courseModules).map(([slug, modules]) => (
             <Card key={slug}>
-              <Card.Header>
-                <Card.Title>
+              <CardHeader>
+                <CardTitle>
                   {adminCourses.find((course) => course.slug === slug)?.title ?? "Curso"}
-                </Card.Title>
-              </Card.Header>
-              <Card.Content>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
                 <ol className={styles.moduleList}>
                   {modules.map((module) => (
                     <li key={module.id}>
@@ -165,7 +171,7 @@ export default function AdminCoursesPage() {
                     </li>
                   ))}
                 </ol>
-              </Card.Content>
+              </CardContent>
             </Card>
           ))}
         </div>
