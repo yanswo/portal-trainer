@@ -1,5 +1,11 @@
-import { Tabs } from "../../ui/Tabs/Tabs";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "../../ui/Card/Card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../ui/Tabs/Tabs";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "../../ui/Card/Card";
 import Badge from "../../ui/Badge/Badge";
 import styles from "./FeatureShowcase.module.css";
 
@@ -50,20 +56,25 @@ export default function FeatureShowcase() {
           <Badge>Experiência integrada</Badge>
           <h2>Uma plataforma com foco na jornada completa</h2>
           <p>
-            Use os componentes prontos da CW Training para apresentar seu catálogo, entregar aulas, aplicar provas e emitir
-            certificados sem fricção para seus clientes.
+            Use os componentes prontos da CW Training para apresentar seu
+            catálogo, entregar aulas, aplicar provas e emitir certificados sem
+            fricção para seus clientes.
           </p>
         </div>
         <Tabs defaultValue="cliente">
-          <Tabs.List data-animate="fade" style={{ animationDelay: "0.1s" }}>
+          <TabsList data-animate="fade" style={{ animationDelay: "0.1s" }}>
             {showcases.map((showcase) => (
-              <Tabs.Trigger key={showcase.value} value={showcase.value}>
+              <TabsTrigger key={showcase.value} value={showcase.value}>
                 {showcase.label}
-              </Tabs.Trigger>
+              </TabsTrigger>
             ))}
-          </Tabs.List>
+          </TabsList>
           {showcases.map((showcase) => (
-            <Tabs.Content key={showcase.value} value={showcase.value} data-animate="rise">
+            <TabsContent
+              key={showcase.value}
+              value={showcase.value}
+              data-animate="rise"
+            >
               <Card className={styles.card}>
                 <CardHeader className={styles.cardHeader}>
                   <CardTitle>{showcase.title}</CardTitle>
@@ -77,7 +88,7 @@ export default function FeatureShowcase() {
                   </ul>
                 </CardContent>
               </Card>
-            </Tabs.Content>
+            </TabsContent>
           ))}
         </Tabs>
       </div>
