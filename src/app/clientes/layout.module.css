@@ -45,17 +45,30 @@
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--color-border);
   background: var(--color-surface-alt);
+
+  overflow: hidden;
+}
+
+.accountSummary > div {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+
 }
 
 .accountSummary strong {
   display: block;
   font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .accountSummary p {
   margin: 0;
   font-size: 0.85rem;
   color: var(--color-text-muted);
+  overflow-wrap: anywhere;
 }
 
 .nav {
