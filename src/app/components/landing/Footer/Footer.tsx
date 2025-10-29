@@ -2,82 +2,55 @@ import Link from "next/link";
 import styles from "./Footer.module.css";
 import { FaFacebook, FaInstagram, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
+const navigation = [
+  { label: "Início", href: "#inicio" },
+  { label: "Experiência", href: "#experiencia" },
+  { label: "Catálogo", href: "#cursos" },
+  { label: "Contato", href: "#contato" },
+];
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className={styles.footer}>
       <div className={styles.container} data-animate="fade">
-        <div className={styles.topBanner}>
-          <div>
-            <span className={styles.badge}>Próximo passo</span>
-            <h3>Fale com um consultor da CW Training</h3>
-          </div>
-          <a href="mailto:contato@cwtraining.com" className={styles.mailLink}>
-            <FaEnvelope aria-hidden /> contato@cwtraining.com
-          </a>
-        </div>
-        <div className={styles.grid}>
-          <div className={styles.column}>
+        <div className={styles.main}>
+          <div className={styles.brand}>
             <h3 className={styles.logo}>CW Training</h3>
             <p className={styles.description}>
-              Plataforma completa para publicar videoaulas, aplicar provas, certificar clientes e acompanhar indicadores de
-              segurança do trabalho.
+              Treinamentos on-demand com avaliações automáticas e certificação instantânea para equipes de segurança do
+              trabalho.
             </p>
           </div>
-
-          <div className={styles.column}>
+          <nav className={styles.navigation} aria-label="Rodapé">
             <h4 className={styles.title}>Navegação</h4>
             <ul className={styles.linkList}>
-              <li>
-                <Link href="#experiencia">Experiência</Link>
-              </li>
-              <li>
-                <Link href="#cursos">Biblioteca</Link>
-              </li>
-              <li>
-                <Link href="#jornada">Metodologia</Link>
-              </li>
-              <li>
-                <Link href="#faq">FAQ</Link>
-              </li>
+              {navigation.map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href}>{item.label}</Link>
+                </li>
+              ))}
             </ul>
-          </div>
-
-          <div className={styles.column}>
-            <h4 className={styles.title}>Recursos</h4>
-            <ul className={styles.linkList}>
-              <li>
-                <Link href="/blog">Blog</Link>
-              </li>
-              <li>
-                <Link href="/materiais">Materiais gratuitos</Link>
-              </li>
-              <li>
-                <Link href="/webinars">Webinars</Link>
-              </li>
-              <li>
-                <Link href="/suporte">Central de ajuda</Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className={styles.column}>
-            <h4 className={styles.title}>Siga a CW</h4>
+          </nav>
+          <div className={styles.contact}>
+            <h4 className={styles.title}>Fale com a equipe</h4>
+            <a href="mailto:contato@cwtraining.com" className={styles.mailLink}>
+              <FaEnvelope aria-hidden /> contato@cwtraining.com
+            </a>
             <div className={styles.socialIcons}>
               <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <FaFacebook size={24} />
+                <FaFacebook size={20} />
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <FaInstagram size={24} />
+                <FaInstagram size={20} />
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <FaLinkedin size={24} />
+                <FaLinkedin size={20} />
               </a>
             </div>
           </div>
         </div>
-
         <div className={styles.bottomBar}>
           <p>&copy; {currentYear} CW Training. Todos os direitos reservados.</p>
           <div className={styles.legalLinks}>

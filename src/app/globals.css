@@ -14,8 +14,8 @@
   --color-text-muted: #5e5e5e;
   --color-text-inverse: #ffffff;
 
-  --color-accent: #050505;
-  --color-accent-hover: #000000;
+  --color-accent: #111111;
+  --color-accent-hover: #2a2a2a;
   --color-accent-muted: rgba(8, 8, 8, 0.08);
   --color-success: #1f8a5f;
   --color-warning: #b28a16;
@@ -108,7 +108,7 @@ html {
 body {
   min-height: 100vh;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+  scrollbar-color: rgba(17, 17, 17, 0.55) rgba(17, 17, 17, 0.08);
 }
 
 main {
@@ -144,11 +144,12 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(17, 17, 17, 0.08);
+  border-radius: 999px;
 }
 
 body::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(17, 17, 17, 0.55);
   border-radius: 999px;
   border: 3px solid transparent;
   background-clip: content-box;
@@ -156,7 +157,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(17, 17, 17, 0.75);
   background-clip: content-box;
 }
 
