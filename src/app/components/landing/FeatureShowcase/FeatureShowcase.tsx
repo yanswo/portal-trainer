@@ -1,50 +1,22 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../ui/Tabs/Tabs";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-} from "../../ui/Card/Card";
+import { FaChartLine, FaClipboardCheck, FaPlayCircle } from "react-icons/fa";
 import Badge from "../../ui/Badge/Badge";
 import styles from "./FeatureShowcase.module.css";
 
-const showcases = [
+const features = [
   {
-    value: "cliente",
-    label: "Portal do cliente",
-    title: "Videoaulas gravadas com experiência cinematográfica",
-    description:
-      "Trilhas agrupadas por norma, player com velocidade inteligente, notas de aula e lembretes automáticos para manter o ritmo dos clientes corporativos.",
-    bullets: [
-      "Dashboard de progresso por módulo e certificados conquistados",
-      "Download de apostilas, checklists e relatórios diretamente no player",
-      "Suporte integrado via chat e envio de dúvidas para os especialistas",
-    ],
+    icon: <FaPlayCircle aria-hidden />,
+    title: "Portal do cliente",
+    description: "Catálogo organizado, player responsivo e materiais extras sempre à mão.",
   },
   {
-    value: "avaliacoes",
-    label: "Provas e avaliações",
-    title: "Bancos de questões e simulados adaptativos",
-    description:
-      "Monte avaliações em minutos, defina notas de corte e libere certificados automaticamente após a conclusão do vídeo.",
-    bullets: [
-      "Provas temporizadas, tentativa dupla e feedback por questão",
-      "Geração de relatórios de desempenho e trilhas recomendadas",
-      "Importação de questões via planilha ou integração com LMS",
-    ],
+    icon: <FaClipboardCheck aria-hidden />,
+    title: "Avaliações automáticas",
+    description: "Crie simulados, defina notas de corte e libere certificados sem esforço manual.",
   },
   {
-    value: "admin",
-    label: "Painel administrativo",
-    title: "Gestão do catálogo, matrículas e finanças em tempo real",
-    description:
-      "Crie cursos, organize módulos de vídeo, acompanhe pagamentos e envie comunicados para a base de clientes sem sair do painel.",
-    bullets: [
-      "Upload de vídeos em lote com transcrição automática",
-      "Financeiro com previsão de receitas e status de notas fiscais",
-      "CRM simplificado para relacionamento com clientes e empresas",
-    ],
+    icon: <FaChartLine aria-hidden />,
+    title: "Painel administrativo",
+    description: "Acompanhe matrículas, pagamentos e certificações em um painel intuitivo.",
   },
 ];
 
@@ -53,44 +25,26 @@ export default function FeatureShowcase() {
     <section className={styles.section} id="experiencia">
       <div className={styles.container}>
         <div className={styles.header} data-animate="fade-up">
-          <Badge>Experiência integrada</Badge>
-          <h2>Uma plataforma com foco na jornada completa</h2>
+          <Badge>Experiência essencial</Badge>
+          <h2>O que você precisa para treinar e certificar equipes</h2>
           <p>
-            Use os componentes prontos da CW Training para apresentar seu
-            catálogo, entregar aulas, aplicar provas e emitir certificados sem
-            fricção para seus clientes.
+            Três pilares para entregar aulas gravadas com avaliações automáticas e acompanhar todo o ciclo sem complicação.
           </p>
         </div>
-        <Tabs defaultValue="cliente">
-          <TabsList data-animate="fade" style={{ animationDelay: "0.1s" }}>
-            {showcases.map((showcase) => (
-              <TabsTrigger key={showcase.value} value={showcase.value}>
-                {showcase.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          {showcases.map((showcase) => (
-            <TabsContent
-              key={showcase.value}
-              value={showcase.value}
+        <div className={styles.grid}>
+          {features.map((feature, index) => (
+            <article
+              key={feature.title}
+              className={styles.featureCard}
               data-animate="rise"
+              style={{ animationDelay: `${0.1 * (index + 1)}s` }}
             >
-              <Card className={styles.card}>
-                <CardHeader className={styles.cardHeader}>
-                  <CardTitle>{showcase.title}</CardTitle>
-                  <CardDescription>{showcase.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ul className={styles.list}>
-                    {showcase.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </TabsContent>
+              <span className={styles.icon}>{feature.icon}</span>
+              <h3>{feature.title}</h3>
+              <p>{feature.description}</p>
+            </article>
           ))}
-        </Tabs>
+        </div>
       </div>
     </section>
   );

@@ -1,234 +1,74 @@
 .page {
   display: grid;
-  gap: clamp(2.5rem, 5vw, 3.5rem);
+  gap: clamp(1.75rem, 3vw, 2.5rem);
 }
 
-.welcome {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(2rem, 4vw, 2.75rem);
-  padding: clamp(2.5rem, 5vw, 3.5rem);
+.greeting {
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
   border-radius: var(--border-radius-xl);
-  background: linear-gradient(140deg, rgba(0, 0, 0, 0.08), transparent 55%) var(--color-surface);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: var(--shadow-md);
-}
-
-.welcomeCopy {
-  display: grid;
-  gap: 1.25rem;
-  max-width: 640px;
-}
-
-.welcomeCopy h1 {
-  font-size: clamp(2rem, 3.4vw, 2.8rem);
-  letter-spacing: -0.03em;
-}
-
-.welcomeCopy p {
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-}
-
-.primaryActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.statGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.statCard {
-  display: grid;
-  gap: 0.65rem;
-  padding: 1.4rem 1.6rem;
-  border-radius: var(--border-radius-lg);
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
 }
 
-.statLabel {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-muted);
-}
-
-.statValue {
-  font-size: 1.8rem;
-  font-weight: 700;
+.greeting h1 {
+  font-size: clamp(1.9rem, 3vw, 2.4rem);
   letter-spacing: -0.02em;
 }
 
-.statDescription {
+.greeting p {
   color: var(--color-text-secondary);
-  font-size: 0.92rem;
   line-height: 1.6;
-}
-
-.featuredCourse {
-  display: grid;
-}
-
-.featuredCard {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: var(--shadow-md);
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.featuredHeader {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.featuredHeader h3,
-.featuredHeader h2 {
-  margin: 0;
-}
-
-.featuredContent {
-  display: grid;
-  gap: 1.25rem;
-}
-
-.featuredMeta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
-}
-
-.featuredMeta span {
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--border-radius-pill);
-  background: var(--color-accent-muted);
-}
-
-.featuredFooter {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: center;
-}
-
-.featuredFooter strong {
-  display: block;
-  font-size: 1rem;
-}
-
-.featuredFooter span {
-  display: block;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-  margin-top: 0.25rem;
-}
-
-.courseSection {
-  display: grid;
-  gap: 1.75rem;
-}
-
-.sectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1.5rem;
-}
-
-.sectionHeader h2 {
-  font-size: 1.6rem;
-}
-
-.sectionHeader p {
-  color: var(--color-text-secondary);
   max-width: 520px;
+}
+
+.course {
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  border-radius: var(--border-radius-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.courseHeader {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.courseHeader span {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.courseHeader h2 {
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  letter-spacing: -0.015em;
+}
+
+.progress {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.courseActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.emptyState {
+  color: var(--color-text-muted);
   line-height: 1.6;
 }
 
-.courseGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.25rem;
-}
-
-.courseCard {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: var(--shadow-sm);
-  background: var(--color-surface);
-}
-
-.courseContent {
-  display: grid;
-  gap: 1rem;
-}
-
-.courseMeta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-}
-
-.courseMeta span {
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--border-radius-pill);
-  background: var(--color-accent-muted);
-}
-
-.courseFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-}
-
-.quickActions {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.quickActions h2 {
-  font-size: 1.5rem;
-}
-
-.quickActionGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
-
-.quickActionCard {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: var(--shadow-sm);
-  background: var(--color-surface);
-}
-
-@media (max-width: 960px) {
-  .welcome {
-    padding: clamp(2rem, 8vw, 2.75rem);
-  }
-
-  .sectionHeader {
+@media (max-width: 640px) {
+  .courseActions {
     flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .featuredFooter {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .courseFooter {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }
