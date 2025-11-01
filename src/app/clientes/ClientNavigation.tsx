@@ -30,16 +30,17 @@ export default function ClientNavigation() {
         const isLogout = item.variant === "logout";
         const isActive =
           !isLogout &&
-          (pathname === item.href || (!isHome && pathname.startsWith(`${item.href}/`)));
+          (pathname === item.href ||
+            (!isHome && pathname.startsWith(`${item.href}/`)));
 
         return (
           <Link
             key={item.href}
             href={item.href}
             aria-current={isActive ? "page" : undefined}
-            className={`${styles.navItem} ${isActive ? styles.navItemActive : ""} ${
-              isLogout ? styles.navItemLogout : ""
-            }`.trim()}
+            className={`${styles.navItem} ${
+              isActive ? styles.navItemActive : ""
+            } ${isLogout ? styles.navItemLogout : ""}`.trim()}
           >
             <span>{item.label}</span>
           </Link>

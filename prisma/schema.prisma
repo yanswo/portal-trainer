@@ -147,6 +147,7 @@ model Enrollment {
   assessments Assessment[]
 
   @@unique([userId, courseId])
+  Certification Certification[]
 }
 
 model SupportTicket {
@@ -193,6 +194,8 @@ model BudgetRequest {
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
+
+  BudgetItem BudgetItem[]
 }
 
 model Assessment {
