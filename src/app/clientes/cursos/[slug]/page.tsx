@@ -1,24 +1,68 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { FaFileAlt } from "react-icons/fa";
+import { prisma } from "@/lib/prisma";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
-import { courseFeedback, courses, getCourseBySlug } from "@/data/courses";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+} from "@/app/components/ui/Card/Card";
 import styles from "./page.module.css";
 
 type CoursePageProps = {
   params: { slug: string };
 };
 
-export default function CourseDetailPage({ params }: CoursePageProps) {
-  const course = getCourseBySlug(params.slug);
+async function getCourseBySlug(slug: string) {
+  const course = await prisma.course.findFirst({
+    where: {
+      slug: slug,
+      isPublished: true,
+    },
+    include: {
+      videos: {
+        orderBy: { position: "asc" },
+      },
+      modules: {
+        orderBy: { position: "asc" },
+      },
+    },
+  });
+
+  if (!course) {
+    const allCourses = await prisma.course.findMany({
+      where: { isPublished: true },
+    });
+    const courseByTitle = allCourses.find(
+      (c) => c.title.toLowerCase().replace(/ /g, "-") === slug
+    );
+    if (!courseByTitle) return null;
+
+    return prisma.course.findUnique({
+      where: { id: courseByTitle.id },
+      include: {
+        videos: { orderBy: { position: "asc" } },
+        modules: { orderBy: { position: "asc" } },
+      },
+    });
+  }
+  return course;
+}
+
+export default async function CourseDetailPage({ params }: CoursePageProps) {
+  const resolvedParams = await params;
+  const course = await getCourseBySlug(resolvedParams.slug);
 
   if (!course) {
     notFound();
   }
 
-  const feedback = courseFeedback[course.slug] ?? [];
+  const feedback: any[] = [];
+  const highlights = ["Demonstrações práticas", "Acesso imediato"];
+  const requirements = ["Documento de identificação", "Conclusão da prova"];
 
   return (
     <div className={styles.page}>
@@ -27,15 +71,19 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
           <div className={styles.summary}>
             <Badge variant="outline">Curso gravado</Badge>
             <h1>{course.title}</h1>
-            <p>{course.description}</p>
+            <p>{course.description ?? "Sem descrição"}</p>
             <div className={styles.meta}>
-              <span>{course.duration}</span>
-              <span>{course.level}</span>
-              <span>{course.category}</span>
-              <span>{course.certificate ? "Certificado digital" : "Sem certificado"}</span>
+              <span>{course.duration ?? "N/D"}</span>
+              <span>{course.level ?? "N/D"}</span>
+              <span>Segurança</span>
+              <span>
+                {course.certificate ? "Certificado digital" : "Sem certificado"}
+              </span>
             </div>
             <div className={styles.ctaGroup}>
-              <Button href={`/clientes/checkout/${course.slug}`}>Comprar acesso</Button>
+              <Button href={`/clientes/checkout/${course.slug}`}>
+                Comprar acesso
+              </Button>
               <Button href="#conteudo" variant="secondary">
                 Ver conteúdo
               </Button>
@@ -44,7 +92,9 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
           <div className={styles.priceCard}>
             <div>
               <span>Investimento único</span>
-              <p className={styles.priceValue}>{course.price}</p>
+              <p className={styles.priceValue}>{`R$ ${Number(course.price)
+                .toFixed(2)
+                .replace(".", ",")}`}</p>
             </div>
             <div>
               <strong>O que está incluso</strong>
@@ -55,11 +105,19 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
                 <li>Certificado digital emitido pela CW Training</li>
               </ul>
             </div>
-            <Button href={`/clientes/checkout/${course.slug}`}>Garantir vaga</Button>
+            <Button href={`/clientes/checkout/${course.slug}`}>
+              Garantir vaga
+            </Button>
           </div>
         </div>
         <div className={styles.mediaWrapper}>
-          <Image src={course.coverImage} alt="Capa do curso" fill sizes="100vw" priority />
+          <Image
+            src={course.imageUrl ?? "https://placehold.co/1600x900"}
+            alt={course.title}
+            fill
+            sizes="100vw"
+            priority
+          />
         </div>
       </section>
 
@@ -71,8 +129,8 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
             </CardHeader>
             <CardContent>
               <p>
-                Cada módulo combina conceitos, demonstrações e atividades avaliativas. Use as
-                transcrições resumidas para revisar antes da prova final.
+                Cada módulo combina conceitos, demonstrações e atividades
+                avaliativas.
               </p>
             </CardContent>
           </Card>
@@ -87,18 +145,14 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
                   <Badge variant="neutral">{video.type}</Badge>
                 </div>
                 <div className={styles.moduleMeta}>
-                  <span>{video.duration}</span>
+                  <span>{video.duration ? `${video.duration}m` : "N/D"}</span>
                   {video.preview ? <span>Prévia disponível</span> : null}
                 </div>
-                <p>{video.description}</p>
-                {video.transcriptSummary ? <p>{video.transcriptSummary}</p> : null}
                 {video.resources ? (
                   <div className={styles.resources}>
-                    {video.resources.map((resource) => (
-                      <span key={resource}>
-                        <FaFileAlt aria-hidden /> {resource}
-                      </span>
-                    ))}
+                    <span key={String(video.resources)}>
+                      <FaFileAlt aria-hidden /> {String(video.resources)}
+                    </span>
                   </div>
                 ) : null}
               </div>
@@ -108,7 +162,7 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
           <div className={styles.assessmentBox}>
             <Badge variant="outline">Avaliação</Badge>
             <strong>Resumo da prova final</strong>
-            <p>{course.assessmentSummary}</p>
+            <p>A prova final combina questões teóricas e envio de prática.</p>
           </div>
         </div>
 
@@ -116,7 +170,7 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
           <section>
             <h3>O que você vai dominar</h3>
             <ul>
-              {course.highlights.map((highlight) => (
+              {highlights.map((highlight) => (
                 <li key={highlight}>{highlight}</li>
               ))}
             </ul>
@@ -124,7 +178,7 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
           <section>
             <h3>Pré-requisitos</h3>
             <ul>
-              {course.requirements.map((requirement) => (
+              {requirements.map((requirement) => (
                 <li key={requirement}>
                   <Badge variant="outline">Obrigatório</Badge>
                   <span>{requirement}</span>
@@ -134,43 +188,21 @@ export default function CourseDetailPage({ params }: CoursePageProps) {
           </section>
           <section>
             <h3>Garantia CW Training</h3>
-            <p>
-              O acesso permanece disponível por 12 meses. Você pode refazer os simulados e enviar
-              nova tentativa da prova prática sem custo adicional.
-            </p>
+            <p>O acesso permanece disponível por 12 meses.</p>
           </section>
         </aside>
       </div>
-
-      <section className={styles.feedbackSection} aria-labelledby="avaliacoes">
-        <div>
-          <Badge variant="outline">Depoimentos</Badge>
-          <h2 id="avaliacoes">Feedback de profissionais certificados</h2>
-        </div>
-        <div className={styles.feedbackList}>
-          {feedback.map((item) => (
-            <div key={item.id} className={styles.feedbackCard}>
-              <div className={styles.feedbackHeader}>
-                <strong>{item.author}</strong>
-                <span className={styles.rating}>
-                  {"★".repeat(item.rating)}
-                  {item.rating < 5 ? "☆".repeat(5 - item.rating) : ""}
-                </span>
-              </div>
-              <span>{item.role}</span>
-              <p>{item.comment}</p>
-              <span>{item.createdAt}</span>
-            </div>
-          ))}
-          {feedback.length === 0 ? (
-            <p>Seja o primeiro a compartilhar como o curso impactou sua rotina.</p>
-          ) : null}
-        </div>
-      </section>
     </div>
   );
 }
 
-export function generateStaticParams() {
-  return courses.map((course) => ({ slug: course.slug }));
+export async function generateStaticParams() {
+  const courses = await prisma.course.findMany({
+    where: { isPublished: true },
+    select: { slug: true, title: true },
+  });
+
+  return courses.map((course) => ({
+    slug: course.slug ?? course.title.toLowerCase().replace(/ /g, "-"),
+  }));
 }

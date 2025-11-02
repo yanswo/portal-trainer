@@ -96,12 +96,23 @@ model Course {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  slug        String?   @unique
+  headline    String?
+  level       String?
+  duration    String?
+  certificate Boolean   @default(false)
+
+  // --- ADICIONE ESTES DOIS CAMPOS ---
+  instructorName String?   // Nome do instrutor
+  rating      Float?    @default(4.5) // Avaliação (ex: 4.7)
+  // --- FIM DOS NOVOS CAMPOS ---
+
   videos      Video[]
   modules     CourseModule[]
   enrollments Enrollment[]
   payments    Payment[]
   assessments Assessment[]
-  }
+}
 
 model Video {
   id        String   @id @default(cuid())
@@ -141,15 +152,18 @@ model Enrollment {
   courseId   String
   enrolledAt DateTime @default(now())
 
+  // --- CAMPO ADICIONADO ---
+  progress   Float    @default(0.0) // Progresso de 0.0 a 1.0
+  // --- FIM DO CAMPO ADICIONADO ---
+
   user        User         @relation(fields: [userId], references: [id])
   course      Course       @relation(fields: [courseId], references: [id])
   payments    Payment[]
   assessments Assessment[]
+  Certification Certification[]
 
   @@unique([userId, courseId])
-  Certification Certification[]
 }
-
 model SupportTicket {
   id        String   @id @default(cuid())
   subject   String

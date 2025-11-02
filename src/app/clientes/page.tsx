@@ -1,34 +1,8 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { getAuthenticatedUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import Button from "../components/ui/Button";
 import Progress from "../components/ui/Progress/Progress";
 import styles from "./page.module.css";
-
-async function getAuthenticatedUser() {
-  const cookieStore = cookies();
-  const authCookie = cookieStore.get("clientAuth");
-  if (!authCookie) redirect("/login");
-
-  try {
-    const sessionPayload = JSON.parse(
-      Buffer.from(authCookie.value, "base64").toString("utf-8")
-    );
-    const userId = sessionPayload.userId;
-    if (!userId) throw new Error("Invalid session payload");
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, name: true },
-    });
-
-    if (!user) throw new Error("User not found");
-    return user;
-  } catch (error) {
-    console.error("Failed to get authenticated user:", error);
-    redirect("/login");
-  }
-}
 
 async function getPurchasedCoursesForUser(userId: string) {
   const enrollments = await prisma.enrollment.findMany({
@@ -42,16 +16,26 @@ async function getPurchasedCoursesForUser(userId: string) {
     return [];
   }
 
-  const courses = enrollments.map((enrollment) => ({
-    ...enrollment.course,
-    slug: enrollment.course.title.toLowerCase().replace(/ /g, "-"),
-    progress: 0.0,
-    lastAccess: "Hoje",
-    certificate: true,
-    level: "Intermediário",
-    duration: "10h",
-    headline: enrollment.course.description ?? "Descrição...",
-  }));
+  const courses = enrollments.map((enrollment) => {
+    const course = enrollment.course;
+
+    const slug =
+      course.slug && course.slug.trim() !== ""
+        ? course.slug
+        : course.title.toLowerCase().replace(/ /g, "-");
+
+    return {
+      ...course,
+
+      slug: slug,
+      progress: enrollment.progress,
+      lastAccess: enrollment.enrolledAt.toLocaleDateString("pt-BR"),
+      certificate: course.certificate,
+      level: course.level ?? "N/D",
+      duration: course.duration ?? "N/D",
+      headline: course.headline ?? course.description ?? "Descrição...",
+    };
+  });
 
   return courses;
 }
@@ -59,8 +43,13 @@ async function getPurchasedCoursesForUser(userId: string) {
 export default async function ClientDashboardPage() {
   const user = await getAuthenticatedUser();
 
+  if (!user) {
+    return null;
+  }
+
   const purchasedCourses = await getPurchasedCoursesForUser(user.id);
   const startedCourse = purchasedCourses[0];
+
   const progress = startedCourse ? Math.round(startedCourse.progress * 100) : 0;
 
   const firstName = (user.name ?? "Aluno").split(" ")[0];

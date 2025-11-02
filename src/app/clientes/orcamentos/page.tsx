@@ -1,22 +1,68 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+} from "@/app/components/ui/Card/Card";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/app/components/ui/Table/Table";
 import { Tabs } from "@/app/components/ui/Tabs/Tabs";
-import { allCourses, budgetFilters, budgets } from "@/data/client-portal";
+
+import { budgetFilters } from "@/data/client-portal";
+
 import styles from "./page.module.css";
 
 const STATUS_MATCHERS: Record<string, RegExp> = {
-  pending: /aguardando/i,
-  sent: /enviado|revisado/i,
-  closed: /aprovado|fechado/i,
+  pending: /aguardando|received/i,
+  sent: /enviado|revisado|in_review|sent/i,
+  closed: /aprovado|fechado|approved|declined/i,
+};
+
+type Budget = {
+  id: string;
+  courseFocus: string;
+  seats: number;
+  proposedFee: number | null;
+  status: string;
+  updatedAt: string;
 };
 
 export default function BudgetsPage() {
   const [filter, setFilter] = useState("all");
+
+  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchBudgets() {
+      try {
+        const response = await fetch("/api/me/budgets");
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.message || "Falha ao buscar orçamentos");
+        }
+        const data: Budget[] = await response.json();
+        setBudgets(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Erro desconhecido");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchBudgets();
+  }, []);
 
   const filteredBudgets = useMemo(() => {
     if (filter === "all") {
@@ -27,7 +73,7 @@ export default function BudgetsPage() {
       return budgets;
     }
     return budgets.filter((budget) => matcher.test(budget.status));
-  }, [filter]);
+  }, [budgets, filter]);
 
   return (
     <div className={styles.page}>
@@ -35,8 +81,8 @@ export default function BudgetsPage() {
         <Badge variant="outline">Orçamentos</Badge>
         <h1>Propostas e simulações personalizadas</h1>
         <p>
-          Ajuste quantidades de licenças, acompanhe o status das negociações e gere novas propostas
-          com valores atualizados.
+          Ajuste quantidades de licenças, acompanhe o status das negociações e
+          gere novas propostas com valores atualizados.
         </p>
       </header>
 
@@ -53,35 +99,56 @@ export default function BudgetsPage() {
         <Button href="/clientes/orcamentos/novo">Novo orçamento</Button>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableCell header>ID</TableCell>
-            <TableCell header>Curso</TableCell>
-            <TableCell header>Vagas</TableCell>
-            <TableCell header>Valor</TableCell>
-            <TableCell header>Status</TableCell>
-            <TableCell header>Válido até</TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredBudgets.map((budget) => {
-            const course = allCourses.find((item) => item.slug === budget.courseSlug);
-            return (
-              <TableRow key={budget.id}>
-                <TableCell>{budget.id}</TableCell>
-                <TableCell>{course?.title}</TableCell>
-                <TableCell>{budget.seats}</TableCell>
-                <TableCell>{budget.amount}</TableCell>
-                <TableCell>
-                  <Badge variant="neutral">{budget.status}</Badge>
+      {isLoading ? (
+        <p>Carregando seus orçamentos...</p>
+      ) : error ? (
+        <p style={{ color: "red" }}>Erro ao carregar: {error}</p>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableCell header>ID</TableCell>
+              <TableCell header>Foco do Curso</TableCell>
+              <TableCell header>Vagas</TableCell>
+              <TableCell header>Valor Proposto</TableCell>
+              <TableCell header>Status</TableCell>
+              <TableCell header>Última Atualização</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredBudgets.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} style={{ textAlign: "center" }}>
+                  Nenhum orçamento encontrado.
                 </TableCell>
-                <TableCell>{budget.validUntil}</TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            ) : (
+              filteredBudgets.map((budget) => {
+                return (
+                  <TableRow key={budget.id}>
+                    <TableCell>{budget.id}</TableCell>
+                    <TableCell>{budget.courseFocus}</TableCell>
+                    <TableCell>{budget.seats}</TableCell>
+                    <TableCell>
+                      {budget.proposedFee
+                        ? `R$ ${Number(budget.proposedFee)
+                            .toFixed(2)
+                            .replace(".", ",")}`
+                        : "N/D"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="neutral">{budget.status}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(budget.updatedAt).toLocaleDateString("pt-BR")}
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
+          </TableBody>
+        </Table>
+      )}
 
       <section className={styles.summaryGrid} aria-label="Próximos passos">
         <Card>
@@ -100,7 +167,9 @@ export default function BudgetsPage() {
             <CardTitle>Economia estimada</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>R$ 1.280,00 negociados com licenças combinadas neste trimestre.</p>
+            <p>
+              R$ 1.280,00 negociados com licenças combinadas neste trimestre.
+            </p>
           </CardContent>
         </Card>
         <Card>

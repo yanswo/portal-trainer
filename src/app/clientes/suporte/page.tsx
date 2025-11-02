@@ -1,17 +1,30 @@
+import { faqEntries, supportShortcuts } from "@/data/client-portal";
+
+import { getAuthenticatedUser } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
+
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
 import styles from "./page.module.css";
-import { faqEntries, supportShortcuts, supportTickets } from "@/data/client-portal";
 
-export default function SupportPage() {
+export default async function SupportPage() {
+  const user = await getAuthenticatedUser();
+  if (!user) return null;
+
+  const supportTickets = await prisma.supportTicket.findMany({
+    where: { userId: user.id },
+    orderBy: { updatedAt: "desc" },
+  });
+
   return (
     <div>
       <header className={styles.header}>
         <Badge variant="outline">Ajuda e suporte</Badge>
         <h1>Conte com o time CW Training</h1>
         <p>
-          Acompanhe chamados abertos, consulte orientações rápidas e compartilhe evidências das
-          suas avaliações para agilizar a liberação dos certificados.
+          Acompanhe chamados abertos, consulte orientações rápidas e compartilhe
+          evidências das suas avaliações para agilizar a liberação dos
+          certificados.
         </p>
       </header>
 
@@ -21,8 +34,10 @@ export default function SupportPage() {
             <strong>{ticket.subject}</strong>
             <span>{ticket.id}</span>
             <span>Status: {ticket.status}</span>
-            <span>Atualizado em {ticket.updatedAt}</span>
-            <Badge variant="neutral">Prioridade {ticket.priority}</Badge>
+            <span>
+              Atualizado em{" "}
+              {new Date(ticket.updatedAt).toLocaleDateString("pt-BR")}
+            </span>
           </article>
         ))}
       </div>
