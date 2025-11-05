@@ -23,7 +23,6 @@ export default function SignUpForm() {
 
     const name = formData.get("name")?.toString().trim();
     const email = formData.get("email")?.toString().trim().toLowerCase();
-    const company = formData.get("company")?.toString().trim();
     const password = formData.get("password")?.toString();
     const acceptedTerms = formData.get("terms") === "on";
 
@@ -53,7 +52,7 @@ export default function SignUpForm() {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, company, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
@@ -65,7 +64,9 @@ export default function SignUpForm() {
       }
 
       setStatus("success");
-      setMessage("Cadastro realizado com sucesso! Redirecionando para o login...");
+      setMessage(
+        "Cadastro realizado com sucesso! Redirecionando para o login..."
+      );
       form.reset();
       await new Promise((resolve) => setTimeout(resolve, 1200));
       router.push("/login");
@@ -82,25 +83,26 @@ export default function SignUpForm() {
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <div className={styles.field}>
         <label htmlFor="name">Nome completo</label>
-        <input id="name" name="name" placeholder="Marina Duarte" autoComplete="name" disabled={isSubmitting} />
-      </div>
-
-      <div className={styles.field}>
-        <label htmlFor="email">E-mail corporativo</label>
         <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="voce@empresa.com"
-          required
-          autoComplete="email"
+          id="name"
+          name="name"
+          placeholder="Marina Duarte"
+          autoComplete="name"
           disabled={isSubmitting}
         />
       </div>
 
       <div className={styles.field}>
-        <label htmlFor="company">Empresa</label>
-        <input id="company" name="company" placeholder="Nome da empresa" autoComplete="organization" disabled={isSubmitting} />
+        <label htmlFor="email">Seu melhor e-mail</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="voce@email.com"
+          required
+          autoComplete="email"
+          disabled={isSubmitting}
+        />
       </div>
 
       <div className={styles.field}>
@@ -120,7 +122,9 @@ export default function SignUpForm() {
       <label className={styles.checkbox}>
         <input type="checkbox" name="terms" required disabled={isSubmitting} />
         <span>
-          Eu concordo com os <a href="/politica-de-privacidade">termos de uso e privacidade</a> da CW Training.
+          Eu concordo com os{" "}
+          <a href="/politica-de-privacidade">termos de uso e privacidade</a> da
+          CW Training.
         </span>
       </label>
 
@@ -130,7 +134,7 @@ export default function SignUpForm() {
           aria-live="polite"
           className={cn(
             styles.status,
-            status === "success" ? styles.statusSuccess : styles.statusError,
+            status === "success" ? styles.statusSuccess : styles.statusError
           )}
         >
           {message}
@@ -138,7 +142,7 @@ export default function SignUpForm() {
       )}
 
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Criando conta..." : "Criar conta do cliente"}
+        {isSubmitting ? "Criando conta..." : "Criar minha conta"}
       </Button>
     </form>
   );

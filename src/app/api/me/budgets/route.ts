@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { DemandType, CertificateFormat, BudgetStatus } from "@prisma/client";
 
 async function getApiUser() {
   const cookieStore = cookies();
@@ -50,19 +51,98 @@ export async function GET() {
       orderBy: { updatedAt: "desc" },
       select: {
         id: true,
-        courseFocus: true,
+        course: { select: { title: true } },
         seats: true,
         proposedFee: true,
         status: true,
         updatedAt: true,
+        demandType: true,
+        certificateFormat: true,
       },
     });
+
+    const formattedBudgets = budgets.map((b) => ({
+      ...b,
+      courseFocus: b.course.title,
+    }));
 
     return NextResponse.json(budgets);
   } catch (error) {
     console.error("Erro ao buscar orçamentos:", error);
     return new NextResponse(
       JSON.stringify({ success: false, message: "Erro interno do servidor" }),
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  const userOrResponse = await getApiUser();
+
+  if (userOrResponse instanceof NextResponse) {
+    return userOrResponse;
+  }
+  const user = userOrResponse;
+
+  try {
+    const body = await request.json();
+    const {
+      courseId,
+      seats,
+      demandType,
+      certificateFormat,
+      companyName,
+      notes,
+    } = body;
+
+    if (
+      !courseId ||
+      !seats ||
+      !demandType ||
+      !certificateFormat ||
+      !companyName
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Todos os campos obrigatórios devem ser preenchidos.",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!Object.values(DemandType).includes(demandType)) {
+      return NextResponse.json(
+        { success: false, message: "Tipo de demanda inválido." },
+        { status: 400 }
+      );
+    }
+
+    if (!Object.values(CertificateFormat).includes(certificateFormat)) {
+      return NextResponse.json(
+        { success: false, message: "Formato de certificado inválido." },
+        { status: 400 }
+      );
+    }
+
+    const budget = await prisma.budgetRequest.create({
+      data: {
+        userId: user.id,
+        courseId: String(courseId),
+        seats: Number(seats),
+        demandType: demandType as DemandType,
+        certificateFormat: certificateFormat as CertificateFormat,
+        companyName: String(companyName),
+        notes: notes ? String(notes) : null,
+        status: BudgetStatus.RECEIVED,
+      },
+    });
+
+    return NextResponse.json({ success: true, budget }, { status: 201 });
+  } catch (error) {
+    console.error("Erro ao criar orçamento:", error);
+    return new NextResponse(
+      JSON.stringify({ success: false, message: "Erro interno do servidor." }),
       { status: 500 }
     );
   }

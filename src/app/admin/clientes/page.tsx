@@ -1,11 +1,19 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import {
-  adminClientList,
-  clientSegments,
-} from "@/data/admin-dashboard";
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+} from "@/app/components/ui/Card/Card";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/app/components/ui/Table/Table";
+import { adminClientList, clientSegments } from "@/data/admin-dashboard";
 import styles from "./page.module.css";
 
 export default function ClientsPage() {
@@ -13,11 +21,13 @@ export default function ClientsPage() {
     <div className={styles.page}>
       <header className={styles.header}>
         <div>
-          <Badge variant="outline">Clientes</Badge>
-          <h1>Empresas com treinamentos ativos</h1>
-          <p>Monitore licenças, planos corporativos e próximos ciclos de renovação.</p>
+          <Badge variant="outline">Usuários</Badge>
+          <h1>Alunos com treinamentos ativos</h1>
+          <p>
+            Monitore matrículas, progresso e próximos ciclos de certificação.
+          </p>
         </div>
-        <Button variant="secondary">Adicionar cliente</Button>
+        <Button variant="secondary">Adicionar aluno</Button>
       </header>
 
       <section className={styles.overview} aria-label="Segmentação">
@@ -27,7 +37,9 @@ export default function ClientsPage() {
               <CardTitle>{segment.segment}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className={styles.segmentValue}>{segment.clients} empresas</div>
+              <div className={styles.segmentValue}>
+                {segment.clients} alunos
+              </div>
               <Badge variant="neutral">{segment.share}</Badge>
             </CardContent>
           </Card>
@@ -37,19 +49,20 @@ export default function ClientsPage() {
       <section className={styles.section} aria-labelledby="tabela-clientes">
         <div className={styles.sectionHeader}>
           <div>
-            <h2 id="tabela-clientes">Clientes ativos</h2>
-            <p>Resumo das empresas com licenças vigentes e status de relacionamento.</p>
+            <h2 id="tabela-clientes">Alunos ativos</h2>
+            <p>
+              Resumo dos alunos com matrículas vigentes e status de atividade.
+            </p>
           </div>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell header>Empresa</TableCell>
-              <TableCell header>Contato</TableCell>
+              <TableCell header>Aluno</TableCell>
               <TableCell header>Plano</TableCell>
-              <TableCell header>Licenças</TableCell>
+              <TableCell header>Cursos Ativos</TableCell>
               <TableCell header>Status</TableCell>
-              <TableCell header>Renovação</TableCell>
+              <TableCell header>Último Acesso</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -57,15 +70,14 @@ export default function ClientsPage() {
               <TableRow key={client.company}>
                 <TableCell>
                   <div className={styles.companyCell}>
-                    <strong>{client.company}</strong>
-                    <span>{client.industry}</span>
+                    <strong>{client.contact}</strong>
+                    <span>{client.company}</span>
                   </div>
                 </TableCell>
-                <TableCell>{client.contact}</TableCell>
                 <TableCell>{client.plan}</TableCell>
-                <TableCell>{client.licenses}</TableCell>
+                <TableCell>{client.licenses} licenças</TableCell>
                 <TableCell>{client.status}</TableCell>
-                <TableCell>{client.renewal}</TableCell>
+                <TableCell>{client.lastAccess}</TableCell>
               </TableRow>
             ))}
           </TableBody>

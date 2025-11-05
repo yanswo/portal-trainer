@@ -35,6 +35,8 @@ type Budget = {
   proposedFee: number | null;
   status: string;
   updatedAt: string;
+  demandType: string;
+  certificateFormat: string;
 };
 
 export default function BudgetsPage() {
@@ -75,6 +77,19 @@ export default function BudgetsPage() {
     return budgets.filter((budget) => matcher.test(budget.status));
   }, [budgets, filter]);
 
+  const formatDemand = (type: string) => {
+    if (type === "IMMEDIATE") return "Imediata";
+    if (type === "ANNUAL") return "Anual";
+    return type;
+  };
+
+  const formatCertificate = (type: string) => {
+    if (type === "DIGITAL") return "Digital";
+    if (type === "PHYSICAL") return "Físico";
+    if (type === "DIGITAL_AND_PHYSICAL") return "Digital + Físico";
+    return type;
+  };
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -107,12 +122,12 @@ export default function BudgetsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell header>ID</TableCell>
               <TableCell header>Foco do Curso</TableCell>
               <TableCell header>Vagas</TableCell>
-              <TableCell header>Valor Proposto</TableCell>
+              <TableCell header>Demanda</TableCell>
+              <TableCell header>Certificado</TableCell>
               <TableCell header>Status</TableCell>
-              <TableCell header>Última Atualização</TableCell>
+              <TableCell header>Atualizado em</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -126,15 +141,11 @@ export default function BudgetsPage() {
               filteredBudgets.map((budget) => {
                 return (
                   <TableRow key={budget.id}>
-                    <TableCell>{budget.id}</TableCell>
                     <TableCell>{budget.courseFocus}</TableCell>
                     <TableCell>{budget.seats}</TableCell>
+                    <TableCell>{formatDemand(budget.demandType)}</TableCell>
                     <TableCell>
-                      {budget.proposedFee
-                        ? `R$ ${Number(budget.proposedFee)
-                            .toFixed(2)
-                            .replace(".", ",")}`
-                        : "N/D"}
+                      {formatCertificate(budget.certificateFormat)}
                     </TableCell>
                     <TableCell>
                       <Badge variant="neutral">{budget.status}</Badge>

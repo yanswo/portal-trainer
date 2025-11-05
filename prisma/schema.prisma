@@ -61,6 +61,18 @@ enum CertificationStatus {
   REVOKED
 }
 
+// Enums para o novo fluxo de orçamento
+enum DemandType {
+  IMMEDIATE 
+  ANNUAL   
+}
+
+enum CertificateFormat {
+  DIGITAL
+  PHYSICAL
+  DIGITAL_AND_PHYSICAL
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String?
@@ -96,17 +108,18 @@ model Course {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  slug        String?   @unique
+  slug        String?  @unique
   headline    String?
   level       String?
   duration    String?
-  certificate Boolean   @default(false)
+  certificate Boolean  @default(false)
 
-  // --- ADICIONE ESTES DOIS CAMPOS ---
-  instructorName String?   // Nome do instrutor
-  rating      Float?    @default(4.5) // Avaliação (ex: 4.7)
-  // --- FIM DOS NOVOS CAMPOS ---
-
+  instructorName String?   
+  rating         Float?   @default(4.5)
+ 
+  // Relação inversa com Orçamentos
+  budgets     BudgetRequest[]
+  
   videos      Video[]
   modules     CourseModule[]
   enrollments Enrollment[]
@@ -151,10 +164,7 @@ model Enrollment {
   userId     String
   courseId   String
   enrolledAt DateTime @default(now())
-
-  // --- CAMPO ADICIONADO ---
   progress   Float    @default(0.0) // Progresso de 0.0 a 1.0
-  // --- FIM DO CAMPO ADICIONADO ---
 
   user        User         @relation(fields: [userId], references: [id])
   course      Course       @relation(fields: [courseId], references: [id])
@@ -164,6 +174,7 @@ model Enrollment {
 
   @@unique([userId, courseId])
 }
+
 model SupportTicket {
   id        String   @id @default(cuid())
   subject   String
@@ -189,7 +200,6 @@ model Payment {
   userId       String
   courseId     String
   enrollmentId String?
-
   user       User        @relation(fields: [userId], references: [id])
   course     Course      @relation(fields: [courseId], references: [id])
   enrollment Enrollment? @relation(fields: [enrollmentId], references: [id])
@@ -197,8 +207,9 @@ model Payment {
 
 model BudgetRequest {
   id          String       @id @default(cuid())
-  companyName String
-  courseFocus String
+  // companyName foi removido
+  courseId    String
+  course      Course       @relation(fields: [courseId], references: [id])
   seats       Int
   status      BudgetStatus @default(RECEIVED)
   proposedFee Decimal?
@@ -209,7 +220,13 @@ model BudgetRequest {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
+  // Novos campos adicionados
+  demandType        DemandType        @default(IMMEDIATE)
+  certificateFormat CertificateFormat @default(DIGITAL)
+
   BudgetItem BudgetItem[]
+  
+  // A linha "Course Course[]" duplicada foi removida daqui
 }
 
 model Assessment {

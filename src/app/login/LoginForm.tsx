@@ -42,7 +42,9 @@ export default function LoginForm() {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        setMessage(data.message ?? "Não foi possível fazer login. Tente novamente.");
+        setMessage(
+          data.message ?? "Não foi possível fazer login. Tente novamente."
+        );
         return;
       }
 
@@ -58,14 +60,14 @@ export default function LoginForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <div className={styles.field}>
-        <label htmlFor="email">E-mail corporativo</label>
+        <label htmlFor="email">E-mail de cadastro</label>
         <Input
           id="email"
           name="email"
           type="email"
           inputMode="email"
           autoComplete="email"
-          placeholder="voce@empresa.com"
+          placeholder="voce@email.com"
           required
           disabled={isSubmitting}
         />
@@ -86,14 +88,23 @@ export default function LoginForm() {
 
       <div className={styles.formFooter}>
         <label className={styles.remember}>
-          <input type="checkbox" name="remember" defaultChecked disabled={isSubmitting} />
+          <input
+            type="checkbox"
+            name="remember"
+            defaultChecked
+            disabled={isSubmitting}
+          />
           <span>Lembrar acesso neste dispositivo</span>
         </label>
         <Link href="/recuperar-acesso">Esqueci minha senha</Link>
       </div>
 
       {message && (
-        <div role="alert" aria-live="polite" className={cn(styles.status, styles.statusError)}>
+        <div
+          role="alert"
+          aria-live="polite"
+          className={cn(styles.status, styles.statusError)}
+        >
           {message}
         </div>
       )}

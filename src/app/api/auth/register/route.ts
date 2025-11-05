@@ -5,22 +5,27 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password, company } = await request.json();
+    const { name, email, password } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json(
         { success: false, message: "Informe um e-mail e uma senha válidos." },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     const normalizedEmail = String(email).toLowerCase();
-    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    const existingUser = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
 
     if (existingUser) {
       return NextResponse.json(
-        { success: false, message: "Já existe uma conta cadastrada com esse e-mail." },
-        { status: 409 },
+        {
+          success: false,
+          message: "Já existe uma conta cadastrada com esse e-mail.",
+        },
+        { status: 409 }
       );
     }
 
@@ -31,13 +36,6 @@ export async function POST(request: Request) {
         name: name ? String(name) : null,
         email: normalizedEmail,
         password: hashedPassword,
-        profile: company
-          ? {
-              create: {
-                bio: String(company),
-              },
-            }
-          : undefined,
       },
       select: {
         id: true,
@@ -51,13 +49,16 @@ export async function POST(request: Request) {
         success: true,
         user,
       },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
     console.error("Register error", error);
     return NextResponse.json(
-      { success: false, message: "Não foi possível concluir o cadastro. Tente novamente." },
-      { status: 500 },
+      {
+        success: false,
+        message: "Não foi possível concluir o cadastro. Tente novamente.",
+      },
+      { status: 500 }
     );
   }
 }
