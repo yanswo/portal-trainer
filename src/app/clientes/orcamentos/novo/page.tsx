@@ -1,214 +1,237 @@
 "use client";
 
-import { useState, FormEvent, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+import { FaShoppingCart, FaTrash } from "react-icons/fa";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
 import Input from "@/app/components/ui/Input/Input";
-import Label from "@/app/components/ui/Label/Label";
-import Select from "@/app/components/ui/Select/Select";
-import Textarea from "@/app/components/ui/Textarea/Textarea";
 import {
   Card,
   CardHeader,
   CardContent,
+  CardFooter,
   CardTitle,
 } from "@/app/components/ui/Card/Card";
-// Usando um estilo de formulário existente como base
-import styles from "@/app/admin/novo-curso/page.module.css";
+import BudgetModal, { ConfiguredCourse } from "./BudgetModal";
 
-// Tipo simplificado para o curso no formulário
-type SimpleCourse = { id: string; title: string };
+import styles from "../../cursos/page.module.css";
+import layoutStyles from "./page.module.css";
+
+type BudgetCourse = {
+  id: string;
+  title: string;
+  headline: string | null;
+  level: string | null;
+  duration: string | null;
+  price: number;
+  imageUrl: string | null;
+};
 
 export default function NovoOrcamentoPage() {
-  const router = useRouter();
-  const [courses, setCourses] = useState<SimpleCourse[]>([]);
+  const [allCourses, setAllCourses] = useState<BudgetCourse[]>([]);
+  const [selectedCourses, setSelectedCourses] = useState<ConfiguredCourse[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [configuringCourse, setConfiguringCourse] =
+    useState<BudgetCourse | null>(null);
 
   useEffect(() => {
-    // Em um app real, o ideal seria buscar de /api/courses
-    // Por enquanto, vamos usar os dados que já temos no sistema
     async function fetchCourses() {
-      setIsLoading(true);
-
-      // Simulação. O ideal é ter um endpoint GET /api/courses
-      // IDs e Títulos baseados no seu arquivo prisma/seed.ts
-      const mockCourses: SimpleCourse[] = [
-        {
-          id: "cmhhtt1js0000vtlg88dbcklj",
-          title: "NR-10: Segurança em Instalações Elétricas",
-        },
-        {
-          id: "cmhhtt1kq0001vtlg9l7ohirs",
-          title: "NR-35: Trabalho em Altura",
-        },
-      ];
-
-      // (Aqui você pode futuramente substituir por um fetch real)
-      setCourses(mockCourses);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/courses");
+        if (!response.ok) {
+          throw new Error("Falha ao buscar cursos");
+        }
+        const data: BudgetCourse[] = await response.json();
+        setAllCourses(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchCourses();
   }, []);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
-
-    const formData = new FormData(event.currentTarget);
-    const data = {
-      companyName: formData.get("companyName"),
-      courseId: formData.get("courseId"),
-      seats: formData.get("seats"),
-      demandType: formData.get("demandType"),
-      certificateFormat: formData.get("certificateFormat"),
-      notes: formData.get("notes"),
-    };
-
-    try {
-      const response = await fetch("/api/me/budgets", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Falha ao enviar orçamento.");
-      }
-
-      // Redireciona de volta para a lista de orçamentos
-      router.push("/clientes/orcamentos");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro inesperado.");
-      setIsSubmitting(false);
+  const handleSaveConfiguration = (configuredCourse: ConfiguredCourse) => {
+    const existingIndex = selectedCourses.findIndex(
+      (c) => c.id === configuredCourse.id
+    );
+    if (existingIndex > -1) {
+      const updatedSelection = [...selectedCourses];
+      updatedSelection[existingIndex] = configuredCourse;
+      setSelectedCourses(updatedSelection);
+    } else {
+      setSelectedCourses([...selectedCourses, configuredCourse]);
     }
   };
 
+  const handleRemoveCourse = (courseId: string) => {
+    setSelectedCourses(selectedCourses.filter((c) => c.id !== courseId));
+  };
+
+  const filteredCourses = useMemo(() => {
+    return allCourses.filter((course) =>
+      course.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [allCourses, searchQuery]);
+
+  const totalPrice = useMemo(() => {
+    return selectedCourses.reduce(
+      (total, course) => total + course.configuredPrice,
+      0
+    );
+  }, [selectedCourses]);
+
+  const formatCurrency = (value: number) => {
+    return `R$ ${value.toFixed(2).replace(".", ",")}`;
+  };
+
+  const getCourseOptionsText = (course: ConfiguredCourse) => {
+    const demand = course.demandType === "annual" ? "Anual" : "Imediata";
+    const cert =
+      course.certificateType === "physical" ? "Digital + Físico" : "Digital";
+    return `${demand}, ${cert}`;
+  };
+
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div>
-          <Badge variant="outline">Orçamentos</Badge>
-          <h1>Solicitar Novo Orçamento</h1>
-          <p>
-            Preencha os dados abaixo para criar uma nova proposta comercial.
-          </p>
-        </div>
+    <div className={layoutStyles.page}>
+      {configuringCourse && (
+        <BudgetModal
+          course={configuringCourse}
+          onClose={() => setConfiguringCourse(null)}
+          onSave={handleSaveConfiguration}
+        />
+      )}
+
+      <header className={layoutStyles.header}>
+        <Badge variant="outline">Orçamentos</Badge>
+        <h1>Orçamento de Cursos</h1>
+        <p>
+          Selecione os cursos desejados e negocie os melhores preços para sua
+          empresa.
+        </p>
       </header>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Detalhes da Solicitação</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={styles.field}>
-              <Label htmlFor="companyName">
-                Empresa (para quem é o orçamento)
-              </Label>
-              <Input
-                id="companyName"
-                name="companyName"
-                placeholder="Nome da Empresa"
-                required
-              />
-            </div>
+      <div className={layoutStyles.layout}>
+        <main className={layoutStyles.mainContent}>
+          <div className={layoutStyles.toolbar}>
+            <Input
+              placeholder="Buscar Cursos..."
+              name="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <span className={layoutStyles.courseCount}>
+              {filteredCourses.length} cursos
+            </span>
+          </div>
 
-            <div className={styles.grid}>
-              <div className={styles.field}>
-                <Label htmlFor="courseId">Curso Desejado</Label>
-                <Select
-                  id="courseId"
-                  name="courseId"
-                  required
-                  disabled={isLoading}
-                >
-                  <option value="">
-                    {isLoading ? "Carregando cursos..." : "Selecione um curso"}
-                  </option>
-                  {courses.map((course) => (
-                    <option key={course.id} value={course.id}>
-                      {course.title}
-                    </option>
-                  ))}
-                </Select>
-              </div>
-
-              <div className={styles.field}>
-                <Label htmlFor="seats">Número de Vagas (Licenças)</Label>
-                <Input
-                  id="seats"
-                  name="seats"
-                  type="number"
-                  placeholder="10"
-                  min="1"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className={styles.grid}>
-              <div className={styles.field}>
-                <Label htmlFor="demandType">Tipo de Demanda</Label>
-                <Select
-                  id="demandType"
-                  name="demandType"
-                  defaultValue="IMMEDIATE"
-                >
-                  <option value="IMMEDIATE">Imediata</option>
-                  <option value="ANNUAL">Contrato Anual</option>
-                </Select>
-              </div>
-
-              <div className={styles.field}>
-                <Label htmlFor="certificateFormat">Envio do Certificado</Label>
-                <Select
-                  id="certificateFormat"
-                  name="certificateFormat"
-                  defaultValue="DIGITAL"
-                >
-                  <option value="DIGITAL">Digital</option>
-                  <option value="PHYSICAL">Físico</option>
-                  <option value="DIGITAL_AND_PHYSICAL">Digital + Físico</option>
-                </Select>
-              </div>
-            </div>
-
-            <div className={styles.field}>
-              <Label htmlFor="notes">Observações</Label>
-              <Textarea
-                id="notes"
-                name="notes"
-                placeholder="Ex: Treinamento para equipe de manutenção elétrica..."
-              />
-            </div>
-
-            {error && (
-              <p style={{ color: "var(--color-danger)", fontSize: "0.9rem" }}>
-                {error}
-              </p>
+          <div className={styles.catalogGrid}>
+            {isLoading ? (
+              <p>Carregando cursos...</p>
+            ) : (
+              filteredCourses.map((course) => {
+                const isInCart = selectedCourses.some(
+                  (c) => c.id === course.id
+                );
+                return (
+                  <article key={course.id} className={styles.courseCard}>
+                    <div className={styles.media}>
+                      <Image
+                        src={course.imageUrl ?? "https://placehold.co/500x400"}
+                        alt={course.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 480px"
+                      />
+                    </div>
+                    <div className={styles.content}>
+                      <div>
+                        <Badge variant="neutral">{course.level ?? "N/D"}</Badge>
+                      </div>
+                      <div>
+                        <h2>{course.title}</h2>
+                        <p>{course.headline ?? "Sem descrição."}</p>
+                      </div>
+                      <div className={styles.meta}>
+                        <span>{course.duration ?? "N/D"}</span>
+                        <span>Certificado incluso</span>
+                      </div>
+                      <div className={styles.footer}>
+                        <span>{formatCurrency(course.price)}</span>
+                        <Button
+                          variant={isInCart ? "ghost" : "primary"}
+                          size="sm"
+                          onClick={() => setConfiguringCourse(course)}
+                        >
+                          {isInCart ? "Alterar" : "Adicionar"}
+                        </Button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })
             )}
+          </div>
+        </main>
 
-            <div className={styles.actions}>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => router.back()}
-              >
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={isSubmitting || isLoading}>
-                {isSubmitting ? "Enviando..." : "Enviar Solicitação"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </form>
+        <aside className={layoutStyles.sidebar}>
+          <Card className={layoutStyles.budgetCard}>
+            <CardHeader>
+              <CardTitle>Seu Orçamento</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedCourses.length === 0 ? (
+                <div className={layoutStyles.emptyState}>
+                  <span className={layoutStyles.emptyIcon}>
+                    <FaShoppingCart />
+                  </span>
+                  <strong>Nenhum curso adicionado</strong>
+                  <p>
+                    Selecione cursos da lista para começar a montar seu
+                    orçamento.
+                  </p>
+                </div>
+              ) : (
+                <div className={layoutStyles.budgetList}>
+                  {selectedCourses.map((course) => (
+                    <div key={course.id} className={layoutStyles.budgetItem}>
+                      <div className={layoutStyles.budgetItemInfo}>
+                        <strong>{course.title}</strong>
+                        <span className={layoutStyles.budgetItemOptions}>
+                          {getCourseOptionsText(course)}
+                        </span>
+                        <span>{formatCurrency(course.configuredPrice)}</span>
+                      </div>
+                      <button
+                        type="button"
+                        className={layoutStyles.removeButton}
+                        onClick={() => handleRemoveCourse(course.id)}
+                        aria-label={`Remover ${course.title}`}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+            {selectedCourses.length > 0 && (
+              <CardFooter className={layoutStyles.budgetFooter}>
+                <div className={layoutStyles.total}>
+                  <span>Total (vaga unitária)</span>
+                  <strong>{formatCurrency(totalPrice)}</strong>
+                </div>
+                <Button fullWidth>Solicitar Orçamento</Button>
+              </CardFooter>
+            )}
+          </Card>
+        </aside>
+      </div>
     </div>
   );
 }
