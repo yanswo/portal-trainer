@@ -1,17 +1,21 @@
 import { getAuthenticatedUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { FaUser, FaBell, FaShieldAlt, FaFileAlt } from "react-icons/fa";
 
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/app/components/ui/Card/Card";
 import styles from "./page.module.css";
 
 export default async function SettingsPage() {
   const user = await getAuthenticatedUser();
   if (!user) return null;
-
-  const profile = await prisma.profile.findUnique({
-    where: { userId: user.id },
-  });
 
   const enrollmentCount = await prisma.enrollment.count({
     where: { userId: user.id },
@@ -22,92 +26,144 @@ export default async function SettingsPage() {
     orderBy: { submittedAt: "desc" },
   });
 
-  const settingsSections = [
-    {
-      title: "Dados pessoais",
-      description: "Atualize nome completo, documentos e dados de contato.",
-      items: [
-        { label: "Nome completo", value: user.name ?? "Não informado" },
-        { label: "E-mail de acesso", value: user.email },
-        { label: "Empresa", value: profile?.bio ?? "Não informada" },
-      ],
-    },
-    {
-      title: "Preferências",
-      description: "Defina notificações e idioma dos materiais.",
-      items: [
-        { label: "Idioma", value: "Português" },
-        { label: "Notificações", value: "Push e E-mail" },
-      ],
-    },
-    {
-      title: "Documentos e Atividade",
-      description: "Gerencie ASO, certificados e registros de avaliação.",
-      items: [
-        { label: "Cursos Matriculados", value: `${enrollmentCount} cursos` },
-        {
-          label: "Última prova",
-          value: lastAssessment?.status ?? "Nenhuma prova enviada",
-        },
-      ],
-    },
-  ];
-
   return (
-    <div>
+    <div className={styles.page}>
       <header className={styles.header}>
         <Badge variant="outline">Configurações</Badge>
-        <h1>Preferências da conta</h1>
+        <h1>Minha Conta</h1>
         <p>
-          Atualize seus dados pessoais, defina preferências de notificação e
-          acompanhe documentos necessários para manter os certificados ativos.
+          Gerencie seus dados pessoais, preferências de privacidade e segurança.
         </p>
       </header>
 
-      <div className={styles.sections}>
-        {settingsSections.map((section) => (
-          <section key={section.title} className={styles.sectionCard}>
-            <div className={styles.sectionHeader}>
+      <div className={styles.grid}>
+        <Card>
+          <CardHeader>
+            <div className={styles.cardTitleRow}>
+              <div className={styles.iconWrapper}>
+                <FaUser />
+              </div>
               <div>
-                <h2>{section.title}</h2>
-                <p>{section.description}</p>
+                <CardTitle>Dados Pessoais</CardTitle>
+                <CardDescription>
+                  Informações de identificação da sua conta.
+                </CardDescription>
               </div>
-              <div className={styles.actions}>
-                <Button variant="secondary">Editar</Button>
+            </div>
+          </CardHeader>
+          <CardContent className={styles.cardContent}>
+            <div className={styles.itemGroup}>
+              <div className={styles.item}>
+                <span className={styles.label}>Nome Completo</span>
+                <span className={styles.value}>
+                  {user.name ?? "Não informado"}
+                </span>
+              </div>
+              <Button variant="ghost" size="sm">
+                Editar
+              </Button>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.itemGroup}>
+              <div className={styles.item}>
+                <span className={styles.label}>E-mail de Acesso</span>
+                <span className={styles.value}>{user.email}</span>
               </div>
             </div>
-            <div className={styles.items}>
-              {section.items.map((item) => (
-                <div key={item.label} className={styles.itemRow}>
-                  <div>
-                    <strong>{item.label}</strong>
-                    <span> · {item.value}</span>
-                  </div>
-                  <Button variant="secondary">Atualizar</Button>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
-        <section className={styles.sectionCard}>
-          <div className={styles.sectionHeader}>
-            <div>
-              <h2>Segurança da conta</h2>
-              <p>
-                Gerencie dispositivos, sessões ativas e redefinições de senha.
-              </p>
-            </div>
-          </div>
-          <div className={styles.items}>
-            <div className={styles.itemRow}>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className={styles.cardTitleRow}>
+              <div className={styles.iconWrapper}>
+                <FaBell />
+              </div>
               <div>
-                <strong>Email principal</strong>
-                <span> · {user.email}</span>
+                <CardTitle>Preferências</CardTitle>
+                <CardDescription>
+                  Gerencie notificações e idioma.
+                </CardDescription>
               </div>
-              <Button variant="secondary">Atualizar senha</Button>
             </div>
-          </div>
-        </section>
+          </CardHeader>
+          <CardContent className={styles.cardContent}>
+            <div className={styles.itemGroup}>
+              <div className={styles.item}>
+                <span className={styles.label}>Idioma</span>
+                <span className={styles.value}>Português (Brasil)</span>
+              </div>
+              <Button variant="ghost" size="sm">
+                Alterar
+              </Button>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.itemGroup}>
+              <div className={styles.item}>
+                <span className={styles.label}>Notificações</span>
+                <span className={styles.value}>Push e E-mail ativados</span>
+              </div>
+              <Button variant="ghost" size="sm">
+                Gerenciar
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className={styles.cardTitleRow}>
+              <div className={styles.iconWrapper}>
+                <FaFileAlt />
+              </div>
+              <div>
+                <CardTitle>Atividade</CardTitle>
+                <CardDescription>
+                  Resumo da sua jornada de aprendizado.
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className={styles.cardContent}>
+            <div className={styles.statsGrid}>
+              <div className={styles.statItem}>
+                <span className={styles.statValue}>{enrollmentCount}</span>
+                <span className={styles.statLabel}>Cursos Ativos</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statValueStatus}>
+                  {lastAssessment ? "Enviada" : "Nenhuma"}
+                </span>
+                <span className={styles.statLabel}>Última Prova</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className={styles.cardTitleRow}>
+              <div className={styles.iconWrapper}>
+                <FaShieldAlt />
+              </div>
+              <div>
+                <CardTitle>Segurança</CardTitle>
+                <CardDescription>Proteção da conta e senha.</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className={styles.cardContent}>
+            <div className={styles.itemGroup}>
+              <div className={styles.item}>
+                <span className={styles.label}>Senha</span>
+                <span className={styles.value}>••••••••••••</span>
+              </div>
+              <Button variant="secondary" size="sm">
+                Redefinir Senha
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

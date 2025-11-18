@@ -1,24 +1,17 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-} from "@/app/components/ui/Card/Card";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@/app/components/ui/Table/Table";
 import { Tabs } from "@/app/components/ui/Tabs/Tabs";
-
-import { budgetFilters } from "@/data/client-portal";
+import {
+  FaCalendarAlt,
+  FaUsers,
+  FaFileContract,
+  FaClock,
+} from "react-icons/fa";
 
 import styles from "./page.module.css";
 
@@ -31,8 +24,9 @@ const STATUS_MATCHERS: Record<string, RegExp> = {
 type Budget = {
   id: string;
   courseFocus: string;
+  courseImage: string | null;
   seats: number;
-  proposedFee: number | null;
+  proposedFee: number | null; // Pode ser null se ainda não foi orçado
   status: string;
   updatedAt: string;
   demandType: string;
@@ -41,7 +35,6 @@ type Budget = {
 
 export default function BudgetsPage() {
   const [filter, setFilter] = useState("all");
-
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,10 +44,9 @@ export default function BudgetsPage() {
       try {
         const response = await fetch("/api/me/budgets");
         if (!response.ok) {
-          const errData = await response.json();
-          throw new Error(errData.message || "Falha ao buscar orçamentos");
+          throw new Error("Falha ao buscar orçamentos");
         }
-        const data: Budget[] = await response.json();
+        const data = await response.json();
         setBudgets(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erro desconhecido");
@@ -62,137 +54,130 @@ export default function BudgetsPage() {
         setIsLoading(false);
       }
     }
-
     fetchBudgets();
   }, []);
 
   const filteredBudgets = useMemo(() => {
-    if (filter === "all") {
-      return budgets;
-    }
+    if (filter === "all") return budgets;
     const matcher = STATUS_MATCHERS[filter];
-    if (!matcher) {
-      return budgets;
-    }
-    return budgets.filter((budget) => matcher.test(budget.status));
+    return matcher ? budgets.filter((b) => matcher.test(b.status)) : budgets;
   }, [budgets, filter]);
 
-  const formatDemand = (type: string) => {
-    if (type === "IMMEDIATE") return "Imediata";
-    if (type === "ANNUAL") return "Anual";
-    return type;
+  const getStatusVariant = (status: string) => {
+    if (/approved|aprovado/i.test(status)) return "success"; // Precisaria criar esse variante no Badge ou usar primary
+    if (/declined|recusado/i.test(status)) return "outline";
+    if (/sent|enviado/i.test(status)) return "primary";
+    return "neutral"; // Pending/Received
   };
 
-  const formatCertificate = (type: string) => {
-    if (type === "DIGITAL") return "Digital";
-    if (type === "PHYSICAL") return "Físico";
-    if (type === "DIGITAL_AND_PHYSICAL") return "Digital + Físico";
-    return type;
+  const formatCurrency = (val: number | null) => {
+    if (val === null) return "Sob análise";
+    return `R$ ${Number(val).toFixed(2).replace(".", ",")}`;
   };
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Badge variant="outline">Orçamentos</Badge>
-        <h1>Propostas e simulações personalizadas</h1>
+        <Badge variant="outline">Minhas Propostas</Badge>
+        <h1>Histórico de Orçamentos</h1>
         <p>
-          Ajuste quantidades de licenças, acompanhe o status das negociações e
-          gere novas propostas com valores atualizados.
+          Acompanhe o status das suas solicitações e aprove propostas
+          comerciais.
         </p>
       </header>
 
       <div className={styles.toolbar}>
         <Tabs defaultValue={filter} onValueChange={setFilter}>
           <Tabs.List>
-            {budgetFilters.map((filterOption) => (
-              <Tabs.Trigger key={filterOption.value} value={filterOption.value}>
-                {filterOption.label}
-              </Tabs.Trigger>
-            ))}
+            <Tabs.Trigger value="all">Todos</Tabs.Trigger>
+            <Tabs.Trigger value="pending">Em análise</Tabs.Trigger>
+            <Tabs.Trigger value="sent">Respondidos</Tabs.Trigger>
+            <Tabs.Trigger value="closed">Finalizados</Tabs.Trigger>
           </Tabs.List>
         </Tabs>
-        <Button href="/clientes/orcamentos/novo">Novo orçamento</Button>
+        <Button href="/clientes/orcamentos/novo">Solicitar Novo</Button>
       </div>
 
       {isLoading ? (
-        <p>Carregando seus orçamentos...</p>
+        <div className={styles.loading}>Carregando histórico...</div>
       ) : error ? (
-        <p style={{ color: "red" }}>Erro ao carregar: {error}</p>
+        <div className={styles.error}>Erro: {error}</div>
+      ) : filteredBudgets.length === 0 ? (
+        <div className={styles.empty}>
+          <p>Nenhum orçamento encontrado para este filtro.</p>
+          <Button href="/clientes/orcamentos/novo" variant="secondary">
+            Começar agora
+          </Button>
+        </div>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell header>Foco do Curso</TableCell>
-              <TableCell header>Vagas</TableCell>
-              <TableCell header>Demanda</TableCell>
-              <TableCell header>Certificado</TableCell>
-              <TableCell header>Status</TableCell>
-              <TableCell header>Atualizado em</TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredBudgets.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} style={{ textAlign: "center" }}>
-                  Nenhum orçamento encontrado.
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredBudgets.map((budget) => {
-                return (
-                  <TableRow key={budget.id}>
-                    <TableCell>{budget.courseFocus}</TableCell>
-                    <TableCell>{budget.seats}</TableCell>
-                    <TableCell>{formatDemand(budget.demandType)}</TableCell>
-                    <TableCell>
-                      {formatCertificate(budget.certificateFormat)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="neutral">{budget.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(budget.updatedAt).toLocaleDateString("pt-BR")}
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            )}
-          </TableBody>
-        </Table>
-      )}
+        <div className={styles.list}>
+          {filteredBudgets.map((budget) => (
+            <article key={budget.id} className={styles.budgetRow}>
+              {/* Imagem do Curso */}
+              <div className={styles.imageWrapper}>
+                <Image
+                  src={budget.courseImage ?? "https://placehold.co/400x300"}
+                  alt={budget.courseFocus}
+                  fill
+                  sizes="120px"
+                  className={styles.image}
+                />
+              </div>
 
-      <section className={styles.summaryGrid} aria-label="Próximos passos">
-        <Card>
-          <CardHeader>
-            <CardTitle>Próximo passo sugerido</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Envie a proposta BGT-2031 com condições atualizadas.</p>
-            <Button variant="secondary" size="sm">
-              Enviar e-mail
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Economia estimada</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>
-              R$ 1.280,00 negociados com licenças combinadas neste trimestre.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Contato responsável</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>Equipe financeira CW Training</p>
-            <span className={styles.contact}>financeiro@cwtraining.com</span>
-          </CardContent>
-        </Card>
-      </section>
+              {/* Detalhes Principais */}
+              <div className={styles.mainInfo}>
+                <div className={styles.titleGroup}>
+                  <h3>{budget.courseFocus}</h3>
+                  <span className={styles.date}>
+                    Atualizado em{" "}
+                    {new Date(budget.updatedAt).toLocaleDateString("pt-BR")}
+                  </span>
+                </div>
+
+                <div className={styles.metaGrid}>
+                  <div className={styles.metaItem}>
+                    <FaUsers /> <span>{budget.seats} licenças</span>
+                  </div>
+                  <div className={styles.metaItem}>
+                    <FaClock />{" "}
+                    <span>
+                      {budget.demandType === "ANNUAL" ? "Anual" : "Imediata"}
+                    </span>
+                  </div>
+                  <div className={styles.metaItem}>
+                    <FaFileContract />{" "}
+                    <span>
+                      {budget.certificateFormat === "DIGITAL"
+                        ? "Digital"
+                        : "Físico"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status e Ação */}
+              <div className={styles.statusAction}>
+                <Badge variant={getStatusVariant(budget.status) as any}>
+                  {budget.status === "RECEIVED"
+                    ? "Aguardando Análise"
+                    : budget.status}
+                </Badge>
+
+                <div className={styles.priceGroup}>
+                  <span className={styles.priceLabel}>Valor Total</span>
+                  <strong className={styles.priceValue}>
+                    {formatCurrency(budget.proposedFee)}
+                  </strong>
+                </div>
+
+                <Button variant="secondary" size="sm">
+                  Ver Detalhes
+                </Button>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

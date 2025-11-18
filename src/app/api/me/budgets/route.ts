@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { DemandType, CertificateFormat, BudgetStatus } from "@prisma/client";
 
 async function getApiUser() {
-  const cookieStore = cookies();
-  const authCookie = (await cookieStore).get("clientAuth");
+  const cookieStore = await cookies();
+  const authCookie = cookieStore.get("clientAuth");
 
   if (!authCookie) {
     return new NextResponse(
@@ -51,7 +51,7 @@ export async function GET() {
       orderBy: { updatedAt: "desc" },
       select: {
         id: true,
-        course: { select: { title: true } },
+        course: { select: { title: true, imageUrl: true } },
         seats: true,
         proposedFee: true,
         status: true,
@@ -64,9 +64,10 @@ export async function GET() {
     const formattedBudgets = budgets.map((b) => ({
       ...b,
       courseFocus: b.course.title,
+      courseImage: b.course.imageUrl,
     }));
 
-    return NextResponse.json(budgets);
+    return NextResponse.json(formattedBudgets);
   } catch (error) {
     console.error("Erro ao buscar orçamentos:", error);
     return new NextResponse(
@@ -91,17 +92,11 @@ export async function POST(request: Request) {
       seats,
       demandType,
       certificateFormat,
-      companyName,
       notes,
+      // companyName removido pois não existe mais no schema
     } = body;
 
-    if (
-      !courseId ||
-      !seats ||
-      !demandType ||
-      !certificateFormat ||
-      !companyName
-    ) {
+    if (!courseId || !seats || !demandType || !certificateFormat) {
       return NextResponse.json(
         {
           success: false,
@@ -132,7 +127,6 @@ export async function POST(request: Request) {
         seats: Number(seats),
         demandType: demandType as DemandType,
         certificateFormat: certificateFormat as CertificateFormat,
-        companyName: String(companyName),
         notes: notes ? String(notes) : null,
         status: BudgetStatus.RECEIVED,
       },

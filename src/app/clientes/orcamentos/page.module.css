@@ -1,10 +1,11 @@
 .page {
   display: grid;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .header {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
 }
 
@@ -21,25 +22,165 @@
 
 .toolbar {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
-.summaryGrid {
+.list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.25rem;
 }
 
-.summaryGrid p {
-  color: var(--color-text-secondary);
-  line-height: 1.4;
+.budgetRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-speed),
+    box-shadow var(--transition-speed);
 }
 
-.contact {
-  font-size: 0.9rem;
+.budgetRow:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 130px;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background: var(--color-surface-alt);
+  flex-shrink: 0;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.mainInfo {
+  flex: 1;
+  display: grid;
+  gap: 0.8rem;
+  min-width: 240px;
+}
+
+.titleGroup {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.titleGroup h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.date {
+  font-size: 0.85rem;
   color: var(--color-text-muted);
 }
 
+.metaGrid {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-alt);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--border-radius-pill);
+}
+
+.metaItem svg {
+  color: var(--color-text-muted);
+}
+
+.statusAction {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  min-width: 160px;
+  text-align: right;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--color-border);
+}
+
+.priceGroup {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.priceLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.priceValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.loading,
+.error,
+.empty {
+  padding: 4rem;
+  text-align: center;
+  background: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  border: 1px dashed var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .budgetRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .imageWrapper {
+    width: 100%;
+    aspect-ratio: 21 / 9;
+  }
+
+  .statusAction {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+  }
+
+  .priceGroup {
+    text-align: left;
+  }
+}

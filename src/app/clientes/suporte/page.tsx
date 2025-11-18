@@ -1,10 +1,25 @@
-import { faqEntries, supportShortcuts } from "@/data/client-portal";
-
+import { faqEntries } from "@/data/client-portal";
 import { getAuthenticatedUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import {
+  FaRobot,
+  FaPaperPlane,
+  FaTicketAlt,
+  FaCheckCircle,
+  FaClock,
+  FaSearch,
+  FaChevronRight,
+} from "react-icons/fa";
 
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
+import Input from "@/app/components/ui/Input/Input";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+} from "@/app/components/ui/Card/Card";
 import styles from "./page.module.css";
 
 export default async function SupportPage() {
@@ -16,63 +31,171 @@ export default async function SupportPage() {
     orderBy: { updatedAt: "desc" },
   });
 
+  const firstName = user.name?.split(" ")[0] ?? "Aluno";
+
   return (
-    <div>
+    <div className={styles.page}>
       <header className={styles.header}>
-        <Badge variant="outline">Ajuda e suporte</Badge>
-        <h1>Conte com o time CW Training</h1>
+        <Badge variant="outline">Central de Ajuda</Badge>
+        <h1>Suporte e Atendimento</h1>
         <p>
-          Acompanhe chamados abertos, consulte orientações rápidas e compartilhe
-          evidências das suas avaliações para agilizar a liberação dos
-          certificados.
+          Tire dúvidas sobre a plataforma, acompanhe seus chamados técnicos ou
+          converse com nosso assistente virtual.
         </p>
       </header>
 
-      <div className={styles.supportGrid}>
-        {supportTickets.map((ticket) => (
-          <article key={ticket.id} className={styles.ticketCard}>
-            <strong>{ticket.subject}</strong>
-            <span>{ticket.id}</span>
-            <span>Status: {ticket.status}</span>
-            <span>
-              Atualizado em{" "}
-              {new Date(ticket.updatedAt).toLocaleDateString("pt-BR")}
-            </span>
-          </article>
-        ))}
-      </div>
+      <div className={styles.layout}>
+        <main className={styles.mainContent}>
+          <section>
+            <div className={styles.sectionHeader}>
+              <h3>Seus chamados recentes</h3>
+              {supportTickets.length > 0 && (
+                <span className={styles.countBadge}>
+                  {supportTickets.length}
+                </span>
+              )}
+            </div>
 
-      <div className={styles.shortcuts}>
-        {supportShortcuts.map((shortcut) => (
-          <div key={shortcut.title} className={styles.shortcutCard}>
-            <strong>{shortcut.title}</strong>
-            <p>{shortcut.description}</p>
-            <Button href={shortcut.href} variant="secondary">
-              Acessar
+            {supportTickets.length === 0 ? (
+              <div className={styles.emptyState}>
+                <div className={styles.emptyIcon}>
+                  <FaTicketAlt />
+                </div>
+                <strong>Nenhum chamado aberto</strong>
+                <p>
+                  Você não possui solicitações de suporte em andamento no
+                  momento.
+                </p>
+              </div>
+            ) : (
+              <div className={styles.ticketList}>
+                {supportTickets.map((ticket) => (
+                  <div key={ticket.id} className={styles.ticketRow}>
+                    <div className={styles.ticketIcon}>
+                      {ticket.status === "OPEN" ? (
+                        <FaClock className={styles.iconPending} />
+                      ) : (
+                        <FaCheckCircle className={styles.iconSuccess} />
+                      )}
+                    </div>
+                    <div className={styles.ticketInfo}>
+                      <strong>{ticket.subject}</strong>
+                      <div className={styles.ticketMeta}>
+                        <span>ID: #{ticket.id.slice(-6).toUpperCase()}</span>
+                        <span className={styles.dot}>·</span>
+                        <span>
+                          Atualizado em{" "}
+                          {new Date(ticket.updatedAt).toLocaleDateString(
+                            "pt-BR"
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={styles.ticketStatus}>
+                      <Badge
+                        variant={
+                          ticket.status === "OPEN" ? "primary" : "neutral"
+                        }
+                      >
+                        {ticket.status === "OPEN" ? "Em análise" : "Resolvido"}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section className={styles.faqSection}>
+            <div className={styles.sectionHeader}>
+              <h3>Dúvidas frequentes</h3>
+            </div>
+            <div className={styles.faqGrid}>
+              {faqEntries.map((entry) => (
+                <details key={entry.question} className={styles.faqItem}>
+                  <summary>
+                    {entry.question}
+                    <FaChevronRight className={styles.chevron} />
+                  </summary>
+                  <p>{entry.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        </main>
+
+        <aside className={styles.sidebar}>
+          <Card className={styles.chatCard}>
+            <div className={styles.chatHeader}>
+              <div className={styles.botAvatar}>
+                <FaRobot />
+              </div>
+              <div>
+                <strong>CW Assistant</strong>
+                <span className={styles.onlineStatus}>
+                  <span className={styles.statusDot} /> Online agora
+                </span>
+              </div>
+            </div>
+
+            <div className={styles.chatBody}>
+              <div className={styles.messageBubble}>
+                Olá, <strong>{firstName}</strong>! 👋
+                <br />
+                Sou a IA da CW Training. Posso ajudar você a encontrar seu
+                certificado ou liberar uma aula travada agora mesmo.
+              </div>
+              <div className={styles.suggestionChips}>
+                <button>Onde está meu certificado?</button>
+                <button>Problema com vídeo</button>
+              </div>
+            </div>
+
+            <div className={styles.chatInputArea}>
+              <div className={styles.inputWrapper}>
+                <input
+                  type="text"
+                  placeholder="Digite sua mensagem..."
+                  className={styles.chatInput}
+                />
+                <button className={styles.sendButton}>
+                  <FaPaperPlane />
+                </button>
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Base de Conhecimento</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={styles.searchBox}>
+                <FaSearch />
+                <Input placeholder="Buscar artigos..." />
+              </div>
+              <ul className={styles.articleList}>
+                <li>
+                  <a href="#">Como enviar o vídeo da prova prática?</a>
+                </li>
+                <li>
+                  <a href="#">Requisitos do sistema para as aulas</a>
+                </li>
+                <li>
+                  <a href="#">Política de cancelamento e reembolso</a>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <div className={styles.manualAction}>
+            <p>O chat não resolveu?</p>
+            <Button fullWidth variant="secondary">
+              Abrir chamado manual
             </Button>
           </div>
-        ))}
+        </aside>
       </div>
-
-      <section className={styles.faq} aria-labelledby="faq">
-        <div>
-          <h2 id="faq">Perguntas frequentes</h2>
-        </div>
-        {faqEntries.map((entry) => (
-          <div key={entry.question} className={styles.faqItem}>
-            <strong>{entry.question}</strong>
-            <p>{entry.answer}</p>
-          </div>
-        ))}
-      </section>
-
-      <form className={styles.form}>
-        <strong>Enviar novo chamado</strong>
-        <textarea placeholder="Descreva sua dúvida ou envie o link da evidência da avaliação." />
-        <div>
-          <Button variant="secondary">Compartilhar com o suporte</Button>
-        </div>
-      </form>
     </div>
   );
 }
