@@ -1,11 +1,16 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
+import {
+  FaLock,
+  FaCreditCard,
+  FaShieldAlt,
+  FaBarcode,
+  FaQrcode,
+} from "react-icons/fa";
 import Button from "@/app/components/ui/Button";
-import Input from "@/app/components/ui/Input/Input";
 import Label from "@/app/components/ui/Label/Label";
-import Select from "@/app/components/ui/Select/Select";
 import {
   Card,
   CardHeader,
@@ -15,18 +20,11 @@ import {
 } from "@/app/components/ui/Card/Card";
 import styles from "./checkout.module.css";
 
-type PaymentMethod = "PIX" | "CREDIT_CARD" | "BOLETO";
-
-type PlainCourse = {
-  id: string;
-  title: string;
-  price: number;
-  slug: string | null;
-};
+type PaymentMethod = "CREDIT_CARD" | "PIX" | "BOLETO";
 
 type CheckoutFormProps = {
-  user: Pick<User, "id" | "name" | "email">;
-  course: PlainCourse;
+  user: { id: string; name: string | null; email: string };
+  course: { id: string; title: string; price: number };
 };
 
 export default function CheckoutForm({ user, course }: CheckoutFormProps) {
@@ -37,6 +35,29 @@ export default function CheckoutForm({ user, course }: CheckoutFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardExpiry, setCardExpiry] = useState("");
+  const [cardCvc, setCardCvc] = useState("");
+
+  const handleCardNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, "");
+    val = val.replace(/(\d{4})/g, "$1 ").trim();
+    setCardNumber(val.slice(0, 19));
+  };
+
+  const handleExpiryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length >= 2) {
+      val = val.slice(0, 2) + "/" + val.slice(2, 4);
+    }
+    setCardExpiry(val.slice(0, 5));
+  };
+
+  const handleCvcChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "");
+    setCardCvc(val.slice(0, 4));
+  };
+
   const installmentValue = (course.price / installments)
     .toFixed(2)
     .replace(".", ",");
@@ -45,6 +66,8 @@ export default function CheckoutForm({ user, course }: CheckoutFormProps) {
     event.preventDefault();
     setIsSubmitting(true);
     setError(null);
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     try {
       const response = await fetch("/api/checkout/mock-purchase", {
@@ -72,113 +95,149 @@ export default function CheckoutForm({ user, course }: CheckoutFormProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Pagamento</CardTitle>
+    <Card className={styles.checkoutCard}>
+      <CardHeader className={styles.header}>
+        <div className={styles.secureHeader}>
+          <CardTitle>Pagamento Seguro</CardTitle>
+          <div className={styles.secureBadge}>
+            <FaLock /> Ambiente Criptografado
+          </div>
+        </div>
         <CardDescription>
-          Preencha os dados para concluir a matrícula.
+          Seus dados estão protegidos. Complete a matrícula para liberar o
+          acesso.
         </CardDescription>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <Label htmlFor="name">Nome Completo</Label>
-            <Input
-              id="name"
-              name="name"
-              defaultValue={user.name ?? ""}
-              required
-              readOnly
-            />
-          </div>
-          <div className={styles.field}>
-            <Label htmlFor="email">E-mail</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              defaultValue={user.email}
-              required
-              readOnly
-            />
-          </div>
-
-          <div className={styles.field}>
-            <Label htmlFor="paymentMethod">Forma de Pagamento</Label>
-            <Select
-              id="paymentMethod"
-              name="paymentMethod"
-              value={paymentMethod}
-              onChange={(e) =>
-                setPaymentMethod(e.target.value as PaymentMethod)
-              }
+          <div className={styles.methodGrid}>
+            <button
+              type="button"
+              className={`${styles.methodBtn} ${
+                paymentMethod === "CREDIT_CARD" ? styles.active : ""
+              }`}
+              onClick={() => setPaymentMethod("CREDIT_CARD")}
             >
-              <option value="CREDIT_CARD">Cartão de Crédito</option>
-              <option value="PIX">PIX</option>
-              <option value="BOLETO">Boleto</option>
-            </Select>
+              <FaCreditCard /> Cartão
+            </button>
+            <button
+              type="button"
+              className={`${styles.methodBtn} ${
+                paymentMethod === "PIX" ? styles.active : ""
+              }`}
+              onClick={() => setPaymentMethod("PIX")}
+            >
+              <FaQrcode /> PIX
+            </button>
+            <button
+              type="button"
+              className={`${styles.methodBtn} ${
+                paymentMethod === "BOLETO" ? styles.active : ""
+              }`}
+              onClick={() => setPaymentMethod("BOLETO")}
+            >
+              <FaBarcode /> Boleto
+            </button>
           </div>
 
           {paymentMethod === "CREDIT_CARD" && (
-            <>
+            <div className={styles.cardSection}>
               <div className={styles.field}>
-                <Label htmlFor="cc-num">Número do Cartão (simulação)</Label>
-                <Input
-                  id="cc-num"
-                  name="cc-num"
-                  placeholder="4242 4242 4242 4242"
+                <Label htmlFor="card-name">Nome no Cartão</Label>
+                <input
+                  id="card-name"
+                  className={styles.secureInput}
+                  placeholder="Como impresso no cartão"
+                  required
                 />
               </div>
-              <div className={styles.grid2}>
+
+              <div className={styles.field}>
+                <Label htmlFor="cc-num">Número do Cartão</Label>
+                <div className={styles.inputWithIcon}>
+                  <FaCreditCard className={styles.fieldIcon} />
+                  <input
+                    id="cc-num"
+                    className={styles.secureInput}
+                    value={cardNumber}
+                    onChange={handleCardNumberChange}
+                    placeholder="0000 0000 0000 0000"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className={styles.row2}>
                 <div className={styles.field}>
                   <Label htmlFor="cc-exp">Validade</Label>
-                  <Input id="cc-exp" name="cc-exp" placeholder="12/28" />
+                  <input
+                    id="cc-exp"
+                    className={styles.secureInput}
+                    value={cardExpiry}
+                    onChange={handleExpiryChange}
+                    placeholder="MM/AA"
+                    required
+                  />
                 </div>
                 <div className={styles.field}>
                   <Label htmlFor="cc-cvc">CVC</Label>
-                  <Input id="cc-cvc" name="cc-cvc" placeholder="123" />
+                  <div className={styles.inputWithIcon}>
+                    <FaLock className={styles.fieldIcon} />
+                    <input
+                      id="cc-cvc"
+                      className={styles.secureInput}
+                      value={cardCvc}
+                      onChange={handleCvcChange}
+                      placeholder="123"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
+
               <div className={styles.field}>
-                <Label htmlFor="installments">Parcelas</Label>
-                <Select
+                <Label htmlFor="installments">Parcelamento</Label>
+                <select
                   id="installments"
-                  name="installments"
+                  className={styles.secureSelect}
                   value={installments}
                   onChange={(e) => setInstallments(Number(e.target.value))}
                 >
                   <option value={1}>
-                    1x de R$ {installmentValue} (sem juros)
+                    1x de R$ {installmentValue} (À vista)
                   </option>
                   <option value={2}>
-                    2x de R${" "}
-                    {(Number(course.price) / 2).toFixed(2).replace(".", ",")}{" "}
-                    (sem juros)
+                    2x de R$ {(course.price / 2).toFixed(2).replace(".", ",")}
                   </option>
                   <option value={3}>
-                    3x de R${" "}
-                    {(Number(course.price) / 3).toFixed(2).replace(".", ",")}{" "}
-                    (sem juros)
+                    3x de R$ {(course.price / 3).toFixed(2).replace(".", ",")}
                   </option>
-                </Select>
+                </select>
               </div>
-            </>
+            </div>
           )}
 
           {paymentMethod === "PIX" && (
-            <div className={styles.notice}>
+            <div className={styles.infoBox}>
               <p>
-                Ao clicar em "Finalizar", um QR Code (simulado) será gerado para
-                pagamento.
+                <strong>Aprovação Imediata!</strong>
+              </p>
+              <p>
+                Ao finalizar, um QR Code será gerado. O acesso ao curso é
+                liberado assim que o pagamento for identificado pelo banco.
               </p>
             </div>
           )}
 
           {paymentMethod === "BOLETO" && (
-            <div className={styles.notice}>
+            <div className={styles.infoBox}>
               <p>
-                Ao clicar em "Finalizar", um Boleto (simulado) será gerado com
-                vencimento em 2 dias úteis.
+                <strong>Atenção ao prazo:</strong>
+              </p>
+              <p>
+                Boletos podem levar até 3 dias úteis para compensar. Se precisar
+                de acesso urgente, prefira PIX ou Cartão.
               </p>
             </div>
           )}
@@ -187,9 +246,14 @@ export default function CheckoutForm({ user, course }: CheckoutFormProps) {
 
           <Button type="submit" fullWidth disabled={isSubmitting}>
             {isSubmitting
-              ? "Processando..."
-              : `Finalizar Matrícula (Simulação)`}
+              ? "Processando Pagamento..."
+              : `Pagar R$ ${course.price.toFixed(2).replace(".", ",")}`}
           </Button>
+
+          <div className={styles.trustFooter}>
+            <FaShieldAlt />{" "}
+            <span>Seus dados pessoais nunca são compartilhados.</span>
+          </div>
         </form>
       </CardContent>
     </Card>

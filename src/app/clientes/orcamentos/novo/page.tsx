@@ -1,9 +1,16 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation"; // Para redirecionar após sucesso
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FaShoppingCart, FaTrash, FaUsers } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaTrash,
+  FaUsers,
+  FaSearch,
+  FaPlus,
+  FaEdit,
+} from "react-icons/fa";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
 import Input from "@/app/components/ui/Input/Input";
@@ -38,8 +45,7 @@ export default function NovoOrcamentoPage() {
   const [configuringCourse, setConfiguringCourse] =
     useState<BudgetCourse | null>(null);
 
-  // Novos estados para o formulário
-  const [seats, setSeats] = useState(10); // Padrão inicial
+  const [seats, setSeats] = useState(10);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -100,14 +106,11 @@ export default function NovoOrcamentoPage() {
     return `${demand}, ${cert}`;
   };
 
-  // Função que realmente envia os dados
   const handleSubmitBudget = async () => {
     if (selectedCourses.length === 0) return;
     setIsSubmitting(true);
 
     try {
-      // Envia um pedido para cada curso selecionado (já que o backend espera 1 curso por request)
-      // Uma melhoria futura seria o backend aceitar múltiplos itens num só pedido.
       const promises = selectedCourses.map((course) =>
         fetch("/api/me/budgets", {
           method: "POST",
@@ -126,8 +129,6 @@ export default function NovoOrcamentoPage() {
       );
 
       await Promise.all(promises);
-
-      // Redireciona para a lista de orçamentos
       router.push("/clientes/orcamentos");
     } catch (error) {
       console.error("Erro ao enviar orçamento", error);
@@ -147,65 +148,98 @@ export default function NovoOrcamentoPage() {
       )}
 
       <header className={styles.header}>
-        <Badge variant="outline">Orçamentos</Badge>
-        <h1>Orçamento de Cursos</h1>
+        <Badge variant="outline">Catálogo Comercial</Badge>
+        <h1>Simulador de Orçamentos</h1>
         <p>
-          Selecione os cursos desejados e negocie os melhores preços para sua
-          empresa.
+          Monte pacotes personalizados para sua equipe e receba uma proposta
+          oficial instantaneamente.
         </p>
       </header>
 
       <div className={styles.layout}>
-        <main className={styles.courseList}>
+        <main className={styles.mainContent}>
           <div className={styles.toolbar}>
-            <Input
-              placeholder="Buscar Cursos..."
-              name="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <div className={styles.searchWrapper}>
+              <FaSearch />
+              <Input
+                placeholder="Buscar treinamentos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={styles.searchInput}
+              />
+            </div>
             <span className={styles.courseCount}>
-              {filteredCourses.length} cursos
+              {filteredCourses.length} opções disponíveis
             </span>
           </div>
 
-          <div className={styles.listContainer}>
+          <div className={styles.grid}>
             {isLoading ? (
-              <p>Carregando cursos...</p>
+              <div className={styles.loadingState}>Carregando catálogo...</div>
             ) : (
               filteredCourses.map((course) => {
                 const isInCart = selectedCourses.some(
                   (c) => c.id === course.id
                 );
                 return (
-                  <article key={course.id} className={styles.courseRow}>
-                    <div className={styles.courseImage}>
+                  <article key={course.id} className={styles.card}>
+                    <div className={styles.cardImage}>
                       <Image
-                        src={course.imageUrl ?? "https://placehold.co/400x300"}
+                        src={course.imageUrl ?? "https://placehold.co/600x400"}
                         alt={course.title}
                         fill
-                        sizes="120px"
+                        sizes="(max-width: 768px) 100vw, 400px"
+                        className={styles.image}
                       />
-                    </div>
-                    <div className={styles.courseDetails}>
-                      <h4>{course.title}</h4>
-                      <p>{course.headline ?? "Sem descrição."}</p>
-                      <div className={styles.courseMeta}>
-                        <Badge variant="outline">{course.level ?? "N/D"}</Badge>
-                        <span>{course.duration ?? "N/D"}</span>
+                      <div className={styles.imageOverlay}>
+                        <Badge
+                          variant="neutral"
+                          className={styles.durationBadge}
+                        >
+                          {course.duration ?? "N/D"}
+                        </Badge>
                       </div>
                     </div>
-                    <div className={styles.courseActions}>
-                      <span className={styles.price}>
-                        {formatCurrency(course.price)}
-                        <span>por vaga</span>
-                      </span>
+
+                    <div className={styles.cardContent}>
+                      <div className={styles.cardHeader}>
+                        <Badge variant="outline" className={styles.levelBadge}>
+                          {course.level ?? "Geral"}
+                        </Badge>
+                      </div>
+                      <h3 className={styles.cardTitle} title={course.title}>
+                        {course.title}
+                      </h3>
+                      <p className={styles.cardHeadline}>
+                        {course.headline ?? "Sem descrição disponível."}
+                      </p>
+
+                      <div className={styles.cardFooterInfo}>
+                        <span className={styles.priceLabel}>
+                          Investimento por vaga
+                        </span>
+                        <strong className={styles.priceValue}>
+                          {formatCurrency(course.price)}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className={styles.cardActions}>
                       <Button
+                        fullWidth
                         variant={isInCart ? "secondary" : "primary"}
-                        size="sm"
                         onClick={() => setConfiguringCourse(course)}
+                        className={styles.actionButton}
                       >
-                        {isInCart ? "Alterar" : "Adicionar"}
+                        {isInCart ? (
+                          <>
+                            <FaEdit /> Configurar
+                          </>
+                        ) : (
+                          <>
+                            <FaPlus /> Adicionar
+                          </>
+                        )}
                       </Button>
                     </div>
                   </article>
@@ -217,75 +251,83 @@ export default function NovoOrcamentoPage() {
 
         <aside className={styles.sidebar}>
           <Card className={styles.budgetCard}>
-            <CardHeader>
-              <CardTitle>Seu Orçamento</CardTitle>
+            <CardHeader className={styles.cartHeader}>
+              <CardTitle>Seu Carrinho</CardTitle>
+              <span className={styles.itemCount}>
+                {selectedCourses.length}{" "}
+                {selectedCourses.length === 1 ? "item" : "itens"}
+              </span>
             </CardHeader>
-            <CardContent>
-              {/* Novo campo de Vagas */}
+
+            <CardContent className={styles.cartContent}>
               <div className={styles.seatsControl}>
                 <label htmlFor="seats">
-                  <FaUsers /> Quantidade de Vagas
+                  <FaUsers /> <span>Vagas por curso</span>
                 </label>
-                <Input
-                  id="seats"
-                  type="number"
-                  min="1"
-                  value={seats}
-                  onChange={(e) => setSeats(Number(e.target.value))}
-                  className={styles.seatsInput}
-                />
-                <span className={styles.seatsHelper}>
-                  Licenças para toda a equipe
-                </span>
+                <div className={styles.seatsInputWrapper}>
+                  <Input
+                    id="seats"
+                    type="number"
+                    min="1"
+                    value={seats}
+                    onChange={(e) => setSeats(Number(e.target.value))}
+                    className={styles.seatsInput}
+                  />
+                </div>
               </div>
 
               {selectedCourses.length === 0 ? (
                 <div className={styles.emptyState}>
-                  <span className={styles.emptyIcon}>
+                  <div className={styles.emptyIcon}>
                     <FaShoppingCart />
-                  </span>
-                  <strong>Nenhum curso adicionado</strong>
-                  <p>
-                    Selecione cursos da lista para começar a montar seu
-                    orçamento.
-                  </p>
+                  </div>
+                  <p>Selecione cursos ao lado para montar sua proposta.</p>
                 </div>
               ) : (
                 <div className={styles.budgetList}>
                   {selectedCourses.map((course) => (
                     <div key={course.id} className={styles.budgetItem}>
-                      <div className={styles.budgetItemInfo}>
+                      <div className={styles.budgetItemHeader}>
                         <strong>{course.title}</strong>
-                        <span className={styles.budgetItemOptions}>
-                          {getCourseOptionsText(course)}
-                        </span>
-                        <span>{formatCurrency(course.configuredPrice)}</span>
+                        <button
+                          type="button"
+                          className={styles.removeButton}
+                          onClick={() => handleRemoveCourse(course.id)}
+                        >
+                          <FaTrash />
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        className={styles.removeButton}
-                        onClick={() => handleRemoveCourse(course.id)}
-                        aria-label={`Remover ${course.title}`}
-                      >
-                        <FaTrash />
-                      </button>
+                      <div className={styles.budgetItemDetails}>
+                        <span>{getCourseOptionsText(course)}</span>
+                        <strong>
+                          {formatCurrency(course.configuredPrice)}
+                        </strong>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
             </CardContent>
+
             {selectedCourses.length > 0 && (
               <CardFooter className={styles.budgetFooter}>
-                <div className={styles.total}>
-                  <span>Estimativa Total</span>
-                  <strong>{formatCurrency(totalPrice * seats)}</strong>
+                <div className={styles.totalRow}>
+                  <span>Subtotal unitário</span>
+                  <strong>{formatCurrency(totalPrice)}</strong>
+                </div>
+                <div className={styles.totalRow}>
+                  <span>Total ({seats} vagas)</span>
+                  <strong className={styles.totalHighlight}>
+                    {formatCurrency(totalPrice * seats)}
+                  </strong>
                 </div>
                 <Button
                   fullWidth
                   onClick={handleSubmitBudget}
                   disabled={isSubmitting}
+                  className={styles.checkoutButton}
                 >
-                  {isSubmitting ? "Enviando..." : "Solicitar Proposta"}
+                  {isSubmitting ? "Gerando..." : "Gerar Proposta PDF"}
                 </Button>
               </CardFooter>
             )}

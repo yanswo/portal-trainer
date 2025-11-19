@@ -1,74 +1,405 @@
 .page {
-  display: grid;
-  gap: clamp(1.75rem, 3vw, 2.5rem);
-}
-
-.greeting {
-  display: grid;
-  gap: 0.75rem;
-  padding: clamp(1.75rem, 4vw, 2.5rem);
-  border-radius: var(--border-radius-xl);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-}
-
-.greeting h1 {
-  font-size: clamp(1.9rem, 3vw, 2.4rem);
-  letter-spacing: -0.02em;
-}
-
-.greeting p {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  max-width: 520px;
-}
-
-.course {
-  display: grid;
-  gap: 1.5rem;
-  padding: clamp(1.75rem, 4vw, 2.5rem);
-  border-radius: var(--border-radius-xl);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-}
-
-.courseHeader {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.courseHeader span {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.courseHeader h2 {
-  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
-  letter-spacing: -0.015em;
-}
-
-.progress {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.courseActions {
   display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-.emptyState {
-  color: var(--color-text-muted);
+.greeting {
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.subtext {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  max-width: 500px;
+}
+
+.dateBadge {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: capitalize;
+  box-shadow: var(--shadow-xs);
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.heroCard {
+  position: relative;
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  border-radius: var(--border-radius-lg);
+  padding: 2.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.heroPattern {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background: radial-gradient(
+    circle at top right,
+    rgba(255, 255, 255, 0.1),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.heroMeta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.heroBadge {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.lastAccess {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.heroTitle {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  max-width: 90%;
+}
+
+.heroDescription {
+  font-size: 1rem;
+  opacity: 0.85;
+  max-width: 600px;
   line-height: 1.6;
 }
 
+.heroProgress {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 400px;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.progressBarBg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #fff;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.playButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #fff;
+  color: #000;
+  font-weight: 700;
+  padding: 0.8rem 1.8rem;
+  border-radius: var(--border-radius-pill);
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.playButton:hover {
+  transform: scale(1.03);
+  text-decoration: none;
+}
+
+.detailsLink {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.detailsLink:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+.emptyHero {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.shortcutsSection h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.shortcutsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.shortcutCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.shortcutCard:hover {
+  border-color: var(--color-border-strong);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.shortcutCardDisabled {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.shortcutIcon {
+  font-size: 1.4rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.shortcutCard strong {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+.shortcutCard span {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.arrowIcon {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.2s;
+}
+
+.shortcutCard:hover .arrowIcon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.statsCard {
+  border-radius: var(--border-radius-lg);
+}
+
+.statsContent {
+  padding: 1.5rem;
+}
+
+.statsContent h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.statIconWrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.statIconWrapper[data-color="blue"] {
+  background: rgba(0, 119, 255, 0.1);
+  color: #0077ff;
+}
+.statIconWrapper[data-color="green"] {
+  background: rgba(31, 138, 95, 0.12);
+  color: #1f8a5f;
+}
+.statIconWrapper[data-color="orange"] {
+  background: rgba(255, 145, 0, 0.12);
+  color: #ff9100;
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.statValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 1rem 0;
+}
+
+.promoBox {
+  background: linear-gradient(
+    135deg,
+    var(--color-surface-alt),
+    var(--color-surface)
+  );
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.promoBox strong {
+  font-size: 1rem;
+}
+
+.promoBox p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sideColumn {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .statsCard,
+  .promoBox {
+    flex: 1;
+    min-width: 280px;
+  }
+}
+
 @media (max-width: 640px) {
-  .courseActions {
+  .header {
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sideColumn {
+    flex-direction: column;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .playButton {
+    justify-content: center;
+  }
+
+  .detailsLink {
+    text-align: center;
   }
 }

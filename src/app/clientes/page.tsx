@@ -1,112 +1,244 @@
+import Link from "next/link";
 import { getAuthenticatedUser } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
-import Button from "../components/ui/Button";
-import Progress from "../components/ui/Progress/Progress";
+import {
+  FaPlay,
+  FaTrophy,
+  FaClock,
+  FaArrowRight,
+  FaBookOpen,
+  FaHeadset,
+} from "react-icons/fa";
+
+import Button from "@/app/components/ui/Button";
+import Progress from "@/app/components/ui/Progress/Progress";
+import Badge from "@/app/components/ui/Badge/Badge";
+import { Card, CardContent } from "@/app/components/ui/Card/Card";
 import styles from "./page.module.css";
 
-async function getPurchasedCoursesForUser(userId: string) {
+async function getDashboardData(userId: string) {
   const enrollments = await prisma.enrollment.findMany({
     where: { userId: userId },
     include: {
       course: true,
+      _count: {
+        select: { Certification: true },
+      },
+    },
+    orderBy: {
+      enrolledAt: "desc",
     },
   });
 
-  if (enrollments.length === 0) {
-    return [];
-  }
+  const totalCourses = enrollments.length;
+  const completedCourses = enrollments.filter((e) => e.progress >= 1).length;
+  const activeCourses = totalCourses - completedCourses;
 
-  const courses = enrollments.map((enrollment) => {
-    const course = enrollment.course;
+  const focusCourse = enrollments.find((e) => e.progress < 1) || enrollments[0];
 
-    const slug =
-      course.slug && course.slug.trim() !== ""
-        ? course.slug
-        : course.title.toLowerCase().replace(/ /g, "-");
+  const heroCourse = focusCourse
+    ? {
+        title: focusCourse.course.title,
+        slug:
+          focusCourse.course.slug ??
+          focusCourse.course.title.toLowerCase().replace(/ /g, "-"),
+        progress: Math.round(focusCourse.progress * 100),
+        headline:
+          focusCourse.course.headline ?? "Continue sua jornada de aprendizado.",
+        lastAccess: focusCourse.enrolledAt.toLocaleDateString("pt-BR"),
+        category: "Em andamento",
+      }
+    : null;
 
-    return {
-      ...course,
-
-      slug: slug,
-      progress: enrollment.progress,
-      lastAccess: enrollment.enrolledAt.toLocaleDateString("pt-BR"),
-      certificate: course.certificate,
-      level: course.level ?? "N/D",
-      duration: course.duration ?? "N/D",
-      headline: course.headline ?? course.description ?? "Descrição...",
-    };
-  });
-
-  return courses;
+  return {
+    heroCourse,
+    stats: {
+      total: totalCourses,
+      completed: completedCourses,
+      certificates: enrollments.reduce(
+        (acc, curr) => acc + curr._count.Certification,
+        0
+      ),
+    },
+  };
 }
 
 export default async function ClientDashboardPage() {
   const user = await getAuthenticatedUser();
+  if (!user) return null;
 
-  if (!user) {
-    return null;
-  }
-
-  const purchasedCourses = await getPurchasedCoursesForUser(user.id);
-  const startedCourse = purchasedCourses[0];
-
-  const progress = startedCourse ? Math.round(startedCourse.progress * 100) : 0;
-
+  const { heroCourse, stats } = await getDashboardData(user.id);
   const firstName = (user.name ?? "Aluno").split(" ")[0];
 
   return (
     <div className={styles.page}>
-      <section className={styles.greeting} data-animate="fade-up">
-        <h1>Olá, {firstName}!</h1>
-        <p>
-          Bem-vindo de volta ao portal do cliente. Acompanhe seus cursos e
-          certificados em um só lugar.
-        </p>
-      </section>
-
-      {startedCourse ? (
-        <section
-          className={styles.course}
-          data-animate="fade-up"
-          style={{ animationDelay: "0.1s" }}
-        >
-          <header className={styles.courseHeader}>
-            <span>Curso em andamento</span>
-            <h2>{startedCourse.title}</h2>
-          </header>
-          <div className={styles.progress}>
-            <Progress
-              value={progress}
-              label={`Progresso atual (${progress}%)`}
-            />
-          </div>
-          <div className={styles.courseActions}>
-            <Button href={`/clientes/meus-cursos/${startedCourse.slug}`}>
-              Continuar curso
-            </Button>
-            <Button href="/clientes/cursos" variant="secondary">
-              Comprar novos cursos
-            </Button>
-          </div>
-        </section>
-      ) : (
-        <section
-          className={styles.course}
-          data-animate="fade-up"
-          style={{ animationDelay: "0.1s" }}
-        >
-          <header className={styles.courseHeader}>
-            <span>Nenhum curso iniciado</span>
-            <h2>Comece seu primeiro treinamento</h2>
-          </header>
-          <p className={styles.emptyState}>
-            Assim que você iniciar um curso, o progresso aparecerá aqui.
+      <header className={styles.header}>
+        <div>
+          <h1 className={styles.greeting}>Olá, {firstName}! 👋</h1>
+          <p className={styles.subtext}>
+            Aqui está o resumo da sua jornada na CW Training hoje.
           </p>
-          <div className={styles.courseActions}>
-            <Button href="/clientes/cursos">Comprar cursos</Button>
+        </div>
+        <div className={styles.dateBadge}>
+          {new Date().toLocaleDateString("pt-BR", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+          })}
+        </div>
+      </header>
+
+      <div className={styles.dashboardGrid}>
+        <div className={styles.mainColumn}>
+          {heroCourse ? (
+            <section className={styles.heroCard}>
+              <div className={styles.heroContent}>
+                <div className={styles.heroMeta}>
+                  <Badge variant="neutral" className={styles.heroBadge}>
+                    Continuar Estudando
+                  </Badge>
+                  <span className={styles.lastAccess}>
+                    Desde {heroCourse.lastAccess}
+                  </span>
+                </div>
+
+                <h2 className={styles.heroTitle}>{heroCourse.title}</h2>
+                <p className={styles.heroDescription}>{heroCourse.headline}</p>
+
+                <div className={styles.heroProgress}>
+                  <div className={styles.progressInfo}>
+                    <span>Progresso da trilha</span>
+                    <strong>{heroCourse.progress}%</strong>
+                  </div>
+                  <div className={styles.progressBarBg}>
+                    <div
+                      className={styles.progressBarFill}
+                      style={{ width: `${heroCourse.progress}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.heroActions}>
+                  <Link
+                    href={`/clientes/meus-cursos/${heroCourse.slug}`}
+                    className={styles.playButton}
+                  >
+                    <FaPlay /> Continuar Aula
+                  </Link>
+                  <Link
+                    href={`/clientes/cursos/${heroCourse.slug}`}
+                    className={styles.detailsLink}
+                  >
+                    Ver detalhes do curso
+                  </Link>
+                </div>
+              </div>
+              <div className={styles.heroPattern} aria-hidden="true" />
+            </section>
+          ) : (
+            <section className={styles.emptyHero}>
+              <h3>Nenhum curso ativo no momento</h3>
+              <p>Explore o catálogo para iniciar uma nova certificação.</p>
+              <Button href="/clientes/cursos">Explorar Catálogo</Button>
+            </section>
+          )}
+
+          <section className={styles.shortcutsSection}>
+            <h3>Acesso Rápido</h3>
+            <div className={styles.shortcutsGrid}>
+              <Link href="/clientes/biblioteca" className={styles.shortcutCard}>
+                <div className={styles.shortcutIcon}>
+                  <FaBookOpen />
+                </div>
+                <strong>Minha Biblioteca</strong>
+                <span>Todos os cursos</span>
+                <FaArrowRight className={styles.arrowIcon} />
+              </Link>
+
+              <Link href="/clientes/suporte" className={styles.shortcutCard}>
+                <div className={styles.shortcutIcon}>
+                  <FaHeadset />
+                </div>
+                <strong>Suporte</strong>
+                <span>Tirar dúvidas</span>
+                <FaArrowRight className={styles.arrowIcon} />
+              </Link>
+
+              <div className={styles.shortcutCardDisabled}>
+                <div className={styles.shortcutIcon}>
+                  <FaTrophy />
+                </div>
+                <strong>Meus Certificados</strong>
+                <span>Disponível na conclusão</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside className={styles.sideColumn}>
+          <Card className={styles.statsCard}>
+            <CardContent className={styles.statsContent}>
+              <h3>Seu Desempenho</h3>
+
+              <div className={styles.statRow}>
+                <div className={styles.statIconWrapper} data-color="blue">
+                  <FaBookOpen />
+                </div>
+                <div className={styles.statInfo}>
+                  <span className={styles.statLabel}>Matrículas</span>
+                  <strong className={styles.statValue}>{stats.total}</strong>
+                </div>
+              </div>
+
+              <div className={styles.divider} />
+
+              <div className={styles.statRow}>
+                <div className={styles.statIconWrapper} data-color="green">
+                  <FaTrophy />
+                </div>
+                <div className={styles.statInfo}>
+                  <span className={styles.statLabel}>Concluídos</span>
+                  <strong className={styles.statValue}>
+                    {stats.completed}
+                  </strong>
+                </div>
+              </div>
+
+              <div className={styles.divider} />
+
+              <div className={styles.statRow}>
+                <div className={styles.statIconWrapper} data-color="orange">
+                  <FaClock />
+                </div>
+                <div className={styles.statInfo}>
+                  <span className={styles.statLabel}>Horas Estudadas</span>
+                  <strong className={styles.statValue}>
+                    {stats.completed * 10 +
+                      Math.round((heroCourse?.progress || 0) / 10)}
+                    h
+                  </strong>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className={styles.promoBox}>
+            <strong>Precisa de mais licenças?</strong>
+            <p>
+              Faça um orçamento para sua equipe inteira com descontos
+              progressivos.
+            </p>
+            <Button
+              href="/clientes/orcamentos/novo"
+              variant="secondary"
+              fullWidth
+              size="sm"
+            >
+              Simular Orçamento
+            </Button>
           </div>
-        </section>
-      )}
+        </aside>
+      </div>
     </div>
   );
 }

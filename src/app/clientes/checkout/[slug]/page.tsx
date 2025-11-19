@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardContent,
   CardTitle,
-  CardDescription,
 } from "@/app/components/ui/Card/Card";
 import CheckoutForm from "../CheckoutForm";
 import styles from "../checkout.module.css";
@@ -16,10 +15,14 @@ type CheckoutPageProps = {
   params: { slug: string };
 };
 
-async function getCourseBySlug(slug: string) {
+async function getCourse(identifier: string) {
   const course = await prisma.course.findFirst({
-    where: { slug: slug, isPublished: true },
+    where: {
+      OR: [{ slug: identifier }, { id: identifier }],
+      isPublished: true,
+    },
   });
+
   if (!course) {
     notFound();
   }
@@ -28,9 +31,10 @@ async function getCourseBySlug(slug: string) {
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const resolvedParams = await params;
-  const user = await getAuthenticatedUser();
 
-  const course = await getCourseBySlug(resolvedParams.slug);
+  const course = await getCourse(resolvedParams.slug);
+
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     return null;
@@ -53,9 +57,12 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Badge variant="outline">Checkout</Badge>
-        <h1>Finalizar matrícula</h1>
-        <p>Preencha seus dados e confirme a inscrição no curso.</p>
+        <Badge variant="outline">Checkout Seguro</Badge>
+        <h1>Finalizar Matrícula</h1>
+        <p>
+          Você está a um passo de liberar seu acesso ao curso{" "}
+          <strong>{course.title}</strong>.
+        </p>
       </header>
 
       <div className={styles.layout}>
@@ -66,13 +73,17 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
             </CardHeader>
             <CardContent>
               <div className={styles.courseItem}>
-                <span>{course.title}</span>
-                <strong>{`R$ ${Number(course.price)
-                  .toFixed(2)
-                  .replace(".", ",")}`}</strong>
+                <span>Curso</span>
+                <span style={{ textAlign: "right", maxWidth: "60%" }}>
+                  {course.title}
+                </span>
+              </div>
+              <div className={styles.courseItem}>
+                <span>Duração</span>
+                <strong>{course.duration ?? "N/D"}</strong>
               </div>
               <div className={styles.total}>
-                <span>Total</span>
+                <span>Total a pagar</span>
                 <strong>{`R$ ${Number(course.price)
                   .toFixed(2)
                   .replace(".", ",")}`}</strong>
@@ -85,13 +96,18 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
           {existingEnrollment ? (
             <Card>
               <CardHeader>
-                <CardTitle>Você já está matriculado</CardTitle>
+                <CardTitle>Você já é aluno deste curso! 🎉</CardTitle>
               </CardHeader>
               <CardContent>
                 <p>
-                  Você já possui acesso a este curso. Acesse sua biblioteca para
-                  começar a estudar.
+                  Não é necessário comprar novamente. Seu acesso já está
+                  liberado na biblioteca.
                 </p>
+                <div style={{ marginTop: "1.5rem" }}>
+                  <a href="/clientes/biblioteca" className={styles.linkButton}>
+                    Ir para meus cursos
+                  </a>
+                </div>
               </CardContent>
             </Card>
           ) : (

@@ -1,130 +1,192 @@
-// 1. Remova a importação dos dados mockados
-// import { purchasedCourses } from "@/data/client-portal";
+"use client";
 
-// 2. Adicione as importações para autenticação e prisma
-import { getAuthenticatedUser } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { FaSearch, FaPlay, FaCheck, FaClock, FaMedal } from "react-icons/fa";
 
+import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import Progress from "@/app/components/ui/Progress/Progress";
+import Input from "@/app/components/ui/Input/Input";
+import { Tabs } from "@/app/components/ui/Tabs/Tabs";
 import styles from "./page.module.css";
 
-// 3. Copie a mesma função que usamos na página de dashboard
-async function getPurchasedCoursesForUser(userId: string) {
-  const enrollments = await prisma.enrollment.findMany({
-    where: { userId: userId },
-    include: {
-      course: true,
-    },
-  });
+type LibraryCourse = {
+  id: string;
+  title: string;
+  slug: string;
+  imageUrl: string | null;
+  headline: string | null;
+  duration: string | null;
+  level: string | null;
+  certificate: boolean;
+  progress: number;
+  enrolledAt: string;
+};
 
-  if (enrollments.length === 0) {
-    return [];
-  }
+export default function LibraryPage() {
+  const [courses, setCourses] = useState<LibraryCourse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
-  const courses = enrollments.map((enrollment) => {
-    const course = enrollment.course;
+  useEffect(() => {
+    async function fetchLibrary() {
+      try {
+        const res = await fetch("/api/me/library");
+        if (res.ok) {
+          const data = await res.json();
+          setCourses(data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchLibrary();
+  }, []);
 
-    const slug =
-      course.slug && course.slug.trim() !== ""
-        ? course.slug
-        : course.title.toLowerCase().replace(/ /g, "-");
+  const filteredCourses = useMemo(() => {
+    return courses.filter((course) => {
+      const matchesSearch = course.title
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-    return {
-      ...course,
-      slug: slug,
-      progress: enrollment.progress,
-      lastAccess: enrollment.enrolledAt.toLocaleDateString("pt-BR"),
-      certificate: course.certificate,
-      level: course.level ?? "N/D",
-      duration: course.duration ?? "N/D",
-      headline: course.headline ?? course.description ?? "Descrição...",
-    };
-  });
+      const isCompleted = course.progress >= 1;
+      const matchesStatus =
+        statusFilter === "all"
+          ? true
+          : statusFilter === "completed"
+          ? isCompleted
+          : !isCompleted;
 
-  return courses;
-}
-
-// 4. Transforme o componente em 'async' e busque os dados
-export default async function ClientLibraryPage() {
-  const user = await getAuthenticatedUser();
-  if (!user) return null; // Proteção caso o usuário não seja encontrado
-
-  const purchasedCourses = await getPurchasedCoursesForUser(user.id);
-  const hasCourses = purchasedCourses.length > 0;
+      return matchesSearch && matchesStatus;
+    });
+  }, [courses, search, statusFilter]);
 
   return (
     <div className={styles.page}>
-      <header className={styles.header} data-animate="fade-up">
-        <span>Biblioteca</span>
-        <h1>Seus cursos comprados</h1>
-        <p>
-          Acesse rapidamente as videoaulas, materiais de apoio e certificados
-          dos treinamentos ativos na sua conta.
-        </p>
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <Badge variant="outline">Meus Estudos</Badge>
+          <h1>Biblioteca de Cursos</h1>
+          <p>
+            Acesse todo o conteúdo contratado. Continue de onde parou ou revise
+            aulas anteriores.
+          </p>
+        </div>
       </header>
 
-      {hasCourses ? (
-        <div className={styles.list}>
-          {/* 5. O map agora usará os dados reais do banco */}
-          {purchasedCourses.map((course, index) => {
-            const progress = Math.round(course.progress * 100);
+      <div className={styles.toolbar}>
+        <div className={styles.searchWrapper}>
+          <FaSearch className={styles.searchIcon} />
+          <Input
+            placeholder="Buscar por título..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+
+        <Tabs defaultValue="all" onValueChange={setStatusFilter}>
+          <Tabs.List>
+            <Tabs.Trigger value="all">Todos</Tabs.Trigger>
+            <Tabs.Trigger value="in-progress">Em andamento</Tabs.Trigger>
+            <Tabs.Trigger value="completed">Concluídos</Tabs.Trigger>
+          </Tabs.List>
+        </Tabs>
+      </div>
+
+      {isLoading ? (
+        <div className={styles.loadingState}>Carregando sua biblioteca...</div>
+      ) : filteredCourses.length === 0 ? (
+        <div className={styles.emptyState}>
+          <strong>Nenhum curso encontrado</strong>
+          <p>
+            Tente ajustar os filtros ou explore nosso catálogo para adicionar
+            novos treinamentos.
+          </p>
+          <Button href="/clientes/cursos" variant="secondary">
+            Explorar Catálogo
+          </Button>
+        </div>
+      ) : (
+        <div className={styles.grid}>
+          {filteredCourses.map((course) => {
+            const percentage = Math.round(course.progress * 100);
+            const isCompleted = percentage >= 100;
+
             return (
-              <article
-                key={course.id}
-                className={styles.card}
-                data-animate="fade-up"
-                style={{ animationDelay: `${index * 0.06}s` }}
-              >
-                <div className={styles.cardHeader}>
-                  <div>
-                    <h2>{course.title}</h2>
-                    <p>{course.headline}</p>
-                  </div>
-                  <span className={styles.status}>{progress}% concluído</span>
-                </div>
-
-                <div className={styles.progress}>
-                  <Progress
-                    value={progress}
-                    label={`Progresso do curso (${progress}%)`}
+              <article key={course.id} className={styles.card}>
+                <div className={styles.cardImage}>
+                  <Image
+                    src={course.imageUrl ?? "https://placehold.co/600x400"}
+                    alt={course.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 400px"
+                    className={styles.image}
                   />
-                  <span>Matriculado em {course.lastAccess}</span>
-                </div>
-
-                <div className={styles.meta}>
-                  <span>{course.duration}</span>
-                  <span>{course.level}</span>
-                  <span>
-                    {course.certificate
-                      ? "Certificado incluso"
-                      : "Sem certificado"}
-                  </span>
-                </div>
-
-                <div className={styles.actions}>
-                  <Button href={`/clientes/meus-cursos/${course.slug}`}>
-                    Assistir aulas
-                  </Button>
-                  <Button
-                    href={`/clientes/cursos/${course.slug}`}
-                    variant="secondary"
+                  <Link
+                    href={`/clientes/meus-cursos/${course.slug}`}
+                    className={styles.playOverlay}
                   >
-                    Ver detalhes do catálogo
+                    <div className={styles.playButton}>
+                      {isCompleted ? <FaCheck /> : <FaPlay />}
+                    </div>
+                    <span>{isCompleted ? "Revisar" : "Continuar"}</span>
+                  </Link>
+
+                  {isCompleted && (
+                    <div className={styles.completedBadge}>
+                      <FaMedal /> Concluído
+                    </div>
+                  )}
+                </div>
+
+                <div className={styles.cardBody}>
+                  <div className={styles.cardHeader}>
+                    <Badge variant="neutral" className={styles.levelBadge}>
+                      {course.level ?? "Geral"}
+                    </Badge>
+                    {course.duration && (
+                      <span className={styles.duration}>
+                        <FaClock /> {course.duration}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className={styles.cardTitle} title={course.title}>
+                    {course.title}
+                  </h3>
+
+                  <div className={styles.progressWrapper}>
+                    <div className={styles.progressHeader}>
+                      <span>Progresso</span>
+                      <strong>{percentage}%</strong>
+                    </div>
+                    <div className={styles.track}>
+                      <div
+                        className={styles.fill}
+                        style={{ width: `${percentage}%` }}
+                        data-completed={isCompleted}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.cardFooter}>
+                  <Button
+                    href={`/clientes/meus-cursos/${course.slug}`}
+                    fullWidth
+                    variant={isCompleted ? "secondary" : "primary"}
+                  >
+                    {isCompleted ? "Acessar Conteúdo" : "Continuar Aula"}
                   </Button>
                 </div>
               </article>
             );
           })}
-        </div>
-      ) : (
-        <div className={styles.empty} data-animate="fade-up">
-          <h2>Nenhum curso na biblioteca ainda</h2>
-          <p>
-            Assim que você adquirir um treinamento, ele aparecerá aqui com
-            acesso rápido às videoaulas e materiais de apoio.
-          </p>
-          <Button href="/clientes/cursos">Explorar catálogo</Button>
         </div>
       )}
     </div>
