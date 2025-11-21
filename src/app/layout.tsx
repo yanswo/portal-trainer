@@ -1,4 +1,5 @@
 import { Inter, Lora } from "next/font/google";
+import { ThemeProvider } from "@/app/components/providers/ThemeProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,8 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
-      <body className={`${inter.variable} ${lora.variable}`}>{children}</body>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className={`${inter.variable} ${lora.variable}`}>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

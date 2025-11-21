@@ -17,6 +17,7 @@ async function getPurchasedCourseData(slug: string, userId: string) {
       },
     },
     include: {
+      completedLessons: true,
       course: {
         include: {
           videos: {
@@ -37,6 +38,7 @@ async function getPurchasedCourseData(slug: string, userId: string) {
   return {
     course: enrollment.course,
     progress: enrollment.progress,
+    completedVideoIds: enrollment.completedLessons.map((l) => l.videoId),
   };
 }
 
@@ -44,7 +46,6 @@ export default async function PurchasedCourseViewer({
   params,
 }: ViewerPageProps) {
   const resolvedParams = await params;
-
   const user = await getAuthenticatedUser();
   if (!user) return null;
 
@@ -54,21 +55,31 @@ export default async function PurchasedCourseViewer({
     redirect("/clientes/biblioteca");
   }
 
-  const { course, progress } = courseData;
+  const { course, progress, completedVideoIds } = courseData;
 
   const courseForClient = {
     ...course,
     price: Number(course.price),
+    createdAt: course.createdAt.toISOString(),
+    updatedAt: course.updatedAt.toISOString(),
     videos: course.videos.map((video) => ({
       ...video,
+      createdAt: video.createdAt.toISOString(),
+      updatedAt: video.updatedAt.toISOString(),
     })),
     modules: course.modules.map((module) => ({
       ...module,
+      createdAt: module.createdAt.toISOString(),
+      updatedAt: module.updatedAt.toISOString(),
     })),
   };
 
   return (
-    <CoursePlayer course={courseForClient} initialProgress={Number(progress)} />
+    <CoursePlayer
+      course={courseForClient}
+      initialProgress={Number(progress)}
+      initialCompletedVideoIds={completedVideoIds}
+    />
   );
 }
 

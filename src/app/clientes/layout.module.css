@@ -1,7 +1,7 @@
 .shell {
   min-height: 100vh;
   display: flex;
-  background: var(--color-surface-alt);
+  background: var(--color-background);
 }
 
 .sidebar {
@@ -10,14 +10,22 @@
   border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.stickyContent {
   position: sticky;
   top: 0;
   height: 100vh;
-  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .sidebarHeader {
   padding: 2rem 1.75rem 1.5rem;
+  flex-shrink: 0;
 }
 
 .brand {
@@ -73,7 +81,6 @@
 .navContainer {
   flex: 1;
   padding: 0 1rem;
-  overflow-y: auto;
   margin-top: 1rem;
 }
 
@@ -121,10 +128,22 @@
   border-color: rgba(187, 37, 37, 0.15);
 }
 
-.userProfile {
-  margin: 1rem;
-  padding: 1rem;
+.sidebarFooter {
+  margin-top: auto;
   border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+  background: var(--color-surface);
+}
+
+.footerActions {
+  padding: 1rem 1.5rem 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.userProfile {
+  margin: 0;
+  padding: 0.5rem 1.5rem 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -161,7 +180,7 @@
 }
 
 .mainContent {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -175,11 +194,15 @@
 
   .sidebar {
     width: 100%;
-    height: auto;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
-    position: relative;
-    padding: 0;
+    height: auto;
+  }
+
+  .stickyContent {
+    position: static;
+    height: auto;
+    overflow-y: visible;
   }
 
   .sidebarHeader {
@@ -202,13 +225,8 @@
     flex: 0 0 auto;
   }
 
-  .userProfile {
+  .sidebarFooter {
     display: none;
-  }
-
-  .navItemLogout {
-    margin-top: 0;
-    margin-left: auto;
   }
 
   .main {

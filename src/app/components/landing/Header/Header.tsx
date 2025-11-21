@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { MouseEvent, useCallback } from "react";
@@ -13,14 +13,17 @@ const navigation = [
 ];
 
 export default function Header() {
-  const handleNavigate = useCallback((href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    const target = document.querySelector(href);
+  const handleNavigate = useCallback(
+    (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      const target = document.querySelector(href);
 
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, []);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    },
+    []
+  );
 
   return (
     <header className={styles.header} data-animate="fade">
