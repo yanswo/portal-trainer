@@ -1,88 +1,69 @@
+import { prisma } from "@/lib/prisma";
 import Badge from "@/app/components/ui/Badge/Badge";
-import Button from "@/app/components/ui/Button";
-import Chart from "@/app/components/ui/Chart/Chart";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/app/components/ui/Card/Card";
 import {
-  productionBurndown,
-  productionQueue,
-  productionSprints,
-} from "@/data/admin-dashboard";
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/app/components/ui/Table/Table";
 import styles from "./page.module.css";
 
-export default function ProductionPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ProductionPage() {
+  const recentVideos = await prisma.video.findMany({
+    take: 20,
+    orderBy: { updatedAt: "desc" },
+    include: { course: { select: { title: true } } },
+  });
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <div>
-          <Badge variant="outline">Produção</Badge>
-          <h1>Pipeline de roteiros e videoaulas</h1>
-          <p>
-            Gerencie gravações, revisões e aprovações para lançar novos treinamentos autoinstrucionais
-            com qualidade consistente.
-          </p>
+          <Badge variant="outline">Conteúdo</Badge>
+          <h1>Histórico de Produção</h1>
+          <p>Últimos vídeos adicionados à plataforma.</p>
         </div>
-        <Button variant="secondary">Nova demanda</Button>
       </header>
 
-      <section className={styles.analytics} aria-label="Acompanhamento semanal">
-        <Chart
-          title="Backlog de tarefas"
-          description="Itens restantes por dia na sprint atual"
-          data={productionBurndown}
-        />
-        <Card>
-          <CardHeader>
-            <CardTitle>Sprints em andamento</CardTitle>
-            <CardDescription>Planejamento da squad de conteúdo e audiovisual.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className={styles.sprintList}>
-              {productionSprints.map((sprint) => (
-                <li key={sprint.id}>
-                  <div>
-                    <strong>{sprint.title}</strong>
-                    <span>{sprint.range}</span>
-                  </div>
-                  <div className={styles.sprintMeta}>
-                    <Badge variant="neutral">{sprint.status}</Badge>
-                    <span>{sprint.focus}</span>
-                    <span>{sprint.owners.join(" · ")}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </section>
-
-      <section className={styles.section} aria-labelledby="fila">
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 id="fila">Fila de produção</h2>
-            <p>Priorize etapas críticas para liberar novas aulas gravadas.</p>
-          </div>
-        </div>
-        <div className={styles.queue}>
-          {productionQueue.map((item) => (
-            <Card key={item.id}>
-              <CardHeader>
-                <CardTitle>{item.title}</CardTitle>
-                <CardDescription>{item.owner}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className={styles.queueMeta}>
-                  <Badge variant="neutral">{item.stage}</Badge>
-                  <span>{item.status}</span>
-                  <span>Entrega: {item.dueDate}</span>
-                </div>
-                <Button variant="ghost" size="sm">
-                  Atualizar status
-                </Button>
-              </CardContent>
-            </Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableCell header>Aula</TableCell>
+            <TableCell header>Curso</TableCell>
+            <TableCell header>Duração</TableCell>
+            <TableCell header>Data Upload</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {recentVideos.map((video) => (
+            <TableRow key={video.id}>
+              <TableCell>
+                <strong>{video.title}</strong>
+              </TableCell>
+              <TableCell>{video.course.title}</TableCell>
+              <TableCell>
+                {video.duration ? `${video.duration} min` : "-"}
+              </TableCell>
+              <TableCell>
+                {new Date(video.updatedAt).toLocaleDateString("pt-BR")}
+              </TableCell>
+            </TableRow>
           ))}
-        </div>
-      </section>
+          {recentVideos.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={4}
+                style={{ textAlign: "center", padding: "2rem" }}
+              >
+                Sem vídeos recentes.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }

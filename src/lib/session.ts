@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
 export async function getAuthenticatedUser() {
-  const cookieStore = cookies();
-  const authCookie = (await cookieStore).get("clientAuth");
+  const cookieStore = await cookies();
+  const authCookie = cookieStore.get("clientAuth");
 
   if (!authCookie) {
     redirect("/login");
@@ -19,7 +19,13 @@ export async function getAuthenticatedUser() {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, name: true, email: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        profile: { select: { avatarUrl: true } },
+      },
     });
 
     if (!user) throw new Error("User not found");

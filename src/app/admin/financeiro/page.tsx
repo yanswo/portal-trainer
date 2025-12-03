@@ -1,6 +1,6 @@
+import { prisma } from "@/lib/prisma";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import Chart from "@/app/components/ui/Chart/Chart";
 import {
   Card,
   CardHeader,
@@ -8,113 +8,91 @@ import {
   CardTitle,
   CardDescription,
 } from "@/app/components/ui/Card/Card";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/app/components/ui/Table/Table";
 import {
-  financeHighlights,
-  financeTransactions,
-  monthlyPayouts,
-  revenueBreakdown,
-  revenueSeries,
-} from "@/data/admin-dashboard";
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/app/components/ui/Table/Table";
 import styles from "./page.module.css";
 
-export default function FinancePage() {
+const formatMoney = (val: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
+    val
+  );
+export const dynamic = "force-dynamic";
+
+export default async function FinancePage() {
+  const payments = await prisma.payment.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { user: { select: { name: true } } },
+  });
+
+  const totalRevenue = payments
+    .filter((p) => p.status === "CONFIRMED")
+    .reduce((acc, curr) => acc + Number(curr.amount), 0);
+  const pendingRevenue = payments
+    .filter((p) => p.status === "PENDING")
+    .reduce((acc, curr) => acc + Number(curr.amount), 0);
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <div>
           <Badge variant="outline">Financeiro</Badge>
-          <h1>Saúde financeira dos treinamentos</h1>
-          <p>
-            Consolide pagamentos, acompanhe fluxo de caixa e distribua receitas entre cursos gravados.
-          </p>
+          <h1>Transações</h1>
         </div>
-        <Button variant="secondary">Exportar planilha</Button>
+        <Button variant="secondary">Exportar</Button>
       </header>
 
-      <section className={styles.metrics} aria-label="Indicadores financeiros">
-        {financeHighlights.map((highlight) => (
-          <Card key={highlight.id}>
-            <CardHeader>
-              <CardTitle>{highlight.label}</CardTitle>
-              <CardDescription>{highlight.detail}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className={styles.metricValue}>{highlight.value}</div>
-              <Badge variant="neutral">{highlight.change}</Badge>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
-
-      <section className={styles.analytics} aria-label="Receitas e repasses">
-        <Chart
-          title="Receita conciliada"
-          description="Valores em milhares de reais por mês"
-          data={revenueSeries}
-          prefix="R$ "
-          suffix=" mil"
-        />
-        <Chart
-          title="Pagamentos realizados"
-          description="Repasses previstos por mês"
-          data={monthlyPayouts}
-          suffix=" mil"
-        />
+      <div className={styles.metrics}>
         <Card>
           <CardHeader>
-            <CardTitle>Composição de receita</CardTitle>
+            <CardTitle>Receita Confirmada</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className={styles.breakdownList}>
-              {revenueBreakdown.map((item) => (
-                <li key={item.label}>
-                  <strong>{item.label}</strong>
-                  <span>{item.value}%</span>
-                </li>
-              ))}
-            </ul>
-            <Button variant="secondary" size="sm">
-              Ajustar preços
-            </Button>
+            <div className={styles.metricValue}>
+              {formatMoney(totalRevenue)}
+            </div>
           </CardContent>
         </Card>
-      </section>
+        <Card>
+          <CardHeader>
+            <CardTitle>Pendente</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className={styles.metricValue}>
+              {formatMoney(pendingRevenue)}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-      <section className={styles.section} aria-labelledby="transacoes">
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 id="transacoes">Transações recentes</h2>
-            <p>Concilie pagamentos para liberar certificados e notas fiscais automaticamente.</p>
-          </div>
-        </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell header>ID</TableCell>
-              <TableCell header>Cliente</TableCell>
-              <TableCell header>Valor</TableCell>
-              <TableCell header>Método</TableCell>
-              <TableCell header>Status</TableCell>
-              <TableCell header>Referência</TableCell>
-              <TableCell header>Processado em</TableCell>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableCell header>Data</TableCell>
+            <TableCell header>Aluno</TableCell>
+            <TableCell header>Valor</TableCell>
+            <TableCell header>Status</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {payments.map((p) => (
+            <TableRow key={p.id}>
+              <TableCell>
+                {new Date(p.createdAt).toLocaleDateString("pt-BR")}
+              </TableCell>
+              <TableCell>{p.user.name ?? "Aluno"}</TableCell>
+              <TableCell>{formatMoney(Number(p.amount))}</TableCell>
+              <TableCell>
+                <Badge variant="neutral">{p.status}</Badge>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {financeTransactions.map((transaction) => (
-              <TableRow key={transaction.id}>
-                <TableCell>{transaction.id}</TableCell>
-                <TableCell>{transaction.client}</TableCell>
-                <TableCell>{transaction.amount}</TableCell>
-                <TableCell>{transaction.method}</TableCell>
-                <TableCell>{transaction.status}</TableCell>
-                <TableCell>{transaction.reference}</TableCell>
-                <TableCell>{transaction.processedAt}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </section>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

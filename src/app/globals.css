@@ -1,120 +1,125 @@
 :root {
   --brand-name: "CW Training";
 
-  --color-background: #f4f4f4;
+  --color-background: #f8f9fa;
   --color-surface: #ffffff;
-  --color-surface-alt: #efefef;
-  --color-surface-muted: #e5e5e5;
-  --color-surface-soft: #fafafa;
-  --color-surface-glass: rgba(255, 255, 255, 0.78);
-  --color-surface-inverse: #070707;
+  --color-surface-alt: #f1f3f5;
+  --color-surface-muted: #e9ecef;
+  --color-surface-soft: #f8f9fa;
+  --color-surface-glass: rgba(255, 255, 255, 0.85);
+  --color-surface-inverse: #111111;
 
-  --color-text-primary: #0c0c0c;
-  --color-text-secondary: #2f2f2f;
-  --color-text-muted: #5e5e5e;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #4a4a4a;
+  --color-text-muted: #717171;
   --color-text-inverse: #ffffff;
 
   --color-accent: #111111;
   --color-accent-hover: #2a2a2a;
-  --color-accent-muted: rgba(8, 8, 8, 0.08);
+  --color-accent-muted: rgba(17, 17, 17, 0.05);
   --color-success: #1f8a5f;
   --color-warning: #b28a16;
-  --color-danger: #bb2525;
+  --color-danger: #e03131;
 
   --color-border: rgba(0, 0, 0, 0.08);
-  --color-border-strong: rgba(0, 0, 0, 0.18);
+  --color-border-strong: rgba(0, 0, 0, 0.15);
   --color-border-inverse: rgba(255, 255, 255, 0.2);
   --color-border-dashed: rgba(0, 0, 0, 0.12);
 
-  --shadow-xs: 0 4px 20px rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 10px 26px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 20px 50px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 36px 80px rgba(0, 0, 0, 0.14);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --section-bg-subtle: #f8f9fa;
+  --card-bg: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.06);
 
-  --border-radius: 14px;
-  --border-radius-lg: 22px;
-  --border-radius-xl: 36px;
+  --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.12);
+
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+  --border-radius-xl: 32px;
   --border-radius-pill: 999px;
 
-  --gradient-primary: linear-gradient(
-    135deg,
-    #050505 0%,
-    #171717 45%,
-    #000000 100%
-  );
-  --gradient-muted: linear-gradient(
-    135deg,
-    rgba(10, 10, 10, 0.08),
-    rgba(10, 10, 10, 0.02)
-  );
-  --gradient-soft: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.92),
-    rgba(240, 240, 240, 0.96)
-  );
+  --gradient-primary: linear-gradient(135deg, #111111 0%, #2a2a2a 100%);
+  --gradient-muted: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --gradient-soft: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
   --gradient-spotlight: radial-gradient(
       circle at 20% 20%,
-      rgba(0, 0, 0, 0.12),
-      transparent 62%
+      rgba(0, 0, 0, 0.05),
+      transparent 50%
     ),
-    radial-gradient(circle at 80% 15%, rgba(0, 0, 0, 0.1), transparent 65%),
-    radial-gradient(circle at 50% 80%, rgba(0, 0, 0, 0.08), transparent 60%);
+    radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.05), transparent 50%);
 
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   --font-serif: "Lora", serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-  --content-max-width: 1240px;
-  --section-spacing: clamp(4rem, 6vw, 6.5rem);
+  --content-max-width: 1280px;
+  --section-spacing: clamp(4rem, 8vw, 8rem);
   --section-spacing-tight: clamp(2.5rem, 5vw, 4.5rem);
-  --container-padding: clamp(1.5rem, 4vw, 2.75rem);
-  --transition-speed: 0.25s ease;
-  --transition-speed-long: 0.45s ease;
-  --focus-ring: 0 0 0 3px rgba(0, 0, 0, 0.18);
+  --container-padding: clamp(1.5rem, 5vw, 3rem);
+  
+  --transition-speed: 0.2s ease;
+  --transition-speed-long: 0.4s ease;
+  --focus-ring: 0 0 0 3px rgba(17, 17, 17, 0.15);
 
-  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --motion-duration-short: 160ms;
-  --motion-duration-medium: 320ms;
-  --motion-duration-long: 620ms;
+  --motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-duration-short: 200ms;
+  --motion-duration-medium: 400ms;
+  --motion-duration-long: 600ms;
 
-  --header-height: 76px;
-  --sidebar-width: clamp(240px, 18vw, 300px);
+  --header-height: 80px;
+  --sidebar-width: 280px;
 
-  --body-bg: linear-gradient(180deg, #f8f8f8 0%, #ffffff 55%, #f2f2f2 100%);
+  --body-bg: #ffffff;
 }
 
 [data-theme="dark"] {
   --color-background: #0a0a0a;
-  --color-surface: #141414;
-  --color-surface-alt: #1f1f1f;
-  --color-surface-muted: #2a2a2a;
-  --color-surface-soft: #1a1a1a;
-  --color-surface-glass: rgba(20, 20, 20, 0.8);
+  --color-surface: #161616;
+  --color-surface-alt: #202020;
+  --color-surface-muted: #262626;
+  --color-surface-soft: #121212;
+  --color-surface-glass: rgba(22, 22, 22, 0.85);
   --color-surface-inverse: #ffffff;
 
   --color-text-primary: #ededed;
-  --color-text-secondary: #a0a0a0;
-  --color-text-muted: #666666;
+  --color-text-secondary: #a1a1a1;
+  --color-text-muted: #6e6e6e;
   --color-text-inverse: #000000;
 
   --color-accent: #ffffff;
   --color-accent-hover: #e0e0e0;
-  --color-accent-muted: rgba(255, 255, 255, 0.12);
+  --color-accent-muted: rgba(255, 255, 255, 0.1);
 
   --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.18);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
   --color-border-inverse: rgba(0, 0, 0, 0.2);
-  --color-border-dashed: rgba(255, 255, 255, 0.12);
+  --color-border-dashed: rgba(255, 255, 255, 0.1);
 
-  --shadow-xs: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 30px 60px rgba(0, 0, 0, 0.6);
+  --glass-bg: rgba(10, 10, 10, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --section-bg-subtle: #111111;
+  --card-bg: #161616;
+  --card-border: rgba(255, 255, 255, 0.06);
 
-  --gradient-soft: linear-gradient(135deg, #141414 0%, #0a0a0a 100%);
+  --shadow-xs: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.7);
+  --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.8);
 
-  --body-bg: var(--color-background);
+  --gradient-soft: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
+  --gradient-spotlight: radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.03),
+      transparent 50%
+    ),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.02), transparent 50%);
+
+  --body-bg: #0a0a0a;
 
   --focus-ring: 0 0 0 3px rgba(255, 255, 255, 0.2);
 }

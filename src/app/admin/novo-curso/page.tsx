@@ -1,11 +1,17 @@
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import { Card, CardHeader, CardContent, CardTitle } from "@/app/components/ui/Card/Card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+} from "@/app/components/ui/Card/Card";
 import Input from "@/app/components/ui/Input/Input";
 import Label from "@/app/components/ui/Label/Label";
 import Select from "@/app/components/ui/Select/Select";
 import Textarea from "@/app/components/ui/Textarea/Textarea";
 import styles from "./page.module.css";
+import { createCourse } from "@/app/actions/admin-courses";
 
 export default function NewCoursePage() {
   return (
@@ -13,16 +19,14 @@ export default function NewCoursePage() {
       <header className={styles.header}>
         <div>
           <Badge variant="outline">Novo curso</Badge>
-          <h1>Cadastrar treinamento gravado</h1>
+          <h1>Cadastrar treinamento</h1>
           <p>
-            Estruture módulos, videoaulas e materiais complementares para disponibilizar um novo
-            curso autoinstrucional na plataforma CW Training.
+            Preencha os dados abaixo para criar um novo curso na base de dados.
           </p>
         </div>
-        <Button variant="secondary">Carregar template</Button>
       </header>
 
-      <form className={styles.form}>
+      <form action={createCourse} className={styles.form}>
         <Card>
           <CardHeader>
             <CardTitle>Informações principais</CardTitle>
@@ -30,46 +34,52 @@ export default function NewCoursePage() {
           <CardContent>
             <div className={styles.grid}>
               <div className={styles.field}>
-                <Label htmlFor="title">Título do curso</Label>
-                <Input id="title" name="title" placeholder="NR-12: Segurança em Máquinas" required />
+                <Label htmlFor="title">Título do curso *</Label>
+                <Input
+                  id="title"
+                  name="title"
+                  placeholder="Ex: NR-10 Avançado"
+                  required
+                />
               </div>
               <div className={styles.field}>
-                <Label htmlFor="slug">Slug</Label>
-                <Input id="slug" name="slug" placeholder="nr-12-seguranca-em-maquinas" />
+                <Label htmlFor="slug">Slug (URL Amigável)</Label>
+                <Input
+                  id="slug"
+                  name="slug"
+                  placeholder="Deixe vazio para gerar automático"
+                />
               </div>
             </div>
             <div className={styles.grid}>
               <div className={styles.field}>
-                <Label htmlFor="category">Categoria</Label>
-                <Select id="category" name="category" defaultValue="seguranca">
-                  <option value="seguranca">Segurança do Trabalho</option>
-                  <option value="operacoes">Operações em campo</option>
-                  <option value="primeiros-socorros">Primeiros Socorros</option>
-                </Select>
+                <Label htmlFor="category">Categoria (Headline)</Label>
+                <Input
+                  id="category"
+                  name="category"
+                  placeholder="Ex: Segurança Elétrica"
+                />
               </div>
               <div className={styles.field}>
                 <Label htmlFor="duration">Carga horária</Label>
-                <Input id="duration" name="duration" placeholder="16h" />
+                <Input id="duration" name="duration" placeholder="Ex: 40h" />
               </div>
               <div className={styles.field}>
                 <Label htmlFor="level">Nível</Label>
-                <Select id="level" name="level" defaultValue="intermediario">
-                  <option value="basico">Básico</option>
-                  <option value="intermediario">Intermediário</option>
-                  <option value="avancado">Avançado</option>
+                <Select id="level" name="level" defaultValue="Básico">
+                  <option value="Básico">Básico</option>
+                  <option value="Intermediário">Intermediário</option>
+                  <option value="Avançado">Avançado</option>
                 </Select>
               </div>
             </div>
             <div className={styles.field}>
-              <Label htmlFor="headline">Resumo</Label>
-              <Input id="headline" name="headline" placeholder="Resumo em uma frase" />
-            </div>
-            <div className={styles.field}>
-              <Label htmlFor="description">Descrição</Label>
+              <Label htmlFor="description">Descrição completa</Label>
               <Textarea
                 id="description"
                 name="description"
-                placeholder="Detalhe o objetivo do treinamento, a metodologia e os resultados esperados."
+                placeholder="Detalhe o objetivo do treinamento..."
+                rows={5}
               />
             </div>
           </CardContent>
@@ -77,67 +87,36 @@ export default function NewCoursePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Materiais e requisitos</CardTitle>
+            <CardTitle>Valores e Mídia</CardTitle>
           </CardHeader>
           <CardContent>
             <div className={styles.grid}>
               <div className={styles.field}>
-                <Label htmlFor="requirements">Requisitos obrigatórios</Label>
-                <Textarea
-                  id="requirements"
-                  name="requirements"
-                  placeholder="Liste documentos, pré-requisitos e evidências necessárias para certificação."
+                <Label htmlFor="price">Preço (R$) *</Label>
+                <Input
+                  id="price"
+                  name="price"
+                  type="number"
+                  step="0.01"
+                  placeholder="0.00"
+                  required
                 />
               </div>
               <div className={styles.field}>
-                <Label htmlFor="highlights">Diferenciais</Label>
-                <Textarea
-                  id="highlights"
-                  name="highlights"
-                  placeholder="Explique o que torna o curso valioso para o aluno corporativo."
+                <Label htmlFor="imageUrl">URL da Imagem de Capa</Label>
+                <Input
+                  id="imageUrl"
+                  name="imageUrl"
+                  placeholder="https://..."
                 />
               </div>
             </div>
-            <div className={styles.grid}>
-              <div className={styles.field}>
-                <Label htmlFor="price">Investimento</Label>
-                <Input id="price" name="price" placeholder="R$ 497,00" />
-              </div>
-              <div className={styles.field}>
-                <Label htmlFor="certificate">Certificado</Label>
-                <Select id="certificate" name="certificate" defaultValue="incluso">
-                  <option value="incluso">Emitir certificado automaticamente</option>
-                  <option value="manual">Emissão manual</option>
-                </Select>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Publicação</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={styles.grid}>
-              <div className={styles.field}>
-                <Label htmlFor="publish">Status inicial</Label>
-                <Select id="publish" name="publish" defaultValue="rascunho">
-                  <option value="rascunho">Rascunho</option>
-                  <option value="revisao">Em revisão</option>
-                  <option value="publicado">Publicar imediatamente</option>
-                </Select>
-              </div>
-              <div className={styles.field}>
-                <Label htmlFor="owner">Responsável</Label>
-                <Input id="owner" name="owner" placeholder="Instrutor responsável" />
-              </div>
-            </div>
-            <div className={styles.actions}>
-              <Button variant="secondary" size="sm" type="button">
-                Salvar rascunho
+            <div className={styles.actions} style={{ marginTop: "1.5rem" }}>
+              <Button variant="secondary" type="button" href="/admin/cursos">
+                Cancelar
               </Button>
-              <Button type="submit">Publicar curso</Button>
+              <Button type="submit">Salvar Curso</Button>
             </div>
           </CardContent>
         </Card>

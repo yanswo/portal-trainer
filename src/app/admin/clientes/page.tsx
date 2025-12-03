@@ -1,11 +1,6 @@
+import { prisma } from "@/lib/prisma";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-} from "@/app/components/ui/Card/Card";
 import {
   Table,
   TableHeader,
@@ -13,76 +8,65 @@ import {
   TableRow,
   TableCell,
 } from "@/app/components/ui/Table/Table";
-import { adminClientList, clientSegments } from "@/data/admin-dashboard";
 import styles from "./page.module.css";
 
-export default function ClientsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ClientsPage() {
+  const clients = await prisma.user.findMany({
+    where: { role: "CLIENT" },
+    orderBy: { createdAt: "desc" },
+    include: {
+      _count: { select: { enrollments: true, budgets: true } },
+    },
+  });
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <div>
-          <Badge variant="outline">Usuários</Badge>
-          <h1>Alunos com treinamentos ativos</h1>
-          <p>
-            Monitore matrículas, progresso e próximos ciclos de certificação.
-          </p>
+          <Badge variant="outline">Alunos</Badge>
+          <h1>Base de Usuários</h1>
         </div>
-        <Button variant="secondary">Adicionar aluno</Button>
+        <Button variant="secondary">Convidar</Button>
       </header>
 
-      <section className={styles.overview} aria-label="Segmentação">
-        {clientSegments.map((segment) => (
-          <Card key={segment.segment}>
-            <CardHeader>
-              <CardTitle>{segment.segment}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className={styles.segmentValue}>
-                {segment.clients} alunos
-              </div>
-              <Badge variant="neutral">{segment.share}</Badge>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
-
-      <section className={styles.section} aria-labelledby="tabela-clientes">
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 id="tabela-clientes">Alunos ativos</h2>
-            <p>
-              Resumo dos alunos com matrículas vigentes e status de atividade.
-            </p>
-          </div>
-        </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell header>Aluno</TableCell>
-              <TableCell header>Plano</TableCell>
-              <TableCell header>Cursos Ativos</TableCell>
-              <TableCell header>Status</TableCell>
-              <TableCell header>Último Acesso</TableCell>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableCell header>Nome</TableCell>
+            <TableCell header>E-mail</TableCell>
+            <TableCell header>Matrículas</TableCell>
+            <TableCell header>Orçamentos</TableCell>
+            <TableCell header>Data Cadastro</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {clients.map((client) => (
+            <TableRow key={client.id}>
+              <TableCell>
+                <strong>{client.name ?? "Sem nome"}</strong>
+              </TableCell>
+              <TableCell>{client.email}</TableCell>
+              <TableCell>{client._count.enrollments} cursos</TableCell>
+              <TableCell>{client._count.budgets}</TableCell>
+              <TableCell>
+                {new Date(client.createdAt).toLocaleDateString("pt-BR")}
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {adminClientList.map((client) => (
-              <TableRow key={client.company}>
-                <TableCell>
-                  <div className={styles.companyCell}>
-                    <strong>{client.contact}</strong>
-                    <span>{client.company}</span>
-                  </div>
-                </TableCell>
-                <TableCell>{client.plan}</TableCell>
-                <TableCell>{client.licenses} licenças</TableCell>
-                <TableCell>{client.status}</TableCell>
-                <TableCell>{client.lastAccess}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </section>
+          ))}
+          {clients.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={5}
+                style={{ textAlign: "center", padding: "2rem" }}
+              >
+                Nenhum aluno.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }

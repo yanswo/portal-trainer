@@ -1,11 +1,17 @@
-import type { ReactNode } from "react";
-import AdminGate from "./AdminGate";
-import AdminShell from "./AdminShell";
+import AdminNavigation from "./components/AdminNavigation";
+import styles from "./layout.module.css";
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <AdminGate>
-      <AdminShell>{children}</AdminShell>
-    </AdminGate>
+    <div className={styles.layout}>
+      <AdminNavigation />
+      <main className={styles.main}>
+        <div className={styles.container}>{children}</div>
+      </main>
+    </div>
   );
 }
