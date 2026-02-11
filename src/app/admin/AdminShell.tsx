@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 import Avatar from "@/app/components/ui/Avatar/Avatar";
 import AdminNavigation from "./AdminNavigation";
+import ThemeToggle from "@/app/components/ui/ThemeToggle/ThemeToggle";
 import styles from "./layout.module.css";
 
 type AdminUser = {
@@ -42,6 +43,7 @@ export default function AdminShell({
             <strong>{user.name}</strong>
             <span>{user.email}</span>
           </div>
+          <ThemeToggle />
         </div>
 
         <AdminNavigation />

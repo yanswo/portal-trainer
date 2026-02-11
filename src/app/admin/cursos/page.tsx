@@ -92,6 +92,7 @@ export default async function AdminCoursesPage() {
                 <TableCell>
                   <CourseActions
                     id={course.id}
+                    slug={course.slug!}
                     isPublished={course.isPublished}
                   />
                 </TableCell>

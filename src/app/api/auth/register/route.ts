@@ -5,11 +5,29 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password } = await request.json();
+    const { 
+      name, 
+      email, 
+      password,
+      cpf,
+      phone,
+      birthdate,
+      address,
+      city,
+      state,
+      zipCode
+    } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json(
         { success: false, message: "Informe um e-mail e uma senha válidos." },
+        { status: 400 }
+      );
+    }
+
+    if (!name || !cpf || !phone) {
+      return NextResponse.json(
+        { success: false, message: "Nome completo, CPF e telefone são obrigatórios." },
         { status: 400 }
       );
     }
@@ -29,6 +47,23 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check if CPF already exists
+    if (cpf) {
+      const existingCPF = await prisma.user.findUnique({
+        where: { cpf: String(cpf) },
+      });
+
+      if (existingCPF) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Já existe uma conta cadastrada com esse CPF.",
+          },
+          { status: 409 }
+        );
+      }
+    }
+
     const hashedPassword = await hashPassword(String(password));
 
     const user = await prisma.user.create({
@@ -36,6 +71,13 @@ export async function POST(request: Request) {
         name: name ? String(name) : null,
         email: normalizedEmail,
         password: hashedPassword,
+        cpf: cpf ? String(cpf) : null,
+        phone: phone ? String(phone) : null,
+        birthdate: birthdate ? new Date(birthdate) : null,
+        address: address ? String(address) : null,
+        city: city ? String(city) : null,
+        state: state ? String(state) : null,
+        zipCode: zipCode ? String(zipCode) : null,
       },
       select: {
         id: true,

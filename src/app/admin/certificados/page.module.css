@@ -124,79 +124,46 @@
   overflow: hidden;
 }
 
-/* Client Cell */
-.clientCell {
+/* User Cell */
+.userCell {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.clientCell strong {
+.userCell strong {
   font-weight: 600;
   color: var(--color-text-primary);
   font-size: 0.9375rem;
 }
 
-.clientCell span {
+.userCell span {
   font-size: 0.875rem;
   color: var(--color-text-muted);
 }
 
-/* Course Info */
-.courseInfo {
+/* Actions */
+.actions {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
-  font-size: 0.9375rem;
 }
 
-/* Progress Cell */
-.progressCell {
+.actionLink {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-}
-
-.progressBar {
-  flex: 1;
-  max-width: 120px;
-  height: 8px;
-  background: var(--color-surface-muted);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progressFill {
-  height: 100%;
-  background: linear-gradient(90deg, #10b981, #3b82f6);
-  border-radius: 999px;
-  transition: width 0.3s ease;
-}
-
-.progressText {
-  font-size: 0.875rem;
-  font-weight: 600;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--color-surface-alt);
   color: var(--color-text-secondary);
-  min-width: 45px;
-}
-
-/* View Link */
-.viewLink {
-  color: var(--color-accent);
-  font-size: 0.875rem;
-  font-weight: 600;
   text-decoration: none;
-  transition: color var(--motion-duration-short);
+  transition: all var(--motion-duration-short);
 }
 
-.viewLink:hover {
-  color: var(--color-accent-hover);
-  text-decoration: underline;
-}
-
-.muted {
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
+.actionLink:hover {
+  background: var(--color-accent);
+  color: white;
 }
 
 /* Responsive */

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
 import {
@@ -10,10 +13,51 @@ import Input from "@/app/components/ui/Input/Input";
 import Label from "@/app/components/ui/Label/Label";
 import Select from "@/app/components/ui/Select/Select";
 import Textarea from "@/app/components/ui/Textarea/Textarea";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import styles from "./page.module.css";
-import { createCourse } from "@/app/actions/admin-courses";
+
+interface Video {
+  title: string;
+  url: string;
+  type: string;
+  duration?: number;
+}
 
 export default function NewCoursePage() {
+  const [videos, setVideos] = useState<Video[]>([]);
+
+  const addVideo = () => {
+    setVideos([...videos, { title: "", url: "", type: "THEORY" }]);
+  };
+
+  const removeVideo = (index: number) => {
+    setVideos(videos.filter((_, i) => i !== index));
+  };
+
+  const updateVideo = (index: number, field: keyof Video, value: string | number) => {
+    const newVideos = [...videos];
+    newVideos[index] = { ...newVideos[index], [field]: value };
+    setVideos(newVideos);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    // Add videos to formData
+    formData.append("videos", JSON.stringify(videos));
+
+    // Submit
+    const response = await fetch("/api/admin/courses", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      window.location.href = "/admin/cursos";
+    }
+  };
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -21,12 +65,12 @@ export default function NewCoursePage() {
           <Badge variant="outline">Novo curso</Badge>
           <h1>Cadastrar treinamento</h1>
           <p>
-            Preencha os dados abaixo para criar um novo curso na base de dados.
+            Preencha os dados abaixo para criar um novo curso completo com vídeos.
           </p>
         </div>
       </header>
 
-      <form action={createCourse} className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <Card>
           <CardHeader>
             <CardTitle>Informações principais</CardTitle>
@@ -111,15 +155,94 @@ export default function NewCoursePage() {
                 />
               </div>
             </div>
-
-            <div className={styles.actions} style={{ marginTop: "1.5rem" }}>
-              <Button variant="secondary" type="button" href="/admin/cursos">
-                Cancelar
-              </Button>
-              <Button type="submit">Salvar Curso</Button>
-            </div>
           </CardContent>
         </Card>
+
+        {/* Videos Section */}
+        <Card>
+          <CardHeader>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <CardTitle>Vídeos do Curso</CardTitle>
+              <Button type="button" onClick={addVideo} size="sm">
+                <FaPlus /> Adicionar Vídeo
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {videos.length === 0 ? (
+              <p style={{ textAlign: "center", color: "var(--color-text-muted)", padding: "2rem" }}>
+                Nenhum vídeo adicionado. Clique em "Adicionar Vídeo" para começar.
+              </p>
+            ) : (
+              <div className={styles.videoList}>
+                {videos.map((video, index) => (
+                  <div key={index} className={styles.videoItem}>
+                    <div className={styles.videoHeader}>
+                      <span className={styles.videoNumber}>Vídeo {index + 1}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeVideo(index)}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
+                    <div className={styles.videoFields}>
+                      <div className={styles.field}>
+                        <Label>Título do Vídeo *</Label>
+                        <Input
+                          value={video.title}
+                          onChange={(e) => updateVideo(index, "title", e.target.value)}
+                          placeholder="Ex: Introdução à Segurança"
+                          required
+                        />
+                      </div>
+                      <div className={styles.field}>
+                        <Label>URL do Vídeo *</Label>
+                        <Input
+                          value={video.url}
+                          onChange={(e) => updateVideo(index, "url", e.target.value)}
+                          placeholder="https://..."
+                          required
+                        />
+                      </div>
+                      <div className={styles.gridTwo}>
+                        <div className={styles.field}>
+                          <Label>Tipo</Label>
+                          <Select
+                            value={video.type}
+                            onChange={(e) => updateVideo(index, "type", e.target.value)}
+                          >
+                            <option value="THEORY">Teórico</option>
+                            <option value="PRACTICE">Prático</option>
+                            <option value="ASSESSMENT">Avaliação</option>
+                          </Select>
+                        </div>
+                        <div className={styles.field}>
+                          <Label>Duração (minutos)</Label>
+                          <Input
+                            type="number"
+                            value={video.duration || ""}
+                            onChange={(e) => updateVideo(index, "duration", parseInt(e.target.value) || 0)}
+                            placeholder="Ex: 15"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className={styles.actions}>
+          <Button variant="secondary" type="button" onClick={() => window.location.href = "/admin/cursos"}>
+            Cancelar
+          </Button>
+          <Button type="submit">Salvar Curso</Button>
+        </div>
       </form>
     </div>
   );

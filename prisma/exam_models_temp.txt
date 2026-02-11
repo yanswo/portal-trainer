@@ -1,0 +1,47 @@
+
+model Exam {
+  id           String   @id @default(cuid())
+  courseId     String   @unique
+  course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  passingScore Float    @default(70.0) // Nota mínima para aprovação
+  duration     Int?     // Duração em minutos
+  isActive     Boolean  @default(true)
+  maxAttempts  Int      @default(3) // Número máximo de tentativas
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  questions ExamQuestion[]
+  attempts  ExamAttempt[]
+}
+
+model ExamQuestion {
+  id            String           @id @default(cuid())
+  examId        String
+  exam          Exam             @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question      String
+  type          ExamQuestionType @default(MULTIPLE_CHOICE)
+  options       Json?            // Array de opções para múltipla escolha
+  correctAnswer String?          // Resposta correta
+  points        Float            @default(1.0)
+  position      Int              // Ordem da questão
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model ExamAttempt {
+  id           String    @id @default(cuid())
+  examId       String
+  exam         Exam      @relation(fields: [examId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  enrollmentId String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  startedAt    DateTime  @default(now())
+  submittedAt  DateTime?
+  score        Float?
+  passed       Boolean   @default(false)
+  answers      Json      // Armazena as respostas do aluno
+  createdAt    DateTime  @default(now())
+}

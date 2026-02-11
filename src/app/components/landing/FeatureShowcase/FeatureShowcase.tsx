@@ -1,34 +1,50 @@
-import { FaChartLine, FaClipboardCheck, FaPlayCircle } from "react-icons/fa";
+import { FaChartLine, FaClipboardCheck, FaPlayCircle, FaCertificate, FaHeadset, FaClock } from "react-icons/fa";
 import Badge from "../../ui/Badge/Badge";
 import styles from "./FeatureShowcase.module.css";
 
 const features = [
   {
     icon: <FaPlayCircle aria-hidden />,
-    title: "Portal do cliente",
-    description: "Catálogo organizado, player responsivo e materiais extras sempre à mão.",
+    title: "Aulas em vídeo de alta qualidade",
+    description: "Conteúdo desenvolvido por especialistas em Segurança do Trabalho com didática clara e exemplos práticos.",
+  },
+  {
+    icon: <FaCertificate aria-hidden />,
+    title: "Certificado reconhecido",
+    description: "Certificado digital válido em todo território nacional, emitido automaticamente após aprovação.",
+  },
+  {
+    icon: <FaClock aria-hidden />,
+    title: "Estude no seu ritmo",
+    description: "Acesso ilimitado ao conteúdo por 1 ano. Assista quando e onde quiser, quantas vezes precisar.",
   },
   {
     icon: <FaClipboardCheck aria-hidden />,
-    title: "Avaliações automáticas",
-    description: "Crie simulados, defina notas de corte e libere certificados sem esforço manual.",
+    title: "Avaliação online",
+    description: "Teste seus conhecimentos com avaliações práticas e objetivas ao final de cada curso.",
+  },
+  {
+    icon: <FaHeadset aria-hidden />,
+    title: "Suporte especializado",
+    description: "Tire suas dúvidas com nossa equipe técnica durante todo o período do curso.",
   },
   {
     icon: <FaChartLine aria-hidden />,
-    title: "Painel administrativo",
-    description: "Acompanhe matrículas, pagamentos e certificações em um painel intuitivo.",
+    title: "Acompanhe seu progresso",
+    description: "Veja quanto já avançou, revise conteúdos e retome de onde parou a qualquer momento.",
   },
 ];
 
 export default function FeatureShowcase() {
   return (
-    <section className={styles.section} id="experiencia">
+    <section className={styles.section} id="beneficios">
       <div className={styles.container}>
         <div className={styles.header} data-animate="fade-up">
-          <Badge>Experiência essencial</Badge>
-          <h2>O que você precisa para treinar e certificar equipes</h2>
+          <Badge>Por que escolher a CW Training</Badge>
+          <h2>Treinamento profissional com a qualidade que sua empresa merece</h2>
           <p>
-            Três pilares para entregar aulas gravadas com avaliações automáticas e acompanhar todo o ciclo sem complicação.
+            Oferecemos a melhor experiência de aprendizado online em Segurança do Trabalho, 
+            com metodologia comprovada e certificação válida.
           </p>
         </div>
         <div className={styles.grid}>
