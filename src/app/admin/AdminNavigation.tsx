@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaChartPie, FaBook, FaVideo, FaUsers, FaWallet } from "react-icons/fa";
+import { FaChartPie, FaBook, FaVideo, FaUsers, FaWallet, FaCertificate } from "react-icons/fa";
 import styles from "./layout.module.css";
 
 const adminNavigation = [
@@ -11,6 +11,7 @@ const adminNavigation = [
   { href: "/admin/producao", label: "Produção", icon: FaVideo },
   { href: "/admin/clientes", label: "Alunos", icon: FaUsers },
   { href: "/admin/financeiro", label: "Financeiro", icon: FaWallet },
+  { href: "/admin/certificados", label: "Certificados", icon: FaCertificate },
 ];
 
 export default function AdminNavigation() {

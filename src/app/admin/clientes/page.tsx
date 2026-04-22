@@ -1,16 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import Badge from "@/app/components/ui/Badge/Badge";
 import Button from "@/app/components/ui/Button";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@/app/components/ui/Table/Table";
-import Link from "next/link";
 import styles from "./page.module.css";
 import { FaUser, FaGraduationCap, FaChartLine, FaCertificate } from "react-icons/fa";
+import ClientsFilter from "./ClientsFilter";
 
 export const dynamic = "force-dynamic";
 
@@ -40,10 +33,8 @@ async function getClientsData() {
       totalEnrollments > 0
         ? (enrollments.reduce((sum, e) => sum + e.progress, 0) / totalEnrollments) * 100
         : 0;
-    
-    const certificates = enrollments.reduce((sum, e) => sum + e.Certification.length, 0);
 
-    // Curso atual (último matriculado em andamento)
+    const certificates = enrollments.reduce((sum, e) => sum + e.Certification.length, 0);
     const currentCourse = enrollments.find((e) => e.progress < 1.0 && e.progress > 0);
 
     return {
@@ -131,115 +122,8 @@ export default async function ClientsPage() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className={styles.filters}>
-        <input
-          type="search"
-          placeholder="Buscar por nome ou email..."
-          className={styles.searchInput}
-        />
-        <select className={styles.filterSelect}>
-          <option value="">Todos os status</option>
-          <option value="active">Ativos</option>
-          <option value="completed">Com cursos concluídos</option>
-          <option value="inactive">Inativos</option>
-        </select>
-        <select className={styles.filterSelect}>
-          <option value="">Ordenar por</option>
-          <option value="name">Nome</option>
-          <option value="recent">Mais recentes</option>
-          <option value="progress">Maior progresso</option>
-        </select>
-      </div>
-
-      {/* Table */}
-      <div className={styles.tableWrapper}>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell header>Cliente</TableCell>
-              <TableCell header>Curso Atual</TableCell>
-              <TableCell header>Progresso</TableCell>
-              <TableCell header>Matrículas</TableCell>
-              <TableCell header>Concluídos</TableCell>
-              <TableCell header>Certificados</TableCell>
-              <TableCell header>Cadastro</TableCell>
-              <TableCell header>Ações</TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {clients.map((client) => (
-              <TableRow key={client.id}>
-                <TableCell>
-                  <div className={styles.clientCell}>
-                    <strong>{client.name}</strong>
-                    <span>{client.email}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className={styles.courseInfo}>
-                    {client.currentCourse}
-                    {client.inProgressCourses > 1 && (
-                      <Badge variant="neutral" size="sm">
-                        +{client.inProgressCourses - 1}
-                      </Badge>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className={styles.progressCell}>
-                    <div className={styles.progressBar}>
-                      <div
-                        className={styles.progressFill}
-                        style={{ width: `${client.averageProgress}%` }}
-                      />
-                    </div>
-                    <span className={styles.progressText}>
-                      {client.averageProgress}%
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="neutral">{client.totalEnrollments}</Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge variant={client.completedCourses > 0 ? "default" : "outline"}>
-                    {client.completedCourses}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {client.certificates > 0 ? (
-                    <Badge variant="default">{client.certificates}</Badge>
-                  ) : (
-                    <span className={styles.muted}>-</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  {new Date(client.createdAt).toLocaleDateString("pt-BR")}
-                </TableCell>
-                <TableCell>
-                  <Link
-                    href={`/admin/clientes/${client.id}`}
-                    className={styles.viewLink}
-                  >
-                    Ver Detalhes
-                  </Link>
-                </TableCell>
-              </TableRow>
-            ))}
-            {clients.length === 0 && (
-              <TableRow>
-                <TableCell
-                  colSpan={8}
-                  style={{ textAlign: "center", padding: "2rem" }}
-                >
-                  Nenhum aluno cadastrado.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      {/* Filtros + Tabela (interactive client component) */}
+      <ClientsFilter clients={clients} />
     </div>
   );
 }
