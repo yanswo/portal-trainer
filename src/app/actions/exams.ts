@@ -14,6 +14,7 @@ export async function createExam(formData: FormData) {
   const maxAttempts = parseInt(formData.get("maxAttempts") as string);
   const isActive = formData.get("isActive") === "true";
 
+  let redirectUrl = "";
   try {
     await prisma.exam.create({
       data: {
@@ -29,11 +30,13 @@ export async function createExam(formData: FormData) {
 
     const course = await prisma.course.findUnique({ where: { id: courseId }, select: { slug: true } });
     revalidatePath(`/admin/cursos/${course?.slug}/prova`);
-    redirect(`/admin/cursos/${course?.slug}/prova`);
+    redirectUrl = `/admin/cursos/${course?.slug}/prova`;
   } catch (error) {
     console.error("Error creating exam:", error);
     throw new Error("Failed to create exam");
   }
+
+  if (redirectUrl) redirect(redirectUrl);
 }
 
 // Update Exam
@@ -45,6 +48,7 @@ export async function updateExam(examId: string, formData: FormData) {
   const maxAttempts = parseInt(formData.get("maxAttempts") as string);
   const isActive = formData.get("isActive") === "true";
 
+  let redirectUrl = "";
   try {
     const exam = await prisma.exam.update({
       where: { id: examId },
@@ -60,11 +64,13 @@ export async function updateExam(examId: string, formData: FormData) {
     });
 
     revalidatePath(`/admin/cursos/${exam.course.slug}/prova`);
-    redirect(`/admin/cursos/${exam.course.slug}/prova`);
+    redirectUrl = `/admin/cursos/${exam.course.slug}/prova`;
   } catch (error) {
     console.error("Error updating exam:", error);
     throw new Error("Failed to update exam");
   }
+
+  if (redirectUrl) redirect(redirectUrl);
 }
 
 // Create Question
@@ -85,6 +91,7 @@ export async function createQuestion(examId: string, formData: FormData) {
     options = JSON.stringify(optionsArray);
   }
 
+  let redirectUrl = "";
   try {
     // Get the current max position
     const maxPosition = await prisma.examQuestion.findFirst({
@@ -102,8 +109,8 @@ export async function createQuestion(examId: string, formData: FormData) {
       data: {
         examId,
         question,
-        type,
-        options,
+        type: type as any,
+        options: options || undefined,
         correctAnswer,
         points,
         position: (maxPosition?.position ?? -1) + 1,
@@ -111,11 +118,13 @@ export async function createQuestion(examId: string, formData: FormData) {
     });
 
     revalidatePath(`/admin/cursos/${exam?.course.slug}/prova`);
-    redirect(`/admin/cursos/${exam?.course.slug}/prova`);
+    redirectUrl = `/admin/cursos/${exam?.course.slug}/prova`;
   } catch (error) {
     console.error("Error creating question:", error);
     throw new Error("Failed to create question");
   }
+
+  if (redirectUrl) redirect(redirectUrl);
 }
 
 // Delete Question
@@ -149,13 +158,14 @@ export async function updateQuestion(questionId: string, formData: FormData) {
     options = JSON.stringify(optionsArray);
   }
 
+  let redirectUrl = "";
   try {
     const updatedQuestion = await prisma.examQuestion.update({
       where: { id: questionId },
       data: {
         question,
-        type,
-        options,
+        type: type as any,
+        options: options || undefined,
         correctAnswer,
         points,
       },
@@ -169,9 +179,11 @@ export async function updateQuestion(questionId: string, formData: FormData) {
     });
 
     revalidatePath(`/admin/cursos/${updatedQuestion.exam.course.slug}/prova`);
-    redirect(`/admin/cursos/${updatedQuestion.exam.course.slug}/prova`);
+    redirectUrl = `/admin/cursos/${updatedQuestion.exam.course.slug}/prova`;
   } catch (error) {
     console.error("Error updating question:", error);
     throw new Error("Failed to update question");
   }
+
+  if (redirectUrl) redirect(redirectUrl);
 }

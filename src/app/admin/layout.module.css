@@ -1,22 +1,241 @@
-.layout {
+.shell {
   min-height: 100vh;
+  display: flex;
   background: var(--color-background);
 }
 
+.sidebar {
+  width: clamp(240px, 20vw, 280px);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.stickyContent {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebarHeader {
+  padding: 2rem 1.75rem 1.5rem;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-speed);
+}
+
+.brand:hover {
+  opacity: 0.8;
+}
+
+.logoMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  border-radius: 0.6rem;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logoText strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.logoText span {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.navContainer {
+  flex: 1;
+  padding: 0 1rem;
+  margin-top: 1rem;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all var(--transition-speed);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.navItem:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+.navItemActive {
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-xs);
+}
+
+.navItemLogout {
+  margin-top: 1.5rem;
+  color: var(--color-danger);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  width: 100%;
+  text-align: left;
+}
+
+.navItemLogout:hover {
+  background: rgba(187, 37, 37, 0.08);
+  color: var(--color-danger);
+  border-color: rgba(187, 37, 37, 0.15);
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+  background: var(--color-surface);
+}
+
+.footerActions {
+  padding: 1rem 1.5rem 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.userProfile {
+  margin: 0;
+  padding: 0.5rem 1.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  overflow: hidden;
+}
+
+.userInfo strong {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userInfo span {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .main {
-  margin-left: var(--sidebar-width);
-  min-height: 100vh;
-  padding: 2rem;
+  flex: 1;
+  padding: clamp(2rem, 5vw, 3rem);
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.container {
-  max-width: 1600px;
+.mainContent {
+  max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 960px) {
+  .shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    height: auto;
+  }
+
+  .stickyContent {
+    position: static;
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .sidebarHeader {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .navContainer {
+    padding: 0 1.5rem 1.5rem;
+    margin-top: 0;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .navItem {
+    padding: 0.6rem 0.9rem;
+    flex: 0 0 auto;
+  }
+
+  .sidebarFooter {
+    display: none;
+  }
+
   .main {
-    margin-left: 0;
-    padding-top: calc(var(--header-height) + 2rem);
+    padding: 1.5rem 1.25rem;
   }
 }

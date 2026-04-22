@@ -66,7 +66,10 @@ export default async function GenerateCertificatePage() {
                     </span>
                   </div>
                 </div>
-                <form action={generateCertificateManually.bind(null, enrollment.id)}>
+                <form action={async () => {
+                  "use server";
+                  await generateCertificateManually(enrollment.id);
+                }}>
                   <Button type="submit">Gerar Certificado</Button>
                 </form>
               </div>

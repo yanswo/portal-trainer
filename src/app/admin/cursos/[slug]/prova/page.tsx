@@ -5,6 +5,7 @@ import Button from "@/app/components/ui/Button";
 import Link from "next/link";
 import { FaArrowLeft, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import styles from "./page.module.css";
+import DeleteQuestionButton from "./DeleteQuestionButton";
 
 export const dynamic = "force-dynamic";
 
@@ -51,18 +52,26 @@ export default async function CourseExamPage({
 
         <div className={styles.headerContent}>
           <div>
+            <Badge variant="outline" style={{ marginBottom: "0.5rem", display: "inline-block" }}>Avaliação</Badge>
             <h1>Prova: {course.title}</h1>
-            <p>Gerenciar prova e questões do curso</p>
+            <p>Gerencie as questões e as configurações da avaliação deste curso.</p>
           </div>
-          {!hasExam ? (
-            <Button href={`/admin/cursos/${slug}/prova/criar`}>
-              <FaPlus /> Criar Prova
-            </Button>
-          ) : (
-            <Button href={`/admin/cursos/${slug}/prova/editar`}>
-              <FaEdit /> Editar Configurações
-            </Button>
-          )}
+          <div className={styles.headerActions}>
+            {!hasExam ? (
+              <Button href={`/admin/cursos/${slug}/prova/criar`}>
+                <FaPlus /> Criar Prova
+              </Button>
+            ) : (
+              <>
+                <Button variant="secondary" href={`/admin/cursos/${slug}/prova/preview`}>
+                  Visualizar Prova
+                </Button>
+                <Button href={`/admin/cursos/${slug}/prova/editar`}>
+                  <FaEdit /> Configurações
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -84,20 +93,22 @@ export default async function CourseExamPage({
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Duração</span>
                 <span className={styles.infoValue}>
-                  {course.exam.duration || "Sem limite"} minutos
+                  {course.exam.duration ? `${course.exam.duration} min` : "Sem limite"}
                 </span>
               </div>
               <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Tentativas Máximas</span>
+                <span className={styles.infoLabel}>Tentativas</span>
                 <span className={styles.infoValue}>
                   {course.exam.maxAttempts}
                 </span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Status</span>
-                <Badge variant={course.exam.isActive ? "default" : "outline"}>
-                  {course.exam.isActive ? "Ativa" : "Inativa"}
-                </Badge>
+                <div style={{ marginTop: "0.2rem" }}>
+                  <Badge variant={course.exam.isActive ? "default" : "outline"}>
+                    {course.exam.isActive ? "Ativa" : "Inativa"}
+                  </Badge>
+                </div>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Realizações</span>
@@ -125,19 +136,19 @@ export default async function CourseExamPage({
                 {course.exam.questions.map((question, index) => (
                   <div key={question.id} className={styles.questionCard}>
                     <div className={styles.questionHeader}>
-                      <div className={styles.questionNumber}>#{index + 1}</div>
+                      <div className={styles.questionNumber}>{index + 1}</div>
                       <Badge
-                        variant="neutral"
+                        variant={question.type === "ESSAY" ? "outline" : "neutral"}
                         size="sm"
                       >
                         {question.type === "MULTIPLE_CHOICE"
-                          ? "Múltipla Escolha"
+                          ? "Questão Fechada (Múltipla Escolha)"
                           : question.type === "TRUE_FALSE"
-                          ? "Verdadeiro/Falso"
-                          : "Dissertativa"}
+                          ? "Verdadeiro ou Falso"
+                          : "Questão Aberta (Dissertativa)"}
                       </Badge>
                       <span className={styles.questionPoints}>
-                        {question.points} {question.points === 1 ? "ponto" : "pontos"}
+                        Valendo {question.points} {question.points === 1 ? "ponto" : "pontos"}
                       </span>
                     </div>
 
@@ -157,6 +168,12 @@ export default async function CourseExamPage({
                           )}
                         </div>
                       )}
+                      {question.type === "ESSAY" && question.correctAnswer && (
+                        <div className={styles.options} style={{ marginTop: "0.5rem" }}>
+                          <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--color-text-secondary)", textTransform: "uppercase" }}>Gabarito / Expectativa de Resposta:</span>
+                          <span style={{ fontSize: "0.95rem" }}>{question.correctAnswer}</span>
+                        </div>
+                      )}
                     </div>
 
                     <div className={styles.questionActions}>
@@ -165,7 +182,7 @@ export default async function CourseExamPage({
                         size="sm"
                         href={`/admin/cursos/${slug}/prova/questao/${question.id}/editar`}
                       >
-                        <FaEdit /> Editar
+                        <FaEdit /> Editar Questão
                       </Button>
                       <DeleteQuestionButton
                         questionId={question.id}
@@ -190,9 +207,9 @@ export default async function CourseExamPage({
           <div className={styles.noExamContent}>
             <h2>Nenhuma prova configurada</h2>
             <p>
-              Este curso ainda não possui uma prova associada. Crie uma prova para
-              que seus alunos possam testá-la ao concluir o curso e obter
-              certificação.
+              Este curso ainda não possui uma avaliação associada. Crie uma prova para
+              que seus alunos possam testar seus conhecimentos e obter
+              a certificação.
             </p>
             <Button href={`/admin/cursos/${slug}/prova/criar`}>
               <FaPlus /> Criar Prova Agora

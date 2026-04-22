@@ -164,13 +164,14 @@ export default async function ClientDashboardPage() {
                 <FaArrowRight className={styles.arrowIcon} />
               </Link>
 
-              <div className={styles.shortcutCardDisabled}>
+              <Link href="/clientes/certificados" className={styles.shortcutCard}>
                 <div className={styles.shortcutIcon}>
                   <FaTrophy />
                 </div>
                 <strong>Meus Certificados</strong>
-                <span>Disponível na conclusão</span>
-              </div>
+                <span>Ver certificados</span>
+                <FaArrowRight className={styles.arrowIcon} />
+              </Link>
             </div>
           </section>
         </div>

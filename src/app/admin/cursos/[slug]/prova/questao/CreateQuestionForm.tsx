@@ -86,9 +86,9 @@ export default function CreateQuestionPage({
                 value={questionType}
                 onChange={(e) => setQuestionType(e.target.value)}
               >
-                <option value="MULTIPLE_CHOICE">Múltipla Escolha</option>
+                <option value="MULTIPLE_CHOICE">Questão Fechada (Múltipla Escolha)</option>
                 <option value="TRUE_FALSE">Verdadeiro ou Falso</option>
-                <option value="ESSAY">Dissertativa</option>
+                <option value="ESSAY">Questão Aberta (Dissertativa)</option>
               </Select>
             </div>
 

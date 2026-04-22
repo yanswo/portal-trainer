@@ -97,7 +97,7 @@ export default async function ClientDetailPage({
             <h1>{client.name || "Sem nome"}</h1>
             <p>{client.email}</p>
           </div>
-          <Badge variant="default">Cliente Ativo</Badge>
+          <Badge variant="primary">Cliente Ativo</Badge>
         </div>
       </div>
 
@@ -160,7 +160,7 @@ export default async function ClientDetailPage({
                     <Badge
                       variant={
                         enrollment.progress >= 1.0
-                          ? "default"
+                          ? "primary"
                           : enrollment.progress > 0
                           ? "neutral"
                           : "outline"
@@ -232,7 +232,7 @@ export default async function ClientDetailPage({
                     <Badge
                       variant={
                         payment.status === "CONFIRMED"
-                          ? "default"
+                          ? "primary"
                           : payment.status === "PENDING"
                           ? "neutral"
                           : "outline"

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ReactNode } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 import Avatar from "@/app/components/ui/Avatar/Avatar";
@@ -29,34 +30,39 @@ export default function AdminShell({
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <div className={styles.brand}>
-          <div className={styles.logoIcon}>CW</div>
-          <div className={styles.brandText}>
-            <strong>Training</strong>
-            <span>Admin</span>
+        <div className={styles.stickyContent}>
+          <div className={styles.sidebarHeader}>
+            <Link href="/admin" className={styles.brand}>
+              <div className={styles.logoMark}>CW</div>
+              <div className={styles.logoText}>
+                <strong>Training</strong>
+                <span>Painel Admin</span>
+              </div>
+            </Link>
           </div>
-        </div>
 
-        <div className={styles.profileCard}>
-          <Avatar name={user.name ?? "Admin"} size="sm" />
-          <div className={styles.profileInfo}>
-            <strong>{user.name}</strong>
-            <span>{user.email}</span>
+          <div className={styles.navContainer}>
+            <AdminNavigation />
           </div>
-          <ThemeToggle />
-        </div>
 
-        <AdminNavigation />
+          <div className={styles.sidebarFooter}>
+            <div className={styles.footerActions}>
+              <ThemeToggle />
+            </div>
 
-        <div className={styles.sidebarFooter}>
-          <button onClick={handleSignOut} className={styles.logoutBtn}>
-            <FaSignOutAlt /> Sair
-          </button>
+            <div className={styles.userProfile}>
+              <Avatar name={user.name ?? "Admin"} size="sm" />
+              <div className={styles.userInfo}>
+                <strong>{user.name}</strong>
+                <span title={user.email}>{user.email}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </aside>
 
-      <div className={styles.mainArea}>
-        <main className={styles.content}>{children}</main>
+      <div className={styles.main}>
+        <div className={styles.mainContent}>{children}</div>
       </div>
     </div>
   );

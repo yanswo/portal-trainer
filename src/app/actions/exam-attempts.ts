@@ -72,12 +72,23 @@ export async function submitExamAttempt(formData: FormData) {
 
       // Only create if doesn't exist
       if (enrollment && enrollment.Certification.length === 0) {
+        // Fetch the user's latest budget request for this course to determine the format
+        const budget = await prisma.budgetRequest.findFirst({
+          where: { 
+            userId: enrollment.userId,
+            courseId: enrollment.courseId
+          },
+          orderBy: { createdAt: "desc" },
+        });
+        
+        const certificateFormat = budget?.certificateFormat || "DIGITAL";
+
         await prisma.certification.create({
           data: {
             enrollmentId,
             status: "ISSUED",
             issuedAt: new Date(),
-            format: "DIGITAL", // Default, can be changed later
+            format: certificateFormat,
             certificateData: JSON.stringify({
               studentName: enrollment.user.name,
               courseName: enrollment.course.title,

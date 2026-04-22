@@ -1,0 +1,122 @@
+.page {
+  display: grid;
+  gap: 2rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.header h1 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  letter-spacing: -0.03em;
+}
+
+.header p {
+  color: var(--color-text-secondary);
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.statIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-surface);
+  border-radius: 1rem;
+  border: 1px solid var(--color-border);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+  margin: 0 0 0.5rem;
+}
+
+.emptyState p {
+  color: var(--color-text-muted);
+  max-width: 400px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+}
+
+.certGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.certCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.certBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: #10b981;
+  opacity: 0.3;
+}
+
+.certInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.certInfo > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.certLabel {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}

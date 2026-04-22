@@ -13,7 +13,7 @@ type PageProps = {
 
 export default function CourseEvaluationsPage({ params }: PageProps) {
   const course = courses.find((item) => item.slug === params.slug);
-  const assessment = courseAssessmentStats[params.slug];
+  const assessment = (courseAssessmentStats as any)[params.slug];
 
   if (!course || !assessment) {
     notFound();

@@ -1,17 +1,22 @@
-import AdminNavigation from "./components/AdminNavigation";
-import styles from "./layout.module.css";
+import { ReactNode } from "react";
+import AdminShell from "./AdminShell";
 
 export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
+  // Temporary mock user since we don't have server-side session parsing yet
+  // The actual protection is in AdminGate in the client
+  const adminUser = {
+    name: "Admin CW",
+    email: "admin@cw.com",
+    role: "ADMIN"
+  };
+
   return (
-    <div className={styles.layout}>
-      <AdminNavigation />
-      <main className={styles.main}>
-        <div className={styles.container}>{children}</div>
-      </main>
-    </div>
+    <AdminShell user={adminUser}>
+      {children}
+    </AdminShell>
   );
 }

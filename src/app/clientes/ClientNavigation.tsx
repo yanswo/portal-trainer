@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { logout } from "@/app/actions/auth";
 import styles from "./layout.module.css";
 
 type NavItem = {
@@ -13,11 +14,11 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: "/clientes", label: "Home" },
   { href: "/clientes/biblioteca", label: "Biblioteca" },
+  { href: "/clientes/certificados", label: "Certificados" },
   { href: "/clientes/cursos", label: "Comprar Cursos" },
   { href: "/clientes/orcamentos", label: "Orçamentos" },
   { href: "/clientes/configuracoes", label: "Configurações" },
   { href: "/clientes/suporte", label: "Ajuda e Suporte" },
-  { href: "/logout", label: "Logout", variant: "logout" as const },
 ];
 
 export default function ClientNavigation() {
@@ -27,11 +28,9 @@ export default function ClientNavigation() {
     <nav className={styles.nav} aria-label="Seções do portal do cliente">
       {navItems.map((item) => {
         const isHome = item.href === "/clientes";
-        const isLogout = item.variant === "logout";
         const isActive =
-          !isLogout &&
-          (pathname === item.href ||
-            (!isHome && pathname.startsWith(`${item.href}/`)));
+          pathname === item.href ||
+          (!isHome && pathname.startsWith(`${item.href}/`));
 
         return (
           <Link
@@ -40,12 +39,20 @@ export default function ClientNavigation() {
             aria-current={isActive ? "page" : undefined}
             className={`${styles.navItem} ${
               isActive ? styles.navItemActive : ""
-            } ${isLogout ? styles.navItemLogout : ""}`.trim()}
+            }`.trim()}
           >
             <span>{item.label}</span>
           </Link>
         );
       })}
+      <form action={logout}>
+        <button
+          type="submit"
+          className={`${styles.navItem} ${styles.navItemLogout}`.trim()}
+        >
+          <span>Sair</span>
+        </button>
+      </form>
     </nav>
   );
 }

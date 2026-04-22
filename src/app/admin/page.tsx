@@ -111,7 +111,7 @@ export default async function AdminDashboard() {
         <Link href="/admin/clientes" className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Alunos Ativos</span>
-            <div className={styles.statIcon} style={{ background: "#3b82f6" }}>
+            <div className={styles.statIcon}>
               <FaUsers />
             </div>
           </div>
@@ -122,7 +122,7 @@ export default async function AdminDashboard() {
         <Link href="/admin/cursos" className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Cursos Publicados</span>
-            <div className={styles.statIcon} style={{ background: "#10b981" }}>
+            <div className={styles.statIcon}>
               <FaBook />
             </div>
           </div>
@@ -133,7 +133,7 @@ export default async function AdminDashboard() {
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Total de Matrículas</span>
-            <div className={styles.statIcon} style={{ background: "#8b5cf6" }}>
+            <div className={styles.statIcon}>
               <FaChartLine />
             </div>
           </div>
@@ -144,7 +144,7 @@ export default async function AdminDashboard() {
         <Link href="/admin/financeiro" className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Receita Mensal</span>
-            <div className={styles.statIcon} style={{ background: "#f59e0b" }}>
+            <div className={styles.statIcon}>
               <FaCheckCircle />
             </div>
           </div>
@@ -163,7 +163,7 @@ export default async function AdminDashboard() {
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Taxa de Conclusão</span>
-            <div className={styles.statIcon} style={{ background: "#06b6d4" }}>
+            <div className={styles.statIcon}>
               <FaClipboardCheck />
             </div>
           </div>
@@ -176,7 +176,7 @@ export default async function AdminDashboard() {
         <Link href="/admin/certificados" className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Certificados Emitidos</span>
-            <div className={styles.statIcon} style={{ background: "#ec4899" }}>
+            <div className={styles.statIcon}>
               <FaCertificate />
             </div>
           </div>
@@ -187,7 +187,7 @@ export default async function AdminDashboard() {
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Provas Este Mês</span>
-            <div className={styles.statIcon} style={{ background: "#14b8a6" }}>
+            <div className={styles.statIcon}>
               <FaFileInvoiceDollar />
             </div>
           </div>
@@ -198,7 +198,7 @@ export default async function AdminDashboard() {
         <div className={styles.statCard}>
           <div className={styles.statHeader}>
             <span className={styles.statTitle}>Orçamentos Pendentes</span>
-            <div className={styles.statIcon} style={{ background: "#ef4444" }}>
+            <div className={styles.statIcon}>
               <FaFileInvoiceDollar />
             </div>
           </div>

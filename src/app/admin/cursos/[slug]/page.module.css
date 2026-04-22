@@ -1,188 +1,252 @@
 .page {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
+.headerTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .header h1 {
-  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
   letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.2;
 }
 
 .header p {
   color: var(--color-text-secondary);
   max-width: 720px;
   line-height: 1.6;
+  font-size: 1.05rem;
+  margin: 0;
 }
 
 .headerActions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  align-items: center;
 }
 
+/* Dashboard Metrics Section */
 .summary {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.statCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.statCardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  border-bottom: 1px dashed var(--color-border-light);
+  padding-bottom: 0.75rem;
 }
 
 .infoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
 }
 
 .infoGrid div {
-  display: grid;
-  gap: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .infoGrid dt {
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-weight: 600;
   color: var(--color-text-muted);
 }
 
 .infoGrid dd {
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
-.assessmentGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
-}
-
-.assessmentGrid div {
-  background: var(--color-surface-alt);
-  border-radius: var(--border-radius);
-  padding: 1rem;
-  display: grid;
-  gap: 0.4rem;
-}
-
-.assessmentGrid span {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.assessmentGrid strong {
-  font-size: 1.4rem;
-}
-
-.attemptList {
-  list-style: none;
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.attemptList li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.95rem;
-  color: var(--color-text-secondary);
-}
-
+/* Modules and Lessons */
 .modules {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
 }
 
 .sectionHeader {
   display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .sectionHeader h2 {
   font-size: clamp(1.6rem, 2.5vw, 2rem);
   letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
 .sectionHeader p {
   color: var(--color-text-secondary);
-  max-width: 520px;
+  max-width: 600px;
   line-height: 1.6;
+  margin: 0;
 }
 
 .modulesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.moduleCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
+  transition: transform var(--motion-duration-short);
+}
+
+.moduleCard:hover {
+  border-color: var(--color-border-strong);
+  transform: translateY(-2px);
+}
+
+.moduleHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--color-border-light);
+}
+
+.moduleTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.moduleDesc {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
 }
 
 .lessonList {
   list-style: none;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
+  margin: 0;
+  padding: 0;
 }
 
 .lessonList li {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
   align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: var(--color-surface-soft);
+  border-radius: 8px;
+  border: 1px solid var(--color-border-light);
 }
 
-.lessonList li div {
-  display: grid;
-  gap: 0.3rem;
+.lessonInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
-.lessonList span {
-  color: var(--color-text-secondary);
-  font-size: 0.85rem;
+.lessonTitle {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
 }
 
-.section {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.twoColumn {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.25rem;
-}
-
-.bulletList {
-  list-style: disc;
-  display: grid;
-  gap: 0.6rem;
-  padding-left: 1.2rem;
-  color: var(--color-text-secondary);
-}
-
-.feedbackGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.25rem;
-}
-
-.feedbackMeta {
-  display: inline-block;
-  margin-top: 0.75rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.lessonMeta {
   color: var(--color-text-muted);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
+/* Video Table */
+.videoSection {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.videoSectionInner {
+  padding: 1.5rem;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .headerActions {
+  .headerTop {
     flex-direction: column;
-    align-items: flex-start;
+  }
+  
+  .headerActions {
+    width: 100%;
+  }
+  
+  .headerActions > * {
+    flex: 1;
+  }
+  
+  .infoGrid {
+    grid-template-columns: 1fr 1fr;
   }
 }
