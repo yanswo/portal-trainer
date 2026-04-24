@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
 
 export async function updateCourse(courseId: string, formData: FormData) {
   const title = formData.get("title") as string;
@@ -11,12 +13,27 @@ export async function updateCourse(courseId: string, formData: FormData) {
   const price = parseFloat(formData.get("price") as string);
   const level = formData.get("level") as string;
   const duration = formData.get("duration") as string;
-  const imageUrl = formData.get("imageUrl") as string;
+  let finalImageUrl = formData.get("imageUrl") as string;
   const headline = formData.get("headline") as string;
   const instructorName = formData.get("instructorName") as string;
   const certificate = formData.get("certificate") === "true";
+  const imageFile = formData.get("imageFile") as File | null;
 
   try {
+    if (imageFile && imageFile.size > 0) {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      
+      const uploadDir = path.join(process.cwd(), "public", "uploads", "courses");
+      await mkdir(uploadDir, { recursive: true });
+      
+      const filename = `${Date.now()}-${imageFile.name.replace(/\s+/g, '-')}`;
+      const filepath = path.join(uploadDir, filename);
+      
+      await writeFile(filepath, buffer);
+      finalImageUrl = `/uploads/courses/${filename}`;
+    }
+
     const course = await prisma.course.update({
       where: { id: courseId },
       data: {
@@ -26,7 +43,7 @@ export async function updateCourse(courseId: string, formData: FormData) {
         price,
         level: level || undefined,
         duration: duration || undefined,
-        imageUrl: imageUrl || undefined,
+        imageUrl: finalImageUrl || undefined,
         headline: headline || undefined,
         instructorName: instructorName || undefined,
         certificate,

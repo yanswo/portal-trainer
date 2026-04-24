@@ -148,7 +148,8 @@
   gap: 0.5rem;
 }
 
-.actionLink {
+.actionLink,
+.actionBtn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -158,10 +159,13 @@
   background: var(--color-surface-alt);
   color: var(--color-text-secondary);
   text-decoration: none;
+  border: none;
+  cursor: pointer;
   transition: all var(--motion-duration-short);
 }
 
-.actionLink:hover {
+.actionLink:hover,
+.actionBtn:hover {
   background: var(--color-accent);
   color: white;
 }

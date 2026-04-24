@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import { FaEye, FaDownload } from "react-icons/fa";
 import styles from "./page.module.css";
+import CertificatePreview from "./CertificatePreview";
 
 type Certificate = {
   id: string;
@@ -19,6 +20,7 @@ type Certificate = {
   format: string;
   issuedAt: Date | null;
   documentUrl: string | null;
+  certificateData?: string | null;
   enrollment: {
     user: { name: string | null; email: string };
     course: { title: string };
@@ -33,6 +35,7 @@ export default function CertificatesFilter({
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [formatFilter, setFormatFilter] = useState("");
+  const [previewCert, setPreviewCert] = useState<Certificate | null>(null);
 
   const filtered = useMemo(() => {
     let result = [...certificates];
@@ -147,25 +150,24 @@ export default function CertificatesFilter({
                 </TableCell>
                 <TableCell>
                   <div className={styles.actions}>
+                    {cert.status === "ISSUED" && (
+                      <button
+                        className={styles.actionBtn}
+                        onClick={() => setPreviewCert(cert)}
+                        title="Pré-visualizar Certificado"
+                      >
+                        <FaEye />
+                      </button>
+                    )}
                     {cert.documentUrl && (
-                      <>
-                        <Link
-                          href={cert.documentUrl}
-                          target="_blank"
-                          className={styles.actionLink}
-                          title="Visualizar"
-                        >
-                          <FaEye />
-                        </Link>
-                        <Link
-                          href={cert.documentUrl}
-                          download
-                          className={styles.actionLink}
-                          title="Baixar"
-                        >
-                          <FaDownload />
-                        </Link>
-                      </>
+                      <Link
+                        href={cert.documentUrl}
+                        download
+                        className={styles.actionLink}
+                        title="Baixar PDF Original"
+                      >
+                        <FaDownload />
+                      </Link>
                     )}
                   </div>
                 </TableCell>
@@ -189,6 +191,20 @@ export default function CertificatesFilter({
           </TableBody>
         </Table>
       </div>
+
+      {previewCert && (
+        <CertificatePreview
+          certificate={{
+            id: previewCert.id,
+            studentName: previewCert.enrollment.user.name || "Sem nome",
+            courseTitle: previewCert.enrollment.course.title,
+            issuedAt: previewCert.issuedAt,
+            documentUrl: previewCert.documentUrl,
+            certificateData: previewCert.certificateData,
+          }}
+          onClose={() => setPreviewCert(null)}
+        />
+      )}
     </>
   );
 }

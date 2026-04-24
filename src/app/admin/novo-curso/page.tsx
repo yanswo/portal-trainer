@@ -245,18 +245,28 @@ export default function NewCoursePage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Mídia Externa</CardTitle>
+              <CardTitle>Capa do Curso</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <div className={styles.field}>
-                <Label htmlFor="imageUrl">URL da Capa do Curso</Label>
+                <Label htmlFor="imageFile">Upload de Imagem (Recomendado)</Label>
+                <Input id="imageFile" name="imageFile" type="file" accept="image/*" />
+                <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: "0.5rem" }}>
+                  A imagem deve ter formato paisagem (16:9).
+                </p>
+              </div>
+              <div style={{ textAlign: "center", color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
+                OU
+              </div>
+              <div className={styles.field}>
+                <Label htmlFor="imageUrl">URL da Imagem</Label>
                 <Input
                   id="imageUrl"
                   name="imageUrl"
                   placeholder="https://..."
                 />
                 <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: "0.5rem" }}>
-                  A imagem deve ter formato paisagem (16:9).
+                  A imagem do upload substituirá a URL se fornecida.
                 </p>
               </div>
             </CardContent>

@@ -1,0 +1,237 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: var(--color-surface);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--color-border);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+}
+
+.previewContainer {
+  padding: 2rem;
+  overflow-y: auto;
+  background: #1e1e24; /* Darker background to contrast the certificate */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificateLayout {
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 1.414; /* A4 landscape approx */
+  background: #fff;
+  border: 8px solid #f1f5f9;
+  box-shadow: 0 0 0 1px #cbd5e1, 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  padding: 1rem;
+}
+
+.certificateLayout::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 2px solid #cbd5e1;
+  pointer-events: none;
+}
+
+.certInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 4rem;
+  color: #1e293b;
+  font-family: "Georgia", serif;
+}
+
+.certHeader {
+  margin-bottom: 2rem;
+}
+
+.awardIcon {
+  font-size: 3rem;
+  color: #eab308;
+  margin-bottom: 1rem;
+}
+
+.certHeader h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.certHeader p {
+  font-size: 1.25rem;
+  color: #475569;
+  font-style: italic;
+  margin: 0;
+}
+
+.studentName {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 1.5rem 0;
+  border-bottom: 2px solid #eab308;
+  padding-bottom: 0.5rem;
+  line-height: 1.2;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.certBody {
+  margin-bottom: 3rem;
+}
+
+.certBody p {
+  font-size: 1.25rem;
+  color: #475569;
+  margin: 0 0 0.5rem 0;
+}
+
+.courseName {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-transform: uppercase;
+}
+
+.certFooter {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.signatureBlock {
+  text-align: center;
+  width: 250px;
+}
+
+.signatureLine {
+  height: 1px;
+  background: #475569;
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+
+.signatureBlock p {
+  margin: 0;
+  font-size: 1rem;
+  color: #475569;
+}
+
+.certDate {
+  text-align: right;
+}
+
+.certDate p {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  color: #475569;
+}
+
+.certId {
+  font-size: 0.75rem !important;
+  color: #94a3b8 !important;
+  font-family: monospace;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+@media (max-width: 768px) {
+  .certificateLayout {
+    font-size: 12px;
+  }
+  .certInner {
+    padding: 1rem 2rem;
+  }
+  .certHeader h1 {
+    font-size: 2rem;
+  }
+  .studentName {
+    font-size: 2rem;
+  }
+  .courseName {
+    font-size: 1.25rem;
+  }
+  .awardIcon {
+    font-size: 2rem;
+  }
+}

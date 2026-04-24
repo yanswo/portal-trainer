@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,11 +11,26 @@ export async function POST(request: NextRequest) {
     const slug = formData.get("slug") as string || title.toLowerCase().replace(/\s+/g, "-");
     const description = formData.get("description") as string;
     const price = parseFloat(formData.get("price") as string);
-    const imageUrl = formData.get("imageUrl") as string;
+    let imageUrl = formData.get("imageUrl") as string;
     const category = formData.get("category") as string;
     const duration = formData.get("duration") as string;
     const level = formData.get("level") as string;
     const videosJson = formData.get("videos") as string;
+    const imageFile = formData.get("imageFile") as File | null;
+
+    if (imageFile && imageFile.size > 0) {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      
+      const uploadDir = path.join(process.cwd(), "public", "uploads", "courses");
+      await mkdir(uploadDir, { recursive: true });
+      
+      const filename = `${Date.now()}-${imageFile.name.replace(/\s+/g, '-')}`;
+      const filepath = path.join(uploadDir, filename);
+      
+      await writeFile(filepath, buffer);
+      imageUrl = `/uploads/courses/${filename}`;
+    }
 
     const videos = videosJson ? JSON.parse(videosJson) : [];
 
