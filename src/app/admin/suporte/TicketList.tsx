@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { adminReplyToTicket } from "@/app/actions/support";
 import Badge from "@/app/components/ui/Badge/Badge";
-import Button from "@/app/components/ui/Button";
-import { FaPaperPlane, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Link from "next/link";
+import { FaChevronRight, FaUser, FaClock, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import styles from "./page.module.css";
 
 type Message = {
@@ -26,102 +25,112 @@ type Ticket = {
   messages: Message[];
 };
 
-export default function TicketList({ tickets: initialTickets }: { tickets: Ticket[] }) {
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const [replying, setReplying] = useState<Record<string, boolean>>({});
+const STATUS_CONFIG: Record<string, { label: string; variant: "primary" | "success" | "neutral" | "outline"; icon: React.ReactNode }> = {
+  OPEN: { label: "Aberto", variant: "primary", icon: <FaExclamationCircle size={11} /> },
+  CLOSED: { label: "Fechado", variant: "neutral", icon: <FaCheckCircle size={11} /> },
+  RESOLVED: { label: "Resolvido", variant: "success", icon: <FaCheckCircle size={11} /> },
+  IN_PROGRESS: { label: "Em Andamento", variant: "outline", icon: <FaClock size={11} /> },
+};
 
-  const toggleExpand = (id: string) => {
-    setExpanded(expanded === id ? null : id);
+type FilterStatus = "ALL" | "OPEN" | "CLOSED" | "RESOLVED" | "IN_PROGRESS";
+
+export default function TicketList({ tickets: initialTickets }: { tickets: Ticket[] }) {
+  const [filter, setFilter] = useState<FilterStatus>("ALL");
+
+  const filtered =
+    filter === "ALL" ? initialTickets : initialTickets.filter((t) => t.status === filter);
+
+  const counts = {
+    ALL: initialTickets.length,
+    OPEN: initialTickets.filter((t) => t.status === "OPEN").length,
+    CLOSED: initialTickets.filter((t) => t.status === "CLOSED" || t.status === "RESOLVED").length,
   };
 
-  async function handleReply(ticketId: string, formData: FormData) {
-    setReplying((prev) => ({ ...prev, [ticketId]: true }));
-    await adminReplyToTicket(ticketId, formData);
-    setReplying((prev) => ({ ...prev, [ticketId]: false }));
-  }
-
-  async function handleClose(ticketId: string) {
-    const formData = new FormData();
-    formData.append("body", "Chamado encerrado pela equipe de suporte.");
-    formData.append("status", "CLOSED");
-    await adminReplyToTicket(ticketId, formData);
-  }
-
   return (
-    <div className={styles.ticketList}>
-      {initialTickets.map((ticket) => (
-        <div key={ticket.id} className={styles.ticketCard}>
-          <div className={styles.ticketHeader} onClick={() => toggleExpand(ticket.id)}>
-            <div className={styles.ticketInfo}>
-              <h3>{ticket.subject}</h3>
-              <div className={styles.ticketMeta}>
-                <span>{ticket.userName} ({ticket.userEmail})</span>
-                <span>#{ticket.id.slice(-6).toUpperCase()}</span>
-                <span>{new Date(ticket.updatedAt).toLocaleDateString("pt-BR")}</span>
+    <div className={styles.ticketSection}>
+      {/* Filter Tabs */}
+      <div className={styles.filterTabs}>
+        {(["ALL", "OPEN", "CLOSED"] as const).map((f) => (
+          <button
+            key={f}
+            className={`${styles.filterTab} ${filter === f || (f === "CLOSED" && (filter === "CLOSED" || filter === "RESOLVED")) ? styles.filterTabActive : ""}`}
+            onClick={() => setFilter(f)}
+          >
+            {f === "ALL" ? "Todos" : f === "OPEN" ? "Abertos" : "Fechados"}
+            <span className={styles.filterCount}>{counts[f]}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Ticket List */}
+      <div className={styles.ticketList}>
+        {filtered.map((ticket) => {
+          const config = STATUS_CONFIG[ticket.status] ?? STATUS_CONFIG.OPEN;
+          const lastMessage = ticket.messages[ticket.messages.length - 1];
+          const hasUnread = ticket.status === "OPEN" && lastMessage?.sender === "CLIENT";
+
+          return (
+            <Link
+              key={ticket.id}
+              href={`/admin/suporte/${ticket.id}`}
+              className={`${styles.ticketCard} ${hasUnread ? styles.ticketCardUnread : ""}`}
+            >
+              <div className={styles.ticketCardLeft}>
+                <div className={styles.ticketAvatarWrap}>
+                  <div className={styles.ticketAvatar}>
+                    {ticket.userName.charAt(0).toUpperCase()}
+                  </div>
+                  {hasUnread && <div className={styles.unreadDot} />}
+                </div>
               </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <Badge variant={ticket.status === "OPEN" ? "primary" : "neutral"}>
-                {ticket.status === "OPEN" ? "Aberto" : "Fechado"}
-              </Badge>
-              {expanded === ticket.id ? <FaChevronUp /> : <FaChevronDown />}
-            </div>
+
+              <div className={styles.ticketCardBody}>
+                <div className={styles.ticketCardTop}>
+                  <span className={styles.ticketSubject}>{ticket.subject}</span>
+                  <span className={styles.ticketTime}>
+                    <FaClock size={11} />
+                    {new Date(ticket.updatedAt).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "short",
+                    })}
+                  </span>
+                </div>
+                <div className={styles.ticketCardMid}>
+                  <FaUser size={11} />
+                  <span className={styles.ticketUser}>{ticket.userName}</span>
+                  <span className={styles.ticketId}>#{ticket.id.slice(-6).toUpperCase()}</span>
+                </div>
+                {lastMessage && (
+                  <div className={styles.ticketPreview}>
+                    <span className={styles.previewSender}>
+                      {lastMessage.sender === "ADMIN" ? "Você:" : `${ticket.userName}:`}
+                    </span>{" "}
+                    {lastMessage.body.length > 80
+                      ? lastMessage.body.slice(0, 80) + "…"
+                      : lastMessage.body}
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.ticketCardRight}>
+                <Badge variant={config.variant} size="sm">
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                    {config.icon} {config.label}
+                  </span>
+                </Badge>
+                <FaChevronRight size={13} className={styles.ticketArrow} />
+              </div>
+            </Link>
+          );
+        })}
+
+        {filtered.length === 0 && (
+          <div className={styles.empty}>
+            <FaCheckCircle size={36} style={{ opacity: 0.2 }} />
+            <p>Nenhum chamado nesta categoria.</p>
           </div>
-
-          {expanded === ticket.id && (
-            <div className={styles.ticketBody}>
-              <div className={styles.messageList}>
-                {ticket.messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`${styles.message} ${
-                      msg.sender === "CLIENT" ? styles.messageClient : styles.messageAdmin
-                    }`}
-                  >
-                    <div className={styles.messageSender}>
-                      {msg.sender === "CLIENT" ? ticket.userName : "Equipe CW Training"} •{" "}
-                      {new Date(msg.createdAt).toLocaleDateString("pt-BR", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                    {msg.body}
-                  </div>
-                ))}
-              </div>
-
-              {ticket.status === "OPEN" && (
-                <>
-                  <form
-                    action={(formData) => handleReply(ticket.id, formData)}
-                    className={styles.replyForm}
-                  >
-                    <input
-                      name="body"
-                      className={styles.replyInput}
-                      placeholder="Escreva uma resposta..."
-                      required
-                    />
-                    <Button type="submit" size="sm" disabled={replying[ticket.id]}>
-                      <FaPaperPlane /> {replying[ticket.id] ? "..." : "Enviar"}
-                    </Button>
-                  </form>
-                  <div style={{ marginTop: "0.75rem", textAlign: "right" }}>
-                    <Button variant="ghost" size="sm" onClick={() => handleClose(ticket.id)}>
-                      Fechar Chamado
-                    </Button>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-      ))}
-      {initialTickets.length === 0 && (
-        <div style={{ textAlign: "center", padding: "3rem", color: "var(--color-text-muted)" }}>
-          Nenhum chamado de suporte encontrado.
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

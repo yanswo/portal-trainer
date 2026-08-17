@@ -1,0 +1,209 @@
+/* ============================
+   RELATÓRIOS — Admin
+   ============================ */
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.header h1 { margin-top: 0.25rem; }
+
+.title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* Section */
+.section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sectionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sectionIcon {
+  color: var(--color-text-primary);
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.sectionSub {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Bar Chart */
+.barChart {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+  height: 180px;
+}
+
+.barGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  height: 100%;
+}
+
+.barWrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  background: var(--color-surface-alt);
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+}
+
+.bar {
+  width: 100%;
+  min-height: 4px;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s ease;
+}
+
+.barValue {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.barLabel {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* Table */
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-alt);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background: var(--color-surface-alt);
+}
+
+.tdMuted {
+  color: var(--color-text-muted) !important;
+  font-size: 0.8125rem !important;
+}
+
+.tdBold {
+  font-weight: 600;
+  color: var(--color-text-primary) !important;
+}
+
+.tdGreen {
+  font-weight: 700;
+  color: #10b981 !important;
+}
+
+.tdEmpty {
+  text-align: center;
+  padding: 3rem !important;
+  color: var(--color-text-muted) !important;
+}
+
+/* Rate Bar */
+.rateCell {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.rateBar {
+  flex: 1;
+  height: 6px;
+  background: var(--color-surface-alt);
+  border-radius: 99px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.rateFill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+.rateText {
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 36px;
+  text-align: right;
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 768px) {
+  .barChart { height: 120px; }
+  .barValue { display: none; }
+}

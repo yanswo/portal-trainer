@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FaSignOutAlt } from "react-icons/fa";
 import Avatar from "@/app/components/ui/Avatar/Avatar";
 import AdminNavigation from "./AdminNavigation";
 import ThemeToggle from "@/app/components/ui/ThemeToggle/ThemeToggle";
@@ -17,23 +16,22 @@ type AdminUser = {
 export default function AdminShell({
   children,
   user,
+  pendingTickets = 0,
+  pendingBudgets = 0,
 }: {
   children: ReactNode;
   user: AdminUser;
+  pendingTickets?: number;
+  pendingBudgets?: number;
 }) {
-  function handleSignOut() {
-    document.cookie =
-      "clientAuth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    window.location.href = "/login";
-  }
-
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
         <div className={styles.stickyContent}>
+          {/* Logo — idêntico à landing page */}
           <div className={styles.sidebarHeader}>
             <Link href="/admin" className={styles.brand}>
-              <div className={styles.logoMark}>CW</div>
+              <span className={styles.logoMark}>CW</span>
               <div className={styles.logoText}>
                 <strong>Training</strong>
                 <span>Painel Admin</span>
@@ -41,21 +39,26 @@ export default function AdminShell({
             </Link>
           </div>
 
+          {/* Navigation */}
           <div className={styles.navContainer}>
-            <AdminNavigation />
+            <AdminNavigation
+              pendingTickets={pendingTickets}
+              pendingBudgets={pendingBudgets}
+            />
           </div>
 
+          {/* Footer */}
           <div className={styles.sidebarFooter}>
             <div className={styles.footerActions}>
               <ThemeToggle />
             </div>
-
             <div className={styles.userProfile}>
               <Avatar name={user.name ?? "Admin"} size="sm" />
               <div className={styles.userInfo}>
-                <strong>{user.name}</strong>
+                <strong>{user.name ?? "Administrador"}</strong>
                 <span title={user.email}>{user.email}</span>
               </div>
+              <div className={styles.userOnline} title="Online" />
             </div>
           </div>
         </div>

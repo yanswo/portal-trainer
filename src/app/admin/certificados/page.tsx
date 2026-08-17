@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import Badge from "@/app/components/ui/Badge/Badge";
-import Button from "@/app/components/ui/Button";
 import styles from "./page.module.css";
-import { FaCertificate } from "react-icons/fa";
+import { FaCertificate, FaPlus, FaTruck, FaFileAlt } from "react-icons/fa";
 import CertificatesFilter from "./CertificatesFilter";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -12,8 +12,8 @@ export default async function CertificatesPage() {
     include: {
       enrollment: {
         include: {
-          user: true,
-          course: true,
+          user: { select: { name: true, email: true } },
+          course: { select: { title: true } },
         },
       },
     },
@@ -21,8 +21,8 @@ export default async function CertificatesPage() {
   });
 
   const issuedCount = certificates.filter((c) => c.status === "ISSUED").length;
-  const pendingCount = certificates.filter((c) => c.status === "PENDING").length;
-  const digitalCount = certificates.filter((c) => c.format === "DIGITAL").length;
+  const digitalCount = certificates.filter((c) => c.format === "DIGITAL" || c.format === "DIGITAL_AND_PHYSICAL").length;
+  const physicalCount = certificates.filter((c) => c.format === "PHYSICAL" || c.format === "DIGITAL_AND_PHYSICAL").length;
 
   return (
     <div className={styles.page}>
@@ -30,25 +30,42 @@ export default async function CertificatesPage() {
         <div>
           <Badge variant="outline">Certificados</Badge>
           <h1>Gestão de Certificados</h1>
-          <p>Gerencie todos os certificados emitidos pela plataforma.</p>
+          <p>Gerencie a emissão, altere o status e acompanhe o rastreio de envios físicos.</p>
         </div>
-        <Button href="/admin/certificados/gerar">Gerar Certificado</Button>
+        <Link
+          href="/admin/certificados/gerar"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            padding: "0.625rem 1.25rem",
+            background: "#111111",
+            color: "#ffffff",
+            borderRadius: "8px",
+            fontSize: "0.875rem",
+            fontWeight: 600,
+            textDecoration: "none",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          <FaPlus size={12} /> Emitir Certificado
+        </Link>
       </header>
 
       {/* Stats */}
       <div className={styles.statsRow}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#10b981" }}>
+          <div className={styles.statIcon}>
             <FaCertificate />
           </div>
           <div>
             <div className={styles.statValue}>{certificates.length}</div>
-            <div className={styles.statLabel}>Total de Certificados</div>
+            <div className={styles.statLabel}>Total Cadastrados</div>
           </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#3b82f6" }}>
+          <div className={styles.statIcon}>
             <FaCertificate />
           </div>
           <div>
@@ -58,27 +75,27 @@ export default async function CertificatesPage() {
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#f59e0b" }}>
-            <FaCertificate />
+          <div className={styles.statIcon}>
+            <FaFileAlt />
           </div>
           <div>
-            <div className={styles.statValue}>{pendingCount}</div>
-            <div className={styles.statLabel}>Pendentes</div>
+            <div className={styles.statValue}>{digitalCount}</div>
+            <div className={styles.statLabel}>Formato Digital</div>
           </div>
         </div>
 
         <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#8b5cf6" }}>
-            <FaCertificate />
+          <div className={styles.statIcon}>
+            <FaTruck />
           </div>
           <div>
-            <div className={styles.statValue}>{digitalCount}</div>
-            <div className={styles.statLabel}>Digitais</div>
+            <div className={styles.statValue}>{physicalCount}</div>
+            <div className={styles.statLabel}>Envios Físicos</div>
           </div>
         </div>
       </div>
 
-      {/* Filtros + Tabela (interactive) */}
+      {/* Filtros + Tabela */}
       <CertificatesFilter certificates={certificates} />
     </div>
   );
