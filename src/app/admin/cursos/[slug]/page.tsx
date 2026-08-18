@@ -1,22 +1,8 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Badge from "@/app/components/ui/Badge/Badge";
-import Button from "@/app/components/ui/Button";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-} from "@/app/components/ui/Card/Card";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@/app/components/ui/Table/Table";
 import Link from "next/link";
+import { FaArrowLeft, FaBook, FaPlayCircle, FaUsers, FaGraduationCap, FaClipboardCheck, FaClock, FaTag, FaCertificate } from "react-icons/fa";
 import styles from "./page.module.css";
 import CourseActions from "./CourseActions";
 
@@ -33,7 +19,7 @@ export default async function AdminCourseDetails({ params }: PageProps) {
     where: { slug },
     include: {
       videos: { orderBy: { position: "asc" } },
-      modules: { orderBy: { position: "asc" }, include: { videos: true } },
+      modules: { orderBy: { position: "asc" }, include: { videos: { orderBy: { position: "asc" } } } },
       _count: {
         select: {
           enrollments: true,
@@ -63,29 +49,33 @@ export default async function AdminCourseDetails({ params }: PageProps) {
   const completedCount = course.enrollments.filter((e) => e.progress >= 1.0).length;
 
   const formatMoney = (val: number | null) =>
-    val !== null
+    val !== null && val > 0
       ? new Intl.NumberFormat("pt-BR", {
           style: "currency",
           currency: "BRL",
         }).format(val)
-      : "-";
+      : "Gratuito";
 
   return (
     <div className={styles.page}>
+      {/* Breadcrumb & Header */}
       <header className={styles.header}>
+        <Link href="/admin/cursos" className={styles.backLink}>
+          <FaArrowLeft size={12} /> Voltar para Cursos
+        </Link>
+
         <div className={styles.headerTop}>
           <div className={styles.headerTitle}>
-            <Link href="/admin/cursos" style={{ display: "inline-block", fontSize: "0.875rem", color: "var(--color-text-muted)", textDecoration: "none", fontWeight: 600, marginBottom: "0.25rem" }}>
-              ← Cursos
-            </Link>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div className={styles.titleRow}>
               <h1>{course.title}</h1>
-              <Badge variant={course.isPublished ? "primary" : "outline"}>
+              <Badge variant={course.isPublished ? "neutral" : "outline"}>
                 {course.isPublished ? "Publicado" : "Rascunho"}
               </Badge>
             </div>
-            <p>{course.description ?? "Sem descrição."}</p>
+            {course.headline && <span className={styles.headline}>{course.headline}</span>}
+            <p className={styles.description}>{course.description ?? "Sem descrição cadastrada."}</p>
           </div>
+
           <div className={styles.headerActions}>
             <CourseActions
               courseId={course.id}
@@ -96,154 +86,170 @@ export default async function AdminCourseDetails({ params }: PageProps) {
         </div>
       </header>
 
-      {/* Info + Stats */}
-      <section className={styles.summary} aria-label="Resumo do curso">
+      {/* Summary Stat Cards — B&W Theme */}
+      <section className={styles.statsGrid} aria-label="Resumo das métricas do curso">
         <div className={styles.statCard}>
-          <h2 className={styles.statCardTitle}>Informações Gerais</h2>
-          <dl className={styles.infoGrid}>
-            <div>
-              <dt>Duração</dt>
-              <dd>{course.duration ?? "-"}</dd>
+          <div className={styles.statIcon}>
+            <FaUsers size={18} />
+          </div>
+          <div>
+            <div className={styles.statValue}>{course._count.enrollments}</div>
+            <div className={styles.statLabel}>Alunos Matriculados</div>
+            <div className={styles.statSub}>
+              {completedCount} concluídos ({avgProgress}%)
             </div>
-            <div>
-              <dt>Nível</dt>
-              <dd>{course.level ?? "-"}</dd>
-            </div>
-            <div>
-              <dt>Preço</dt>
-              <dd>{formatMoney(course.price ? Number(course.price) : null)}</dd>
-            </div>
-            <div>
-              <dt>Certificado</dt>
-              <dd>{course.certificate ? "Incluso" : "Não incluso"}</dd>
-            </div>
-            <div>
-              <dt>Alunos Matriculados</dt>
-              <dd>{course._count.enrollments}</dd>
-            </div>
-            <div>
-              <dt>Taxa de Conclusão</dt>
-              <dd>
-                {completedCount} / {course._count.enrollments} ({avgProgress}%)
-              </dd>
-            </div>
-          </dl>
+          </div>
         </div>
 
         <div className={styles.statCard}>
-          <h2 className={styles.statCardTitle}>Conteúdo e Avaliação</h2>
-          <dl className={styles.infoGrid}>
-            <div>
-              <dt>Módulos</dt>
-              <dd>{course._count.modules}</dd>
+          <div className={styles.statIcon}>
+            <FaPlayCircle size={18} />
+          </div>
+          <div>
+            <div className={styles.statValue}>{course._count.videos}</div>
+            <div className={styles.statLabel}>Videoaulas Cadastradas</div>
+            <div className={styles.statSub}>
+              {course._count.modules} módulos organizados
             </div>
-            <div>
-              <dt>Videoaulas</dt>
-              <dd>{course._count.videos}</dd>
+          </div>
+        </div>
+
+        <div className={styles.statCard}>
+          <div className={styles.statIcon}>
+            <FaClock size={18} />
+          </div>
+          <div>
+            <div className={styles.statValue}>{course.duration ?? "-"}</div>
+            <div className={styles.statLabel}>Carga Horária</div>
+            <div className={styles.statSub}>
+              Nível: {course.level ?? "Todos os níveis"}
             </div>
-            <div>
-              <dt>Aulas Avaliativas</dt>
-              <dd>
-                {course.videos.filter((v) => v.type === "ASSESSMENT").length} aulas
-              </dd>
+          </div>
+        </div>
+
+        <div className={styles.statCard}>
+          <div className={styles.statIcon}>
+            <FaTag size={18} />
+          </div>
+          <div>
+            <div className={styles.statValue}>{formatMoney(course.price ? Number(course.price) : null)}</div>
+            <div className={styles.statLabel}>Preço do Treinamento</div>
+            <div className={styles.statSub}>
+              Certificado: {course.certificate ? "Incluso ✓" : "Não incluso"}
             </div>
-          </dl>
+          </div>
         </div>
       </section>
 
-      {/* Modules */}
-      {course.modules.length > 0 && (
-        <section className={styles.modules} aria-labelledby="modulos">
-          <div className={styles.sectionHeader}>
-            <h2 id="modulos">Módulos e Aulas</h2>
-            <p>Estrutura do curso organizada por módulos.</p>
+      {/* Modules & Curriculum Section */}
+      <section className={styles.section} aria-labelledby="modulos-header">
+        <div className={styles.sectionHeader}>
+          <div>
+            <h2 id="modulos-header" className={styles.sectionTitle}>Conteúdo Programático & Módulos</h2>
+            <p className={styles.sectionSub}>Estrutura de tópicos, módulos e videoaulas do treinamento.</p>
           </div>
+          <Link href={`/admin/cursos/${course.slug}/editar`} className={styles.editCurriculumBtn}>
+            Editar Módulos e Aulas
+          </Link>
+        </div>
+
+        {course.modules.length > 0 ? (
           <div className={styles.modulesGrid}>
-            {course.modules.map((module) => (
+            {course.modules.map((module, i) => (
               <div key={module.id} className={styles.moduleCard}>
                 <div className={styles.moduleHeader}>
-                  <div className={styles.moduleTitle}>{module.title}</div>
+                  <span className={styles.moduleNumber}>Módulo {i + 1}</span>
+                  <h3 className={styles.moduleTitle}>{module.title}</h3>
                   {module.description && (
-                    <div className={styles.moduleDesc}>{module.description}</div>
+                    <p className={styles.moduleDesc}>{module.description}</p>
                   )}
                 </div>
+
                 <ul className={styles.lessonList}>
-                  {module.videos.map((video) => (
-                    <li key={video.id}>
-                      <div className={styles.lessonInfo}>
-                        <div className={styles.lessonTitle}>{video.title}</div>
-                        <div className={styles.lessonMeta}>
-                          {video.type === "THEORY" ? "Teórico" : video.type === "PRACTICE" ? "Prático" : "Avaliação"}
-                          {video.duration ? ` · ${video.duration} min` : ""}
+                  {module.videos.map((video, vIdx) => (
+                    <li key={video.id} className={styles.lessonItem}>
+                      <div className={styles.lessonLeft}>
+                        <span className={styles.lessonIndex}>{vIdx + 1}</span>
+                        <div>
+                          <div className={styles.lessonTitle}>{video.title}</div>
+                          {video.duration && (
+                            <span className={styles.lessonDuration}>⏱ {video.duration} min</span>
+                          )}
                         </div>
                       </div>
-                      <Badge variant="neutral" size="sm">
-                        {video.type === "THEORY" ? "Teórico" : video.type === "PRACTICE" ? "Prático" : "Avaliação"}
-                      </Badge>
+                      <div className={styles.lessonRight}>
+                        <Badge variant="neutral">
+                          {video.type === "THEORY" ? "Teórico" : video.type === "PRACTICE" ? "Prático" : "Avaliação"}
+                        </Badge>
+                        {video.preview && <span className={styles.previewTag}>Preview Aberto</span>}
+                      </div>
                     </li>
                   ))}
                   {module.videos.length === 0 && (
-                    <li style={{ color: "var(--color-text-muted)", fontSize: "0.875rem", justifyContent: "center", background: "transparent", border: "none" }}>
-                      Nenhuma aula neste módulo.
-                    </li>
+                    <li className={styles.emptyLesson}>Nenhuma aula cadastrada neste módulo.</li>
                   )}
                 </ul>
               </div>
             ))}
           </div>
-        </section>
-      )}
-
-      {/* All Videos */}
-      <section className={styles.modules} aria-labelledby="aulas-gravadas">
-        <div className={styles.sectionHeader}>
-          <h2 id="aulas-gravadas">Videoaulas Cadastradas</h2>
-          <p>Acompanhe a lista completa de aulas, duração, tipo de conteúdo e preview.</p>
-        </div>
-        <div className={styles.videoSection}>
-          <div className={styles.tableWrapper}>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableCell header>#</TableCell>
-                  <TableCell header>Título</TableCell>
-                  <TableCell header>Tipo</TableCell>
-                  <TableCell header>Duração</TableCell>
-                  <TableCell header>Preview Aberto</TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {course.videos.map((video, i) => (
-                  <TableRow key={video.id}>
-                    <TableCell><strong>{i + 1}</strong></TableCell>
-                    <TableCell>{video.title}</TableCell>
-                    <TableCell>
-                      <Badge variant="neutral" size="sm">
-                        {video.type === "THEORY" ? "Teórico" : video.type === "PRACTICE" ? "Prático" : "Avaliação"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell style={{ color: "var(--color-text-secondary)" }}>
-                      {video.duration ? `${video.duration} min` : "-"}
-                    </TableCell>
-                    <TableCell>
-                      {video.preview ? (
-                        <span style={{ color: "var(--color-primary)", fontWeight: 600 }}>Sim</span>
-                      ) : (
-                        <span style={{ color: "var(--color-text-muted)" }}>Não</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {course.videos.length === 0 && (
-                  <TableRow>
-                    <TableCell style={{ textAlign: "center", padding: "3rem", color: "var(--color-text-muted)" }}>
-                      Nenhuma videoaula cadastrada.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+        ) : (
+          <div className={styles.emptySection}>
+            <FaBook size={32} style={{ opacity: 0.2 }} />
+            <p>Nenhum módulo cadastrado ainda.</p>
+            <Link href={`/admin/cursos/${course.slug}/editar`} className={styles.editCurriculumBtn}>
+              Cadastrar Módulos
+            </Link>
           </div>
+        )}
+      </section>
+
+      {/* Video Lessons Full List Table */}
+      <section className={styles.section} aria-labelledby="aulas-header">
+        <div className={styles.sectionHeader}>
+          <div>
+            <h2 id="aulas-header" className={styles.sectionTitle}>Todas as Videoaulas</h2>
+            <p className={styles.sectionSub}>Lista de todas as aulas registradas no banco de dados.</p>
+          </div>
+        </div>
+
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Título da Aula</th>
+                <th>Tipo</th>
+                <th>Duração</th>
+                <th>Preview Aberto</th>
+              </tr>
+            </thead>
+            <tbody>
+              {course.videos.map((video, i) => (
+                <tr key={video.id}>
+                  <td className={styles.tdMuted}>{i + 1}</td>
+                  <td className={styles.tdBold}>{video.title}</td>
+                  <td>
+                    <Badge variant="neutral">
+                      {video.type === "THEORY" ? "Teórico" : video.type === "PRACTICE" ? "Prático" : "Avaliação"}
+                    </Badge>
+                  </td>
+                  <td>{video.duration ? `${video.duration} min` : "-"}</td>
+                  <td>
+                    {video.preview ? (
+                      <span className={styles.previewYes}>Sim</span>
+                    ) : (
+                      <span className={styles.previewNo}>Não</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {course.videos.length === 0 && (
+                <tr>
+                  <td colSpan={5} className={styles.tdEmpty}>Nenhuma videoaula cadastrada.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </section>
     </div>
