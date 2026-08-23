@@ -1,8 +1,18 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import Badge from "@/app/components/ui/Badge/Badge";
 import Link from "next/link";
-import { FaArrowLeft, FaBook, FaPlayCircle, FaUsers, FaGraduationCap, FaClipboardCheck, FaClock, FaTag, FaCertificate } from "react-icons/fa";
+import Image from "next/image";
+import {
+  FaArrowLeft,
+  FaBook,
+  FaPlayCircle,
+  FaUsers,
+  FaClock,
+  FaTag,
+  FaChevronRight,
+  FaListUl,
+  FaUserGraduate,
+} from "react-icons/fa";
 import styles from "./page.module.css";
 import CourseActions from "./CourseActions";
 
@@ -19,7 +29,10 @@ export default async function AdminCourseDetails({ params }: PageProps) {
     where: { slug },
     include: {
       videos: { orderBy: { position: "asc" } },
-      modules: { orderBy: { position: "asc" }, include: { videos: { orderBy: { position: "asc" } } } },
+      modules: {
+        orderBy: { position: "asc" },
+        include: { videos: { orderBy: { position: "asc" } } },
+      },
       _count: {
         select: {
           enrollments: true,
@@ -46,7 +59,14 @@ export default async function AdminCourseDetails({ params }: PageProps) {
         ).toFixed(1)
       : "0.0";
 
-  const completedCount = course.enrollments.filter((e) => e.progress >= 1.0).length;
+  const completedCount = course.enrollments.filter(
+    (e) => e.progress >= 1.0
+  ).length;
+
+  const completionRate =
+    course.enrollments.length > 0
+      ? ((completedCount / course.enrollments.length) * 100).toFixed(0)
+      : "0";
 
   const formatMoney = (val: number | null) =>
     val !== null && val > 0
@@ -56,159 +76,308 @@ export default async function AdminCourseDetails({ params }: PageProps) {
         }).format(val)
       : "Gratuito";
 
+  const getVideoTypeLabel = (type: string) => {
+    if (type === "THEORY") return { label: "Teórico", cls: styles.typeTheory };
+    if (type === "PRACTICE") return { label: "Prático", cls: styles.typePractice };
+    return { label: "Avaliação", cls: styles.typeAssessment };
+  };
+
   return (
     <div className={styles.page}>
-      {/* Breadcrumb & Header */}
-      <header className={styles.header}>
-        <Link href="/admin/cursos" className={styles.backLink}>
-          <FaArrowLeft size={12} /> Voltar para Cursos
+      {/* Breadcrumb */}
+      <nav className={styles.breadcrumb} aria-label="Navegação">
+        <Link href="/admin/cursos" className={styles.breadcrumbLink}>
+          <FaArrowLeft size={10} />
+          Cursos
         </Link>
+        <span className={styles.breadcrumbSep}>/</span>
+        <span className={styles.breadcrumbCurrent}>{course.title}</span>
+      </nav>
 
-        <div className={styles.headerTop}>
-          <div className={styles.headerTitle}>
-            <div className={styles.titleRow}>
-              <h1>{course.title}</h1>
-              <Badge variant={course.isPublished ? "neutral" : "outline"}>
+      {/* Hero Header */}
+      <header className={styles.heroHeader}>
+        {/* Top: Content + Thumbnail side by side */}
+        <div className={styles.heroBody}>
+          {/* Content (takes all available space) */}
+          <div className={styles.heroContent}>
+            <div className={styles.heroTopRow}>
+              <span
+                className={`${styles.statusBadge} ${
+                  course.isPublished ? styles.statusPublished : styles.statusDraft
+                }`}
+              >
+                <span className={styles.statusDot} />
                 {course.isPublished ? "Publicado" : "Rascunho"}
-              </Badge>
+              </span>
+              {course.headline && (
+                <span className={styles.heroHeadline}>{course.headline}</span>
+              )}
             </div>
-            {course.headline && <span className={styles.headline}>{course.headline}</span>}
-            <p className={styles.description}>{course.description ?? "Sem descrição cadastrada."}</p>
+
+            <h1 className={styles.heroTitle}>{course.title}</h1>
+
+            <p className={styles.heroDescription}>
+              {course.description ?? "Sem descrição cadastrada."}
+            </p>
+
+            {/* Actions inline below title */}
+            <div className={styles.heroActions}>
+              <CourseActions
+                courseId={course.id}
+                courseSlug={course.slug || ""}
+                isPublished={course.isPublished}
+              />
+            </div>
           </div>
 
-          <div className={styles.headerActions}>
-            <CourseActions
-              courseId={course.id}
-              courseSlug={course.slug || ""}
-              isPublished={course.isPublished}
+          {/* Thumbnail (right side, fixed size) */}
+          {course.imageUrl ? (
+            <Image
+              src={course.imageUrl}
+              alt={course.title}
+              width={200}
+              height={134}
+              className={styles.heroThumb}
+              unoptimized
             />
-          </div>
+          ) : (
+            <div className={styles.heroThumbPlaceholder} aria-hidden>
+              <FaBook size={28} />
+            </div>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div className={styles.tabs} role="navigation" aria-label="Seções do curso">
+          <span className={`${styles.tabItem} ${styles.tabActive}`}>
+            <FaListUl size={12} />
+            Conteúdo
+            <span className={styles.tabCount}>{course._count.modules}</span>
+          </span>
+          <Link
+            href={`/admin/cursos/${course.slug}/prova`}
+            className={styles.tabItem}
+          >
+            <FaUserGraduate size={12} />
+            Prova Final
+          </Link>
         </div>
       </header>
 
-      {/* Summary Stat Cards — B&W Theme */}
-      <section className={styles.statsGrid} aria-label="Resumo das métricas do curso">
+      {/* KPI Stats */}
+      <section className={styles.statsGrid} aria-label="Métricas do curso">
+        {/* Alunos */}
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <FaUsers size={18} />
+          <div className={styles.statTopRow}>
+            <div className={styles.statIcon}>
+              <FaUsers size={17} />
+            </div>
+            <span className={styles.statGrowth}>{completionRate}% concluíram</span>
           </div>
           <div>
             <div className={styles.statValue}>{course._count.enrollments}</div>
             <div className={styles.statLabel}>Alunos Matriculados</div>
-            <div className={styles.statSub}>
-              {completedCount} concluídos ({avgProgress}%)
+          </div>
+          <div className={styles.statSubRow}>
+            <span className={styles.statSub}>
+              {completedCount} de {course._count.enrollments} concluíram
+            </span>
+            <div className={styles.statProgress}>
+              <div
+                className={styles.statProgressFill}
+                style={{ width: `${completionRate}%` }}
+              />
             </div>
           </div>
         </div>
 
+        {/* Videoaulas */}
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <FaPlayCircle size={18} />
+          <div className={styles.statTopRow}>
+            <div className={styles.statIcon}>
+              <FaPlayCircle size={17} />
+            </div>
+            <span className={styles.statGrowth}>
+              {course._count.modules} módulos
+            </span>
           </div>
           <div>
             <div className={styles.statValue}>{course._count.videos}</div>
             <div className={styles.statLabel}>Videoaulas Cadastradas</div>
-            <div className={styles.statSub}>
-              {course._count.modules} módulos organizados
+          </div>
+          <div className={styles.statSubRow}>
+            <span className={styles.statSub}>
+              Organizadas em {course._count.modules} módulo
+              {course._count.modules !== 1 ? "s" : ""}
+            </span>
+            <div className={styles.statProgress}>
+              <div
+                className={styles.statProgressFill}
+                style={{
+                  width:
+                    course._count.videos > 0
+                      ? `${Math.min((course._count.videos / 20) * 100, 100)}%`
+                      : "4%",
+                }}
+              />
             </div>
           </div>
         </div>
 
+        {/* Carga Horária */}
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <FaClock size={18} />
+          <div className={styles.statTopRow}>
+            <div className={styles.statIcon}>
+              <FaClock size={17} />
+            </div>
+            <span className={styles.statGrowth}>
+              {course.level ?? "Todos os níveis"}
+            </span>
           </div>
           <div>
-            <div className={styles.statValue}>{course.duration ?? "-"}</div>
+            <div className={styles.statValue}>{course.duration ?? "—"}</div>
             <div className={styles.statLabel}>Carga Horária</div>
-            <div className={styles.statSub}>
-              Nível: {course.level ?? "Todos os níveis"}
+          </div>
+          <div className={styles.statSubRow}>
+            <span className={styles.statSub}>
+              Nível: {course.level ?? "Não definido"}
+            </span>
+            <div className={styles.statProgress}>
+              <div className={styles.statProgressFill} style={{ width: "60%" }} />
             </div>
           </div>
         </div>
 
+        {/* Preço */}
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>
-            <FaTag size={18} />
+          <div className={styles.statTopRow}>
+            <div className={styles.statIcon}>
+              <FaTag size={17} />
+            </div>
+            <span className={styles.statGrowth}>
+              {course.certificate ? "Com certificado" : "Sem certificado"}
+            </span>
           </div>
           <div>
-            <div className={styles.statValue}>{formatMoney(course.price ? Number(course.price) : null)}</div>
+            <div className={styles.statValue}>
+              {formatMoney(course.price ? Number(course.price) : null)}
+            </div>
             <div className={styles.statLabel}>Preço do Treinamento</div>
-            <div className={styles.statSub}>
+          </div>
+          <div className={styles.statSubRow}>
+            <span className={styles.statSub}>
               Certificado: {course.certificate ? "Incluso ✓" : "Não incluso"}
+            </span>
+            <div className={styles.statProgress}>
+              <div className={styles.statProgressFill} style={{ width: "100%" }} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Modules & Curriculum Section */}
+      {/* Modules & Curriculum */}
       <section className={styles.section} aria-labelledby="modulos-header">
         <div className={styles.sectionHeader}>
-          <div>
-            <h2 id="modulos-header" className={styles.sectionTitle}>Conteúdo Programático & Módulos</h2>
-            <p className={styles.sectionSub}>Estrutura de tópicos, módulos e videoaulas do treinamento.</p>
+          <div className={styles.sectionTitleGroup}>
+            <h2 id="modulos-header" className={styles.sectionTitle}>
+              Conteúdo Programático &amp; Módulos
+            </h2>
+            <p className={styles.sectionSub}>
+              Estrutura de tópicos, módulos e videoaulas do treinamento.
+            </p>
           </div>
-          <Link href={`/admin/cursos/${course.slug}/editar`} className={styles.editCurriculumBtn}>
+          <Link
+            href={`/admin/cursos/${course.slug}/editar`}
+            className={styles.editCurriculumBtn}
+          >
             Editar Módulos e Aulas
+            <FaChevronRight size={10} />
           </Link>
         </div>
 
-        {course.modules.length > 0 ? (
-          <div className={styles.modulesGrid}>
-            {course.modules.map((module, i) => (
-              <div key={module.id} className={styles.moduleCard}>
-                <div className={styles.moduleHeader}>
-                  <span className={styles.moduleNumber}>Módulo {i + 1}</span>
-                  <h3 className={styles.moduleTitle}>{module.title}</h3>
-                  {module.description && (
-                    <p className={styles.moduleDesc}>{module.description}</p>
-                  )}
-                </div>
+        <div className={styles.sectionBody}>
+          {course.modules.length > 0 ? (
+            <div className={styles.modulesAccordion}>
+              {course.modules.map((module, i) => (
+                <div key={module.id} className={styles.moduleCard}>
+                  <div className={styles.moduleCardHeader}>
+                    <span className={styles.moduleNumber}>Módulo {i + 1}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className={styles.moduleTitle}>{module.title}</div>
+                      {module.description && (
+                        <div className={styles.moduleDesc}>{module.description}</div>
+                      )}
+                    </div>
+                    <span className={styles.moduleLessonCount}>
+                      <FaPlayCircle size={10} />
+                      {module.videos.length} aula
+                      {module.videos.length !== 1 ? "s" : ""}
+                    </span>
+                  </div>
 
-                <ul className={styles.lessonList}>
-                  {module.videos.map((video, vIdx) => (
-                    <li key={video.id} className={styles.lessonItem}>
-                      <div className={styles.lessonLeft}>
-                        <span className={styles.lessonIndex}>{vIdx + 1}</span>
-                        <div>
-                          <div className={styles.lessonTitle}>{video.title}</div>
-                          {video.duration && (
-                            <span className={styles.lessonDuration}>⏱ {video.duration} min</span>
-                          )}
-                        </div>
-                      </div>
-                      <div className={styles.lessonRight}>
-                        <Badge variant="neutral">
-                          {video.type === "THEORY" ? "Teórico" : video.type === "PRACTICE" ? "Prático" : "Avaliação"}
-                        </Badge>
-                        {video.preview && <span className={styles.previewTag}>Preview Aberto</span>}
-                      </div>
-                    </li>
-                  ))}
-                  {module.videos.length === 0 && (
-                    <li className={styles.emptyLesson}>Nenhuma aula cadastrada neste módulo.</li>
-                  )}
-                </ul>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className={styles.emptySection}>
-            <FaBook size={32} style={{ opacity: 0.2 }} />
-            <p>Nenhum módulo cadastrado ainda.</p>
-            <Link href={`/admin/cursos/${course.slug}/editar`} className={styles.editCurriculumBtn}>
-              Cadastrar Módulos
-            </Link>
-          </div>
-        )}
+                  <ul className={styles.lessonList}>
+                    {module.videos.map((video, vIdx) => {
+                      const vType = getVideoTypeLabel(video.type);
+                      return (
+                        <li key={video.id} className={styles.lessonItem}>
+                          <div className={styles.lessonLeft}>
+                            <span className={styles.lessonIndex}>{vIdx + 1}</span>
+                            <div className={styles.lessonTitleGroup}>
+                              <span className={styles.lessonTitle}>
+                                {video.title}
+                              </span>
+                              {video.duration && (
+                                <span className={styles.lessonDuration}>
+                                  ⏱ {video.duration} min
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className={styles.lessonRight}>
+                            <span className={`${styles.typeTag} ${vType.cls}`}>
+                              {vType.label}
+                            </span>
+                            {video.preview && (
+                              <span className={styles.previewTag}>Preview</span>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
+                    {module.videos.length === 0 && (
+                      <li className={styles.emptyLesson}>
+                        Nenhuma aula cadastrada neste módulo.
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.emptySection}>
+              <FaBook size={36} style={{ opacity: 0.15 }} />
+              <p>Nenhum módulo cadastrado ainda.</p>
+              <Link
+                href={`/admin/cursos/${course.slug}/editar`}
+                className={styles.editCurriculumBtn}
+              >
+                Cadastrar Módulos
+              </Link>
+            </div>
+          )}
+        </div>
       </section>
 
-      {/* Video Lessons Full List Table */}
+      {/* All Videos Table */}
       <section className={styles.section} aria-labelledby="aulas-header">
         <div className={styles.sectionHeader}>
-          <div>
-            <h2 id="aulas-header" className={styles.sectionTitle}>Todas as Videoaulas</h2>
-            <p className={styles.sectionSub}>Lista de todas as aulas registradas no banco de dados.</p>
+          <div className={styles.sectionTitleGroup}>
+            <h2 id="aulas-header" className={styles.sectionTitle}>
+              Todas as Videoaulas
+            </h2>
+            <p className={styles.sectionSub}>
+              Lista completa de aulas registradas no banco de dados.
+            </p>
           </div>
         </div>
 
@@ -224,28 +393,33 @@ export default async function AdminCourseDetails({ params }: PageProps) {
               </tr>
             </thead>
             <tbody>
-              {course.videos.map((video, i) => (
-                <tr key={video.id}>
-                  <td className={styles.tdMuted}>{i + 1}</td>
-                  <td className={styles.tdBold}>{video.title}</td>
-                  <td>
-                    <Badge variant="neutral">
-                      {video.type === "THEORY" ? "Teórico" : video.type === "PRACTICE" ? "Prático" : "Avaliação"}
-                    </Badge>
-                  </td>
-                  <td>{video.duration ? `${video.duration} min` : "-"}</td>
-                  <td>
-                    {video.preview ? (
-                      <span className={styles.previewYes}>Sim</span>
-                    ) : (
-                      <span className={styles.previewNo}>Não</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {course.videos.map((video, i) => {
+                const vType = getVideoTypeLabel(video.type);
+                return (
+                  <tr key={video.id}>
+                    <td className={styles.tdIndex}>{i + 1}</td>
+                    <td className={styles.tdBold}>{video.title}</td>
+                    <td>
+                      <span className={`${styles.typeTag} ${vType.cls}`}>
+                        {vType.label}
+                      </span>
+                    </td>
+                    <td>{video.duration ? `${video.duration} min` : "—"}</td>
+                    <td>
+                      {video.preview ? (
+                        <span className={styles.previewYes}>✓ Sim</span>
+                      ) : (
+                        <span className={styles.previewNo}>—</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
               {course.videos.length === 0 && (
                 <tr>
-                  <td colSpan={5} className={styles.tdEmpty}>Nenhuma videoaula cadastrada.</td>
+                  <td colSpan={5} className={styles.tdEmpty}>
+                    Nenhuma videoaula cadastrada.
+                  </td>
                 </tr>
               )}
             </tbody>

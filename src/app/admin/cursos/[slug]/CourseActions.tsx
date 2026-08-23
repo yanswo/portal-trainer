@@ -2,8 +2,15 @@
 
 import { useState } from "react";
 import { togglePublishCourse, deleteCourse } from "@/app/actions/admin-courses";
-import Button from "@/app/components/ui/Button";
-import { FaEye, FaEyeSlash, FaTrash } from "react-icons/fa";
+import Link from "next/link";
+import {
+  FaEye,
+  FaEyeSlash,
+  FaEdit,
+  FaTrash,
+  FaClipboardCheck,
+} from "react-icons/fa";
+import styles from "./CourseActions.module.css";
 
 type CourseActionsProps = {
   courseId: string;
@@ -11,7 +18,11 @@ type CourseActionsProps = {
   isPublished: boolean;
 };
 
-export default function CourseActions({ courseId, courseSlug, isPublished }: CourseActionsProps) {
+export default function CourseActions({
+  courseId,
+  courseSlug,
+  isPublished,
+}: CourseActionsProps) {
   const [published, setPublished] = useState(isPublished);
   const [loading, setLoading] = useState(false);
 
@@ -23,30 +34,61 @@ export default function CourseActions({ courseId, courseSlug, isPublished }: Cou
   }
 
   async function handleDelete() {
-    if (!confirm("Tem certeza que deseja excluir este curso? Esta ação não pode ser desfeita.")) return;
+    if (
+      !confirm(
+        "Tem certeza que deseja excluir este curso? Esta ação não pode ser desfeita."
+      )
+    )
+      return;
     setLoading(true);
     await deleteCourse(courseId);
     window.location.href = "/admin/cursos";
   }
 
   return (
-    <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-      <Button
-        variant={published ? "secondary" : "default"}
+    <div className={styles.actions}>
+      <Link
+        href={`/admin/cursos/${courseSlug}/editar`}
+        className={styles.btnSecondary}
+      >
+        <FaEdit size={12} />
+        Editar Curso
+      </Link>
+
+      <Link
+        href={`/admin/cursos/${courseSlug}/prova`}
+        className={styles.btnSecondary}
+      >
+        <FaClipboardCheck size={12} />
+        Gerenciar Prova
+      </Link>
+
+      <button
         onClick={handleToggle}
         disabled={loading}
+        className={published ? styles.btnSecondary : styles.btnPrimary}
       >
-        {published ? <><FaEyeSlash /> Despublicar</> : <><FaEye /> Publicar</>}
-      </Button>
-      <Button href={`/admin/cursos/${courseSlug}/editar`} variant="secondary">
-        Editar Curso
-      </Button>
-      <Button href={`/admin/cursos/${courseSlug}/prova`} variant="secondary">
-        Gerenciar Prova
-      </Button>
-      <Button variant="ghost" onClick={handleDelete} disabled={loading}>
-        <FaTrash /> Excluir
-      </Button>
+        {published ? (
+          <>
+            <FaEyeSlash size={12} />
+            Despublicar
+          </>
+        ) : (
+          <>
+            <FaEye size={12} />
+            Publicar
+          </>
+        )}
+      </button>
+
+      <button
+        onClick={handleDelete}
+        disabled={loading}
+        className={styles.btnDanger}
+      >
+        <FaTrash size={11} />
+        Excluir
+      </button>
     </div>
   );
 }

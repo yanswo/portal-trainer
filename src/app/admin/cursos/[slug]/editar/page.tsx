@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import Badge from "@/app/components/ui/Badge/Badge";
-import Button from "@/app/components/ui/Button";
 import Link from "next/link";
+import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import EditCourseForm from "./EditCourseForm";
+import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +38,7 @@ export default async function EditCoursePage({ params }: PageProps) {
     headline: course.headline,
     instructorName: course.instructorName,
     certificate: course.certificate,
+    isPublished: course.isPublished,
     videos: course.videos.map((v) => ({
       id: v.id,
       title: v.title,
@@ -56,16 +57,39 @@ export default async function EditCoursePage({ params }: PageProps) {
   };
 
   return (
-    <div style={{ maxWidth: "900px" }}>
-      <div style={{ marginBottom: "1.5rem" }}>
-        <Link href={`/admin/cursos/${slug}`} style={{ fontSize: "0.875rem", color: "var(--color-text-muted)", textDecoration: "none" }}>
-          ← Voltar ao curso
+    <div className={styles.page}>
+      {/* Breadcrumb */}
+      <nav className={styles.breadcrumb} aria-label="Navegação">
+        <Link href="/admin/cursos" className={styles.breadcrumbLink}>
+          <FaArrowLeft size={10} />
+          Cursos
         </Link>
+        <span className={styles.breadcrumbSep}>/</span>
+        <Link
+          href={`/admin/cursos/${slug}`}
+          className={styles.breadcrumbLink}
+        >
+          {course.title}
+        </Link>
+        <span className={styles.breadcrumbSep}>/</span>
+        <span className={styles.breadcrumbCurrent}>Editar</span>
+      </nav>
+
+      {/* Page Header */}
+      <div className={styles.pageHeader}>
+        <div className={styles.pageTitleGroup}>
+          <span className={styles.pageLabel}>
+            <FaEdit size={10} />
+            Editando curso
+          </span>
+          <h1 className={styles.pageTitle}>{course.title}</h1>
+          <p className={styles.pageSub}>
+            Altere as informações, configurações e currículo do treinamento.
+          </p>
+        </div>
       </div>
-      <header style={{ marginBottom: "2rem" }}>
-        <Badge variant="outline">Editar</Badge>
-        <h1 style={{ marginTop: "0.5rem" }}>{course.title}</h1>
-      </header>
+
+      {/* Form */}
       <EditCourseForm course={serializedCourse} />
     </div>
   );

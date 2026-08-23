@@ -1,102 +1,240 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+/* ============================
+   CURRICULUM BUILDER — Premium B&W
+   ============================ */
 
-.moduleList {
+.container {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
+/* ── Top Bar ─────────────────── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.topBarTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.topBarKpis {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kpiPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.625rem;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnAddModule {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.475rem 0.875rem;
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.btnAddModule:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.btnAddModule:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Module List ─────────────── */
+.moduleList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Module Card ─────────────── */
 .moduleCard {
-  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .moduleCard.dragging {
-  opacity: 0.5;
+  opacity: 0.45;
   box-shadow: 0 0 0 2px #111111;
 }
 
 .moduleCard.dragOver {
+  border-color: #111111;
   border-top: 2px solid #111111;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* ── Module Header (Black) ───── */
 .moduleHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
-  background: var(--color-surface-alt);
-  border-bottom: 1px solid var(--color-border);
+  gap: 0.75rem;
+  padding: 0.875rem 1.125rem;
+  background: #111111;
   cursor: grab;
+  transition: background 0.15s ease;
 }
 
 .moduleHeader:active {
   cursor: grabbing;
 }
 
-.moduleTitle {
-  font-weight: 700;
-  font-size: 1.05rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--color-text-primary);
-}
-
 .dragHandle {
-  color: var(--color-text-muted);
-  cursor: grab;
+  color: rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
 }
 
 .dragHandle:hover {
-  color: var(--color-text-primary);
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.dragHandle:active {
-  cursor: grabbing;
+.moduleNumberBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  min-width: 52px;
+}
+
+.moduleTitleText {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #ffffff;
+  min-width: 0;
+  word-break: break-word;
 }
 
 .moduleActions {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
 }
 
+.btnAddLesson {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.625rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btnAddLesson:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.btnDeleteModule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.3);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btnDeleteModule:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* ── Video List ──────────────── */
 .videoList {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 1.25rem;
-  min-height: 2rem;
+  gap: 0.375rem;
+  padding: 0.875rem 1.125rem;
+  background: var(--color-surface-alt);
+  min-height: 2.5rem;
 }
 
+.emptyVideoList {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 1rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+
+/* ── Video Item ──────────────── */
 .videoItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
+  cursor: default;
 }
 
 .videoItem:hover {
   border-color: var(--color-border-strong);
-  background: var(--color-surface-alt);
 }
 
 .videoItem.dragging {
-  opacity: 0.5;
+  opacity: 0.45;
   box-shadow: 0 0 0 2px #111111;
 }
 
@@ -107,19 +245,90 @@
 .videoInfo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.625rem;
+  flex: 1;
+  min-width: 0;
 }
 
-.videoTitle {
-  font-weight: 600;
-  font-size: 0.9rem;
+.videoDragHandle {
+  color: var(--color-text-muted);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.videoDragHandle:hover {
   color: var(--color-text-primary);
 }
 
+.videoDragHandle:active {
+  cursor: grabbing;
+}
+
+.videoTitle {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.videoTypePill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.typeTheory {
+  background: rgba(17, 17, 17, 0.07);
+  color: #111111;
+}
+
+.typePractice {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.typeAssessment {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.btnDeleteVideo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.btnDeleteVideo:hover {
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+/* ── Add Module / Video Forms ─ */
 .formSection {
-  padding: 1.25rem;
-  background: var(--color-surface-alt);
-  border-radius: 8px;
+  padding: 1.125rem;
+  background: var(--color-surface);
+  border-radius: 10px;
   border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
@@ -129,11 +338,167 @@
 .formGridTwo {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.875rem;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.375rem;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btnFormCancel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.425rem 0.75rem;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btnFormCancel:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+.btnFormSave {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.425rem 0.875rem;
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btnFormSave:hover {
+  opacity: 0.85;
+}
+
+.btnFormSave:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Unassigned Section ──────── */
+.unassignedCard {
+  border: 1px dashed var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.unassignedCard.dragOver {
+  border-color: #111111;
+}
+
+.unassignedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.125rem;
+  background: var(--color-surface-alt);
+}
+
+.unassignedTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+/* ── Empty State ─────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 3rem 2rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.emptyStateTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.emptyStateSub {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.emptyStateActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.btnEmptyPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1.125rem;
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btnEmptyPrimary:hover {
+  opacity: 0.85;
+}
+
+.btnEmptySecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1.125rem;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btnEmptySecondary:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .formGridTwo {
+    grid-template-columns: 1fr;
+  }
 }
