@@ -103,6 +103,28 @@ export default function SignUpForm() {
     }
   };
 
+  const handleZipCodeBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const cep = e.target.value.replace(/\D/g, "");
+    if (cep.length !== 8) return;
+
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+      
+      if (!data.erro) {
+        const addressInput = document.getElementById("address") as HTMLInputElement;
+        const cityInput = document.getElementById("city") as HTMLInputElement;
+        const stateSelect = document.getElementById("state") as HTMLSelectElement;
+
+        if (addressInput) addressInput.value = `${data.logradouro}, ${data.bairro}`;
+        if (cityInput) cityInput.value = data.localidade;
+        if (stateSelect) stateSelect.value = data.uf;
+      }
+    } catch (error) {
+      console.error("Erro ao buscar CEP", error);
+    }
+  };
+
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <div className={styles.formSection}>
@@ -168,6 +190,7 @@ export default function SignUpForm() {
             placeholder="00000-000"
             maxLength={9}
             disabled={isSubmitting}
+            onBlur={handleZipCodeBlur}
           />
         </div>
 
