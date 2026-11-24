@@ -134,7 +134,6 @@ export default async function CreateExamPage({
 
         <div className={styles.actions}>
           <Button
-            type="button"
             variant="secondary"
             href={`/admin/cursos/${slug}/prova`}
           >

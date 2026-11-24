@@ -48,7 +48,7 @@ export default function LoginForm() {
         return;
       }
 
-      router.push("/clientes");
+      router.push(data.user?.role === "ADMIN" ? "/admin" : "/clientes");
     } catch (error) {
       console.error("Login submit error", error);
       setMessage("Erro inesperado ao fazer login. Tente novamente.");

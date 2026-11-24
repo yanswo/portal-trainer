@@ -4,16 +4,18 @@ import FeatureShowcase from "./components/landing/FeatureShowcase/FeatureShowcas
 import CourseHighlight from "./components/landing/CourseHighlight/CourseHighlight";
 import CallToAction from "./components/landing/CallToAction/CallToAction";
 import Footer from "./components/landing/Footer/Footer";
+import LandingThemeToggle from "./components/landing/LandingThemeToggle";
 
 export default function LandingPage() {
   return (
-    <main>
+    <main className="landing-page">
       <Header />
       <Hero />
       <FeatureShowcase />
       <CourseHighlight />
       <CallToAction />
       <Footer />
+      <LandingThemeToggle />
     </main>
   );
 }

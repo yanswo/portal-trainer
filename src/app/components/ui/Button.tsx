@@ -1,4 +1,10 @@
-import { forwardRef, ReactNode, Ref } from "react";
+import {
+  forwardRef,
+  ReactNode,
+  Ref,
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+} from "react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import styles from "./Button.module.css";
@@ -13,16 +19,17 @@ interface BaseProps {
   fullWidth?: boolean;
 }
 
-interface AnchorProps extends BaseProps {
+interface AnchorProps
+  extends BaseProps,
+    Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children" | "className" | "href"> {
   href: string;
-  onClick?: () => void;
   type?: never;
 }
 
-interface ButtonElementProps extends BaseProps {
+interface ButtonElementProps
+  extends BaseProps,
+    Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "className"> {
   href?: undefined;
-  onClick?: () => void;
-  type?: "button" | "submit" | "reset";
 }
 
 type ButtonProps = AnchorProps | ButtonElementProps;
@@ -41,14 +48,14 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(fu
 
   if (href) {
     return (
-      <Link ref={ref as Ref<HTMLAnchorElement>} href={href} className={classes} {...props}>
+      <Link ref={ref as Ref<HTMLAnchorElement>} href={href} className={classes} {...(props as Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "className">)}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button ref={ref as Ref<HTMLButtonElement>} className={classes} {...props}>
+    <button ref={ref as Ref<HTMLButtonElement>} className={classes} {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}>
       {children}
     </button>
   );

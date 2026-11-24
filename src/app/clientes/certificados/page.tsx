@@ -132,6 +132,13 @@ export default async function StudentCertificatesPage() {
                       </div>
                     )}
                   </div>
+                  {cert.status === "ISSUED" && (
+                    <div className={styles.certActions}>
+                      <Button href={`/api/certificates/${cert.id}`} target="_blank" rel="noreferrer">
+                        <FaDownload /> Abrir certificado
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             );

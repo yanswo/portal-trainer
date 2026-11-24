@@ -165,11 +165,28 @@ export async function deleteModule(moduleId: string, courseSlug: string) {
 
 export async function addVideoToModule(courseId: string, moduleId: string | null, formData: FormData, courseSlug: string) {
   const title = formData.get("title") as string;
-  const url = formData.get("url") as string;
+  let url = formData.get("url") as string;
   const type = formData.get("type") as string;
   const duration = formData.get("duration") ? parseInt(formData.get("duration") as string) : null;
+  const videoFile = formData.get("videoFile") as File | null;
 
   try {
+    if (videoFile && videoFile.size > 0) {
+      if (!["video/mp4", "video/webm", "video/quicktime"].includes(videoFile.type)) {
+        return { success: false, error: "Use um vídeo MP4, WebM ou MOV" };
+      }
+      if (videoFile.size > 500 * 1024 * 1024) {
+        return { success: false, error: "O vídeo deve ter no máximo 500 MB" };
+      }
+      const uploadDir = path.join(process.cwd(), "public", "uploads", "videos");
+      await mkdir(uploadDir, { recursive: true });
+      const extension = videoFile.name.split(".").pop()?.toLowerCase() || "mp4";
+      const filename = `${Date.now()}-${videoFile.name.replace(/[^a-zA-Z0-9._-]/g, "-")}`;
+      await writeFile(path.join(uploadDir, filename), Buffer.from(await videoFile.arrayBuffer()));
+      url = `/uploads/videos/${filename}`;
+    }
+    if (!url) return { success: false, error: "Informe uma URL ou envie um vídeo" };
+
     const maxPosition = await prisma.video.findFirst({
       where: { courseId, moduleId },
       orderBy: { position: "desc" },

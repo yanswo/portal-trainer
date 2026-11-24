@@ -41,7 +41,8 @@ export default async function CourseExamPage({
     notFound();
   }
 
-  const hasExam = !!course.exam;
+  const exam = course.exam;
+  const hasExam = !!exam;
 
   return (
     <div className={styles.page}>
@@ -75,45 +76,45 @@ export default async function CourseExamPage({
         </div>
       </div>
 
-      {hasExam ? (
+      {exam ? (
         <>
           {/* Exam Info */}
           <div className={styles.examInfo}>
             <div className={styles.infoGrid}>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Título</span>
-                <span className={styles.infoValue}>{course.exam.title}</span>
+                <span className={styles.infoValue}>{exam.title}</span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Nota Mínima</span>
                 <span className={styles.infoValue}>
-                  {course.exam.passingScore}%
+                  {exam.passingScore}%
                 </span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Duração</span>
                 <span className={styles.infoValue}>
-                  {course.exam.duration ? `${course.exam.duration} min` : "Sem limite"}
+                  {exam.duration ? `${exam.duration} min` : "Sem limite"}
                 </span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Tentativas</span>
                 <span className={styles.infoValue}>
-                  {course.exam.maxAttempts}
+                  {exam.maxAttempts}
                 </span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Status</span>
                 <div style={{ marginTop: "0.2rem" }}>
-                  <Badge variant={course.exam.isActive ? "default" : "outline"}>
-                    {course.exam.isActive ? "Ativa" : "Inativa"}
+                  <Badge variant={exam.isActive ? "default" : "outline"}>
+                    {exam.isActive ? "Ativa" : "Inativa"}
                   </Badge>
                 </div>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Realizações</span>
                 <span className={styles.infoValue}>
-                  {course.exam._count.attempts}
+                  {exam._count.attempts}
                 </span>
               </div>
             </div>
@@ -122,7 +123,7 @@ export default async function CourseExamPage({
           {/* Questions */}
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
-              <h2>Questões ({course.exam.questions.length})</h2>
+              <h2>Questões ({exam.questions.length})</h2>
               <Button
                 size="sm"
                 href={`/admin/cursos/${slug}/prova/questao/nova`}
@@ -131,9 +132,9 @@ export default async function CourseExamPage({
               </Button>
             </div>
 
-            {course.exam.questions.length > 0 ? (
+            {exam.questions.length > 0 ? (
               <div className={styles.questionList}>
-                {course.exam.questions.map((question, index) => (
+                {exam.questions.map((question, index) => (
                   <div key={question.id} className={styles.questionCard}>
                     <div className={styles.questionHeader}>
                       <div className={styles.questionNumber}>{index + 1}</div>

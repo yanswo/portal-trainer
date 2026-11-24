@@ -73,6 +73,13 @@
   gap: 0.75rem;
 }
 
+.sectionHint {
+  margin-top: -0.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .section h4 {
   font-size: 0.9rem;
   letter-spacing: 0.05em;

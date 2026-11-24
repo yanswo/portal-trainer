@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { verifySessionToken } from "@/lib/auth";
 import { DemandType, CertificateFormat, BudgetStatus } from "@prisma/client";
 
 async function getApiUser() {
@@ -15,9 +16,8 @@ async function getApiUser() {
   }
 
   try {
-    const sessionPayload = JSON.parse(
-      Buffer.from(authCookie.value, "base64").toString("utf-8")
-    );
+    const sessionPayload = verifySessionToken(authCookie.value);
+    if (!sessionPayload) throw new Error("Sessão inválida");
     const userId = sessionPayload.userId;
     if (!userId) throw new Error("Payload de sessão inválido");
 

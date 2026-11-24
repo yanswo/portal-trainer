@@ -7,8 +7,8 @@ import Input from "@/app/components/ui/Input/Input";
 import Label from "@/app/components/ui/Label/Label";
 import styles from "./AdminGate.module.css";
 
-const ADMIN_EMAIL = "admin@cw.com";
-const ADMIN_PASSWORD = "admincw";
+const ADMIN_EMAIL = "admin@cwtraining.com.br";
+const ADMIN_PASSWORD = "admin@123";
 const STORAGE_KEY = "cw-training-admin-authenticated";
 
 export default function AdminGate({ children }: { children: ReactNode }) {

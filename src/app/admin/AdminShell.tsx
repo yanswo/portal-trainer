@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Avatar from "@/app/components/ui/Avatar/Avatar";
 import AdminNavigation from "./AdminNavigation";
 import ThemeToggle from "@/app/components/ui/ThemeToggle/ThemeToggle";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import styles from "./layout.module.css";
 
 type AdminUser = {
@@ -24,8 +25,22 @@ export default function AdminShell({
   pendingTickets?: number;
   pendingBudgets?: number;
 }) {
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    setCollapsed(localStorage.getItem("cw-admin-sidebar-collapsed") === "true");
+  }, []);
+
+  function toggleSidebar() {
+    setCollapsed((current) => {
+      const next = !current;
+      localStorage.setItem("cw-admin-sidebar-collapsed", String(next));
+      return next;
+    });
+  }
+
   return (
-    <div className={styles.shell}>
+    <div className={`${styles.shell} ${collapsed ? styles.shellCollapsed : ""}`}>
       <aside className={styles.sidebar}>
         <div className={styles.stickyContent}>
           {/* Logo — idêntico à landing page */}
@@ -42,6 +57,7 @@ export default function AdminShell({
           {/* Navigation */}
           <div className={styles.navContainer}>
             <AdminNavigation
+              collapsed={collapsed}
               pendingTickets={pendingTickets}
               pendingBudgets={pendingBudgets}
             />
@@ -62,6 +78,14 @@ export default function AdminShell({
             </div>
           </div>
         </div>
+        <button
+          className={styles.collapseButton}
+          onClick={toggleSidebar}
+          aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
+          title={collapsed ? "Expandir menu" : "Recolher menu"}
+        >
+          {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+        </button>
       </aside>
 
       <div className={styles.main}>

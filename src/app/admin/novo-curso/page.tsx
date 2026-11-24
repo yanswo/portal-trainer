@@ -105,6 +105,19 @@ export default function NewCoursePage() {
     }
   };
 
+  const handleVideoFileChange = async (mIdx: number, vIdx: number, file?: File) => {
+    if (!file) return;
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+    const response = await fetch("/api/admin/uploads/video", { method: "POST", body: uploadData });
+    const data = await response.json();
+    if (!response.ok) {
+      alert(data.error || "Não foi possível enviar o vídeo.");
+      return;
+    }
+    updateVideoInModule(mIdx, vIdx, "url", data.url);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (loading) return;
@@ -321,6 +334,13 @@ export default function NewCoursePage() {
                                 onChange={(e) => updateVideoInModule(mIdx, vIdx, "url", e.target.value)}
                                 placeholder="Link do vídeo ou ID da mídia"
                                 required
+                              />
+                              <label className={styles.subLabel} style={{ marginTop: "0.5rem" }}>Ou envie um arquivo (MP4, WebM ou MOV)</label>
+                              <input
+                                type="file"
+                                className={styles.input}
+                                accept="video/mp4,video/webm,video/quicktime"
+                                onChange={(e) => handleVideoFileChange(mIdx, vIdx, e.target.files?.[0])}
                               />
                             </div>
 

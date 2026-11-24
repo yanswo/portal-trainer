@@ -243,7 +243,9 @@ export default function CurriculumBuilder({
         </div>
         <div className={styles.field}>
           <Label>URL do Vídeo *</Label>
-          <Input name="url" placeholder="https://..." required />
+          <Input name="url" placeholder="https://... (opcional se enviar arquivo)" />
+          <Label>Ou envie um vídeo (MP4, WebM ou MOV)</Label>
+          <Input name="videoFile" type="file" accept="video/mp4,video/webm,video/quicktime" />
         </div>
       </div>
       <div className={styles.formGridTwo}>

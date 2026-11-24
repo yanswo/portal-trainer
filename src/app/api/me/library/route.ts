@@ -1,21 +1,10 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
 
 async function getApiUser() {
-  const cookieStore = await cookies();
-  const authCookie = cookieStore.get("clientAuth");
-
-  if (!authCookie) return null;
-
-  try {
-    const payload = JSON.parse(
-      Buffer.from(authCookie.value, "base64").toString("utf-8")
-    );
-    return payload.userId;
-  } catch {
-    return null;
-  }
+  const user = await getSessionUser();
+  return user?.id ?? null;
 }
 
 export async function GET() {

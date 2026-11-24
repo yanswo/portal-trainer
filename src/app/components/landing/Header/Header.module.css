@@ -7,6 +7,7 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: background var(--transition-speed), border-color var(--transition-speed);
+  box-shadow: 0 8px 30px rgba(21, 35, 45, 0.04);
 }
 
 .container {
@@ -40,6 +41,13 @@
   color: var(--color-text-inverse);
   font-size: 0.9rem;
   font-weight: 700;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+  transition: transform 350ms var(--motion-ease), box-shadow 350ms var(--motion-ease);
+}
+
+.logo:hover .logoMark {
+  transform: rotate(-6deg) translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
 }
 
 .logoText {
@@ -53,6 +61,10 @@
   display: flex;
   gap: 2rem;
   justify-content: center;
+  padding: 0.25rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius-pill);
+  background: var(--color-surface-alt);
 }
 
 .navLink {
@@ -60,7 +72,8 @@
   font-weight: 500;
   color: var(--color-text-secondary);
   position: relative;
-  padding: 0.5rem 0;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--border-radius-pill);
   transition: color var(--transition-speed);
 }
 
@@ -80,6 +93,7 @@
 .navLink:hover,
 .navLink:focus-visible {
   color: var(--color-text-primary);
+  background: var(--color-surface-alt);
 }
 
 .navLink:hover::after,

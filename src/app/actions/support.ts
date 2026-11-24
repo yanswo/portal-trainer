@@ -1,21 +1,12 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 
 async function getCurrentUserId() {
-  const cookieStore = await cookies();
-  const authCookie = cookieStore.get("clientAuth");
-  if (!authCookie) return null;
-  try {
-    const payload = JSON.parse(
-      Buffer.from(authCookie.value, "base64").toString("utf-8")
-    );
-    return payload.userId as string;
-  } catch {
-    return null;
-  }
+  const user = await getSessionUser();
+  return user?.id ?? null;
 }
 
 export async function createSupportTicket(formData: FormData) {

@@ -100,10 +100,9 @@ export default function NovoOrcamentoPage() {
   };
 
   const getCourseOptionsText = (course: ConfiguredCourse) => {
-    const demand = course.demandType === "annual" ? "Anual" : "Imediata";
     const cert =
       course.certificateType === "physical" ? "Digital + Físico" : "Digital";
-    return `${demand}, ${cert}`;
+    return cert;
   };
 
   const handleSubmitBudget = async () => {
@@ -118,7 +117,7 @@ export default function NovoOrcamentoPage() {
           body: JSON.stringify({
             courseId: course.id,
             seats: Number(seats),
-            demandType: course.demandType === "annual" ? "ANNUAL" : "IMMEDIATE",
+            demandType: "IMMEDIATE",
             certificateFormat:
               course.certificateType === "physical"
                 ? "DIGITAL_AND_PHYSICAL"
@@ -152,7 +151,7 @@ export default function NovoOrcamentoPage() {
         <h1>Simulador de Orçamentos</h1>
         <p>
           Monte pacotes personalizados para sua equipe e receba uma proposta
-          oficial instantaneamente.
+          oficial para análise da sua equipe.
         </p>
       </header>
 
@@ -327,7 +326,7 @@ export default function NovoOrcamentoPage() {
                   disabled={isSubmitting}
                   className={styles.checkoutButton}
                 >
-                  {isSubmitting ? "Gerando..." : "Gerar Proposta PDF"}
+                  {isSubmitting ? "Enviando..." : "Enviar solicitação"}
                 </Button>
               </CardFooter>
             )}

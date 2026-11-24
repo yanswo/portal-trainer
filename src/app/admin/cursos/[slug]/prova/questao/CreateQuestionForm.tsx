@@ -201,7 +201,6 @@ export default function CreateQuestionPage({
 
         <div className={styles.actions}>
           <Button
-            type="button"
             variant="secondary"
             href={`/admin/cursos/${params.slug}/prova`}
           >

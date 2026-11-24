@@ -31,9 +31,11 @@ type NavGroup = {
 };
 
 export default function AdminNavigation({
+  collapsed = false,
   pendingTickets = 0,
   pendingBudgets = 0,
 }: {
+  collapsed?: boolean;
   pendingTickets?: number;
   pendingBudgets?: number;
 }) {
@@ -81,7 +83,7 @@ export default function AdminNavigation({
     <nav className={styles.nav}>
       {navGroups.map((group) => (
         <div key={group.label} className={styles.navGroup}>
-          <div className={styles.navGroupLabel}>{group.label}</div>
+            <div className={styles.navGroupLabel}>{group.label}</div>
           {group.items.map((item) => {
             const isActive =
               item.href === "/admin"
@@ -96,7 +98,7 @@ export default function AdminNavigation({
                 className={`${styles.navItem} ${isActive ? styles.navItemActive : ""}`}
               >
                 <Icon size={16} />
-                {item.label}
+                <span>{item.label}</span>
                 {item.badge !== undefined && item.badge > 0 && (
                   <span className={styles.navBadge}>
                     {item.badge > 99 ? "99+" : item.badge}
@@ -113,9 +115,10 @@ export default function AdminNavigation({
           <button
             type="submit"
             className={`${styles.navItem} ${styles.navItemLogout}`}
+            title={collapsed ? "Sair" : undefined}
           >
             <FaSignOutAlt size={16} />
-            Sair
+            <span>Sair</span>
           </button>
         </form>
       </div>

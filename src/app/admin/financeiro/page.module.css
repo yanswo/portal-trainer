@@ -5,7 +5,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.35rem;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -78,6 +78,11 @@
   border-bottom: 1px solid var(--color-border);
   overflow-x: auto;
   padding-bottom: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 0.35rem;
+  box-shadow: var(--shadow-xs);
 }
 
 .tab {
@@ -94,6 +99,7 @@
   white-space: nowrap;
   position: relative;
   margin-bottom: -1px;
+  border-radius: 10px;
 }
 
 .tab:hover {
@@ -105,9 +111,11 @@
 
 .activeTab {
   color: var(--color-primary, #6366f1);
-  border-bottom-color: var(--color-primary, #6366f1);
+  border-bottom-color: transparent;
   font-weight: 600;
-  background: transparent;
+  background: var(--color-accent-muted);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-xs);
 }
 
 .activeTab:hover {

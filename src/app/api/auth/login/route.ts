@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { verifyPassword } from "@/lib/auth";
+import { createSessionToken, hashPassword, verifyPassword } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
       );
     }
 
+    const isLegacyPassword = !user.password.includes(":");
     const isValidPassword = await verifyPassword(String(password), user.password);
 
     if (!isValidPassword) {
@@ -33,8 +34,15 @@ export async function POST(request: Request) {
       );
     }
 
+    if (isLegacyPassword) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { password: await hashPassword(String(password)) },
+      });
+    }
+
     const rememberDevice = Boolean(remember);
-    const sessionPayload = Buffer.from(JSON.stringify({ userId: user.id })).toString("base64");
+    const sessionPayload = createSessionToken(user.id);
 
     const response = NextResponse.json({
       success: true,
@@ -42,6 +50,7 @@ export async function POST(request: Request) {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
 

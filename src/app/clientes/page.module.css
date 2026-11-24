@@ -93,7 +93,7 @@
 
 .heroBadge {
   background: rgba(255, 255, 255, 0.2) !important;
-  color: #fff !important;
+  color: var(--color-text-inverse) !important;
   border: none !important;
 }
 
@@ -140,7 +140,7 @@
 
 .progressBarFill {
   height: 100%;
-  background: #fff;
+  background: var(--color-text-inverse);
   border-radius: 999px;
   transition: width 0.5s ease;
 }
@@ -157,8 +157,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  background: #fff;
-  color: #000;
+  background: var(--color-text-inverse);
+  color: var(--color-text-primary);
   font-weight: 700;
   padding: 0.8rem 1.8rem;
   border-radius: var(--border-radius-pill);
@@ -172,7 +172,7 @@
 }
 
 .detailsLink {
-  color: #fff;
+  color: var(--color-text-inverse);
   font-size: 0.9rem;
   font-weight: 500;
   opacity: 0.9;
@@ -181,6 +181,19 @@
 .detailsLink:hover {
   text-decoration: underline;
   opacity: 1;
+}
+
+/* No modo escuro o card fica claro; os elementos internos precisam acompanhar a inversão. */
+:global([data-theme="dark"]) .heroBadge {
+  background: rgba(0, 0, 0, 0.12) !important;
+}
+
+:global([data-theme="dark"]) .heroPattern {
+  background: radial-gradient(circle at top right, rgba(0, 0, 0, 0.1), transparent 70%);
+}
+
+:global([data-theme="dark"]) .progressBarBg {
+  background: rgba(0, 0, 0, 0.16);
 }
 
 .emptyHero {

@@ -56,7 +56,7 @@ export default function CourseEvaluationsPage({ params }: PageProps) {
               </div>
             </div>
             <ul className={styles.attempts}>
-              {assessment.attempts.map((attempt) => (
+              {assessment.attempts.map((attempt: { label: string; value: number }) => (
                 <li key={attempt.label}>
                   <span>{attempt.label}</span>
                   <strong>{attempt.value} alunos</strong>
@@ -100,7 +100,7 @@ export default function CourseEvaluationsPage({ params }: PageProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {assessment.submissions.map((submission) => (
+            {assessment.submissions.map((submission: { id: string; learner: string; score: string; status: string; deliveredAt: string }) => (
               <TableRow key={submission.id}>
                 <TableCell>{submission.id}</TableCell>
                 <TableCell>{submission.learner}</TableCell>

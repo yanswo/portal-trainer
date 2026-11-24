@@ -292,7 +292,7 @@ export const adminCourses = courses.map((course, index) => ({
   enrolled: [186, 248, 164][index] ?? 132,
   lastUpdate: ["15/03/2025", "14/03/2025", "12/03/2025"][index] ?? "10/03/2025",
   status: ["Publicado", "Publicado", "Em revisão"][index] ?? "Em revisão",
-  modules: courseModules[course.slug]?.length ?? course.videos.length,
+  modules: courseModules[course.slug as keyof typeof courseModules]?.length ?? course.videos.length,
   lessons: course.videos.length,
   completionRate: [0.82, 0.74, 0.69][index] ?? 0.64,
 }));

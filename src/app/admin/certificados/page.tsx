@@ -24,6 +24,15 @@ export default async function CertificatesPage() {
   const digitalCount = certificates.filter((c) => c.format === "DIGITAL" || c.format === "DIGITAL_AND_PHYSICAL").length;
   const physicalCount = certificates.filter((c) => c.format === "PHYSICAL" || c.format === "DIGITAL_AND_PHYSICAL").length;
 
+  const certificateRows = certificates.map((certificate) => ({
+    ...certificate,
+    certificateData: typeof certificate.certificateData === "string"
+      ? certificate.certificateData
+      : certificate.certificateData
+        ? JSON.stringify(certificate.certificateData)
+        : null,
+  }));
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -96,7 +105,7 @@ export default async function CertificatesPage() {
       </div>
 
       {/* Filtros + Tabela */}
-      <CertificatesFilter certificates={certificates} />
+      <CertificatesFilter certificates={certificateRows} />
     </div>
   );
 }

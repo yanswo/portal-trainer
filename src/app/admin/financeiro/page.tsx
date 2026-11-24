@@ -47,7 +47,7 @@ export default async function FinancePage({ searchParams }: PageProps) {
             <FaDollarSign style={{ marginRight: "0.3rem" }} />
             Financeiro
           </Badge>
-          <h1>Painel de Vendas e B2B</h1>
+          <h1>Financeiro</h1>
           <p>Gerencie transações, analise o desempenho dos cursos e aprove orçamentos corporativos.</p>
         </div>
         <div className={styles.headerActions}>

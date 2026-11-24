@@ -56,9 +56,9 @@
     ),
     radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.05), transparent 50%);
 
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  --font-serif: "Lora", serif;
+  --font-sans: "Avenir Next", "Segoe UI Variable", "Segoe UI", Inter, sans-serif;
+  --font-serif: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+  --font-display: "Avenir Next", "Segoe UI Variable", "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   --content-max-width: 1280px;
@@ -168,6 +168,37 @@ main {
   min-height: 100vh;
 }
 
+.landing-page {
+  overflow: clip;
+  background: var(--body-bg);
+}
+
+.landing-page section {
+  position: relative;
+  isolation: isolate;
+}
+
+.landing-page section:not(:first-of-type)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 8% 18%, rgba(0, 0, 0, 0.035), transparent 26%), radial-gradient(circle at 92% 75%, rgba(0, 0, 0, 0.025), transparent 24%);
+}
+
+.landing-page h1,
+.landing-page h2,
+.landing-page h3 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+.landing-page ::selection {
+  background: rgba(0, 0, 0, 0.16);
+  color: var(--color-text-primary);
+}
+
 section {
   scroll-margin-top: calc(var(--header-height) + 24px);
 }
@@ -231,19 +262,19 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 [data-animate="fade"] {
-  animation: fadeIn var(--motion-duration-medium) var(--motion-ease) forwards;
+  animation: fadeIn 800ms var(--motion-ease) forwards;
 }
 
 [data-animate="fade-up"] {
-  animation: fadeInUp var(--motion-duration-long) var(--motion-ease) forwards;
+  animation: fadeInUp 900ms var(--motion-ease) forwards;
 }
 
 [data-animate="rise"] {
-  animation: riseUp var(--motion-duration-long) var(--motion-ease) forwards;
+  animation: riseUp 950ms var(--motion-ease) forwards;
 }
 
 [data-animate="zoom"] {
-  animation: zoomIn var(--motion-duration-medium) var(--motion-ease) forwards;
+  animation: zoomIn 800ms var(--motion-ease) forwards;
 }
 
 @keyframes fadeIn {

@@ -10,7 +10,6 @@ import {
   FaCalendarAlt,
   FaUsers,
   FaFileContract,
-  FaClock,
 } from "react-icons/fa";
 
 import styles from "./page.module.css";
@@ -137,12 +136,6 @@ export default function BudgetsPage() {
                 <div className={styles.metaGrid}>
                   <div className={styles.metaItem}>
                     <FaUsers /> <span>{budget.seats} licenças</span>
-                  </div>
-                  <div className={styles.metaItem}>
-                    <FaClock />{" "}
-                    <span>
-                      {budget.demandType === "ANNUAL" ? "Anual" : "Imediata"}
-                    </span>
                   </div>
                   <div className={styles.metaItem}>
                     <FaFileContract />{" "}

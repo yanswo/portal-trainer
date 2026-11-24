@@ -1,38 +1,30 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { verifySessionToken } from "@/lib/auth";
 
-export async function getAuthenticatedUser() {
+export async function getSessionUser() {
   const cookieStore = await cookies();
   const authCookie = cookieStore.get("clientAuth");
+  if (!authCookie) return null;
 
-  if (!authCookie) {
-    redirect("/login");
-  }
+  const session = verifySessionToken(authCookie.value);
+  if (!session) return null;
 
-  try {
-    const sessionPayload = JSON.parse(
-      Buffer.from(authCookie.value, "base64").toString("utf-8")
-    );
-    const userId = sessionPayload.userId;
-    if (!userId) throw new Error("Invalid session payload");
+  return prisma.user.findUnique({
+    where: { id: session.userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      profile: { select: { avatarUrl: true } },
+    },
+  });
+}
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        profile: { select: { avatarUrl: true } },
-      },
-    });
-
-    if (!user) throw new Error("User not found");
-
-    return user;
-  } catch (error) {
-    console.error("Failed to get authenticated user:", error);
-    redirect("/login");
-  }
+export async function getAuthenticatedUser() {
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+  return user;
 }

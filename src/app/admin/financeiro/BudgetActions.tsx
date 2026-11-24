@@ -27,7 +27,6 @@ type BudgetActionsProps = {
   clientName: string;
   courseTitle: string;
   seats: number;
-  demandType: "IMMEDIATE" | "ANNUAL";
   certificateFormat: "DIGITAL" | "PHYSICAL" | "DIGITAL_AND_PHYSICAL";
 };
 
@@ -39,16 +38,13 @@ const STATUS_LABELS: Record<string, string> = {
   DECLINED: "Recusado",
 };
 
-const DEMAND_LABELS: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  IMMEDIATE: { label: "Pagamento Imediato", icon: <FaBolt />, color: "#f59e0b" },
-  ANNUAL: { label: "Contrato Anual", icon: <FaCalendarAlt />, color: "#6366f1" },
-};
-
 const CERT_LABELS: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
   DIGITAL: { label: "Somente Digital", icon: <FaFilePdf />, color: "#3b82f6" },
   PHYSICAL: { label: "Somente Físico", icon: <FaBoxOpen />, color: "#8b5cf6" },
   DIGITAL_AND_PHYSICAL: { label: "Digital + Físico", icon: <FaCertificate />, color: "#10b981" },
 };
+
+const demand = { label: "Contratação padrão", icon: null, color: "var(--color-text-muted)" };
 
 export default function BudgetActions({
   budgetId,
@@ -56,7 +52,6 @@ export default function BudgetActions({
   clientName,
   courseTitle,
   seats,
-  demandType,
   certificateFormat,
 }: BudgetActionsProps) {
   const [loading, setLoading] = useState(false);
@@ -83,7 +78,6 @@ export default function BudgetActions({
     setActiveAction(null);
   }
 
-  const demand = DEMAND_LABELS[demandType];
   const cert = CERT_LABELS[certificateFormat];
 
   if (status === "APPROVED" || status === "DECLINED") {

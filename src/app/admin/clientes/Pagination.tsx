@@ -41,7 +41,7 @@ export default function Pagination({ currentPage, totalPages, totalItems }: Prop
       </div>
       <div className={styles.pageButtons}>
         <Button 
-          variant="outline" 
+          variant="secondary"
           size="sm" 
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage <= 1 || isPending}
@@ -49,7 +49,7 @@ export default function Pagination({ currentPage, totalPages, totalItems }: Prop
           <FaChevronLeft /> Anterior
         </Button>
         <Button 
-          variant="outline" 
+          variant="secondary"
           size="sm" 
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage >= totalPages || isPending}

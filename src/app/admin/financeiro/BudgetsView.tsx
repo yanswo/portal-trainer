@@ -34,11 +34,6 @@ const BUDGET_STATUS_LABELS: Record<string, string> = {
   DECLINED: "Recusado",
 };
 
-const DEMAND_LABELS: Record<string, string> = {
-  IMMEDIATE: "Imediato",
-  ANNUAL: "Anual",
-};
-
 const CERT_LABELS: Record<string, { label: string; color: string }> = {
   DIGITAL: { label: "Digital", color: "#3b82f6" },
   PHYSICAL: { label: "Físico", color: "#8b5cf6" },
@@ -147,7 +142,6 @@ export default async function BudgetsView() {
                 <TableCell header>Cliente</TableCell>
                 <TableCell header>Curso Solicitado</TableCell>
                 <TableCell header>Vagas</TableCell>
-                <TableCell header>Tipo</TableCell>
                 <TableCell header>Certificado</TableCell>
                 <TableCell header>Proposta (R$)</TableCell>
                 <TableCell header>Status</TableCell>
@@ -186,19 +180,6 @@ export default async function BudgetsView() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="neutral">{b.seats}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span style={{
-                        display: "inline-flex", alignItems: "center", gap: "0.3rem",
-                        fontSize: "0.78rem", fontWeight: 700,
-                        color: b.demandType === "IMMEDIATE" ? "#f59e0b" : "#6366f1",
-                        background: b.demandType === "IMMEDIATE" ? "rgba(245,158,11,0.1)" : "rgba(99,102,241,0.1)",
-                        padding: "0.2rem 0.55rem",
-                        borderRadius: "6px",
-                        border: `1px solid ${b.demandType === "IMMEDIATE" ? "rgba(245,158,11,0.3)" : "rgba(99,102,241,0.3)"}`,
-                      }}>
-                        {DEMAND_LABELS[b.demandType] ?? b.demandType}
-                      </span>
                     </TableCell>
                     <TableCell>
                       <span style={{
@@ -241,7 +222,6 @@ export default async function BudgetsView() {
                         clientName={b.user.name || b.user.email}
                         courseTitle={b.course.title}
                         seats={b.seats}
-                        demandType={b.demandType}
                         certificateFormat={b.certificateFormat}
                       />
                     </TableCell>

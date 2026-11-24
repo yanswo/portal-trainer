@@ -28,15 +28,15 @@ export default async function FinanceTabs({ currentTab }: { currentTab: string }
         )}
       </Link>
       <Link
-        href="/admin/financeiro?tab=analytics"
-        className={`${styles.tab} ${currentTab === "analytics" ? styles.activeTab : ""}`}
+        href="/admin/financeiro?tab=budgets"
+        className={`${styles.tab} ${currentTab === "budgets" ? styles.activeTab : ""}`}
       >
         <FaChartBar size={14} />
         Analytics de Cursos
       </Link>
       <Link
-        href="/admin/financeiro?tab=budgets"
-        className={`${styles.tab} ${currentTab === "budgets" ? styles.activeTab : ""}`}
+        href="/admin/financeiro?tab=analytics"
+        className={`${styles.tab} ${currentTab === "analytics" ? styles.activeTab : ""}`}
       >
         <FaBriefcase size={14} />
         Gestão de Orçamentos

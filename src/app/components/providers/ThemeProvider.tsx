@@ -29,6 +29,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setTheme("dark");
       document.documentElement.setAttribute("data-theme", "dark");
     }
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== "cw-theme" || (event.newValue !== "light" && event.newValue !== "dark")) return;
+      setTheme(event.newValue);
+      document.documentElement.setAttribute("data-theme", event.newValue);
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   const toggleTheme = () => {
